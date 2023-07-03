@@ -16,6 +16,12 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
               _iconUser(),
               _inputEmail(),
               _inputPassword(),
+              Obx(() => Checkbox(
+                value: controller.rememberMe.value,
+                onChanged: (value) {
+                  controller.toggleRememberMe(value!);
+                },
+              )),
               _myButton(context),
               _myButtonSignUp(),
             ],

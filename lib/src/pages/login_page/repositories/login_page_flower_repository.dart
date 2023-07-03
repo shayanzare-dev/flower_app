@@ -36,12 +36,29 @@ class LoginPageFlowerRepository {
         responseOrException.statusCode <= 400) {
       final responseData = jsonDecode(responseOrException.body);
       if (responseData.isNotEmpty) {
-        return const Left('Email already exists');
+        return const Left('passWord already exists');
       } else {
         return const Right(true);
       }
     } else {
-      return const Left('Failed to check email availability');
+      return const Left('Failed to check password ');
+    }
+  }
+
+  Future<Either<String, bool>> checkUserType({required String email,required String passWord,required int user}) async {
+    final url = Uri.parse("http://10.0.2.2:3000/users?email=$email&passWord=$passWord&userType=$user");
+    final responseOrException =
+    await httpClient.get(url, headers: customHeaders);
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      final responseData = jsonDecode(responseOrException.body);
+      if (responseData.isNotEmpty) {
+        return const Left('passWord already exists');
+      } else {
+        return const Right(true);
+      }
+    } else {
+      return const Left('Failed to check password ');
     }
   }
 
