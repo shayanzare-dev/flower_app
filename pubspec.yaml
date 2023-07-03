@@ -12,8 +12,9 @@ dependencies:
   http: ^1.0.0
   either_dart: ^1.0.0
   image_picker: ^1.0.0
-  flutter_colorpicker: ^1.0.3
   shared_preferences: ^2.2.0
+  flutter_colorpicker: ^1.0.3
+
   flutter:
     sdk: flutter
 
