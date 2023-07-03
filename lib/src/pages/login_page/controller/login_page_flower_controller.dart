@@ -1,11 +1,14 @@
+import 'package:either_dart/either.dart';
 import 'package:flower_app/flower_app.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../repositories/login_page_flower_repository.dart';
 
 class LoginPageFlowerController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final TextEditingController passWordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final LoginPageFlowerRepository _repository = LoginPageFlowerRepository();
   RxBool obscureText = true.obs;
 
   @override
@@ -29,13 +32,28 @@ class LoginPageFlowerController extends GetxController {
     return null;
   }
 
-  void checkLogin() {
-    final isValid = loginFormKey.currentState!.validate();
-    if (!isValid) {
+  Future<void> onSubmitLogin() async {
+    if (!loginFormKey.currentState!.validate()) {
+      Get.snackbar('Register', 'Your must be enter required field');
       return;
     }
-    loginFormKey.currentState!.save();
-    // Get.offAndToNamed(RouteName.myBankHomePage); TODO: go to home page
+    final Either<String, bool> resultOrExceptionEmail =
+        await _repository.checkEmailUser(emailController.text);
+    resultOrExceptionEmail.fold((String error) async {
+      final Either<String, bool> resultOrExceptionPassWord =
+          await _repository.checkPassWordUser(passWordController.text);
+      resultOrExceptionPassWord.fold((left) {
+        Get.offAndToNamed(
+            RouteNames.loginPageFlower + RouteNames.homePageFlower);
+        return;
+      }, (right) => Get.snackbar('Login', 'passWord is not  found'));
+      return;
+    }, (right) async {
+      if (right) {
+        Get.snackbar('Login', 'Email is not  found');
+      }
+      return;
+    });
   }
 
   void goToRegisterPage() {

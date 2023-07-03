@@ -8,7 +8,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
 
   @override
   Widget build(BuildContext context) => Form(
-        key: controller.loginFormKey,
+        key: controller.registerFormKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: SingleChildScrollView(
           child: Column(
@@ -380,9 +380,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                   ],
                 )),
             onTap: () {
-              // controller.checkLogin();
-
-              print(controller.base64Image);
+              controller.onSubmitRegister();
             },
           ),
         ],

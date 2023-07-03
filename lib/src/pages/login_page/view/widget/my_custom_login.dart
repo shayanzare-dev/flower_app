@@ -72,7 +72,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.emailController,
             decoration: const InputDecoration(
-              icon: Icon(Icons.person, color: Colors.white),
+              icon: Icon(Icons.mail, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
                 padding: EdgeInsets.only(right: 15),
@@ -170,7 +170,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                   ],
                 )),
             onTap: () {
-              controller.checkLogin();
+              controller.onSubmitLogin();
             },
           ),
         ],

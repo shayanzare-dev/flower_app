@@ -1,32 +1,46 @@
 import 'dart:convert';
+import 'package:either_dart/either.dart';
+import 'package:flower_app/src/pages/shared/user_type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import '../../../../flower_app.dart';
+import '../models/register_user_dto.dart';
+import '../models/user_view_model.dart';
+import '../repositories/register_page_flower_repository.dart';
+
 class RegisterPageFlowerController extends GetxController {
-  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passWordController = TextEditingController();
   final TextEditingController passWordConfirmController =
       TextEditingController();
+  Rx<UserType> userType = UserType.vendor.obs;
+  final RegisterPageFlowerRepository _repository =
+      RegisterPageFlowerRepository();
   String passCheckConfirm = '';
   String passCheck = '';
-
   RxInt selectedTypeUser = 1.obs;
+
   void selectedTypeUserValue(int value) {
     selectedTypeUser.value = value;
+
+    if (selectedTypeUser.value == 1) {
+      userType = UserType.vendor.obs;
+    } else {
+      userType = UserType.customer.obs;
+    }
   }
+
   RxBool obscureText = true.obs;
   RxBool obscureTextConfirm = true.obs;
 
   File? imageFile;
-  String base64Image="";
-
-
-
+  String base64Image = "";
 
   Future<void> getImage(ImageSource source) async {
     final picker = ImagePicker();
@@ -34,19 +48,52 @@ class RegisterPageFlowerController extends GetxController {
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
       update();
-      if (imageFile != null){
-        List<int> imageBytes  = await pickedFile.readAsBytes();
-        base64Image =  base64Encode(imageBytes);
+      if (imageFile != null) {
+        List<int> imageBytes = await pickedFile.readAsBytes();
+        base64Image = base64Encode(imageBytes);
       }
     } else {
       print('No image selected.');
     }
   }
 
+  Future<void> onSubmitRegister() async {
+    if (!registerFormKey.currentState!.validate()) {
+      Get.snackbar('Register', 'Your must be enter required field');
+      return;
+    }
+    final Either<String, bool> resultOrExceptionEmail =
+        await _repository.checkEmailUser(emailController.text);
+    resultOrExceptionEmail.fold(
+        (String error) => Get.snackbar('Register', 'Email already exists'),
+        (right) async {
+      if (right) {
+        final RegisterUserDto dto = RegisterUserDto(
+            userType: userType.value,
+            firstName: firstNameController.text,
+            lastName: lastNameController.text,
+            passWord: passWordConfirmController.text,
+            email: emailController.text,
+            image: base64Image);
+        final Either<String, UserViewModel> resultOrException =
+            (await _repository.addUser(dto));
+        resultOrException.fold(
+            (String error) => Get.snackbar('Register',
+                'Your registration is not successfully code error:$error'),
+            (UserViewModel addRecord) {
+          Get.snackbar('Register', 'Your registration is successfully');
+          Get.offAndToNamed(RouteNames.loginPageFlower);
+        });
+      }
+      return;
+    });
+  }
+
   @override
   void onInit() {
     super.onInit();
   }
+
   String? validateFirstName(String value) {
     if (value.isEmpty || value.length < 3) {
       return "Password must be of 6 characters";
@@ -86,6 +133,4 @@ class RegisterPageFlowerController extends GetxController {
     }
     return null;
   }
-
-
 }

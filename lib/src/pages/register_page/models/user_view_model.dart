@@ -1,6 +1,9 @@
 
+import '../../shared/user_type_enum.dart';
+
 class UserViewModel {
-  final int id, userType;
+  final int id;
+  final UserType userType;
   final String firstName, lastName, email, passWord, image;
 
   UserViewModel({
@@ -21,7 +24,7 @@ class UserViewModel {
       email: json['email'],
       passWord: json['passWord'],
       image: json['image'],
-      userType: json['userType'],
+      userType: UserType.getUserTypeFromValue(json['userType']),
     );
   }
 }

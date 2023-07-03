@@ -1,5 +1,7 @@
+import '../../shared/user_type_enum.dart';
+
 class RegisterUserDto {
-  final int userType;
+  final UserType userType;
   final String firstName, lastName, email, passWord, image;
 
   RegisterUserDto({
@@ -12,7 +14,7 @@ class RegisterUserDto {
   });
 
   Map<String, dynamic> toJson() => {
-        'userType': userType,
+        'userType': userType.value,
         'firstName': firstName,
         'lastName': lastName,
         'email': email,

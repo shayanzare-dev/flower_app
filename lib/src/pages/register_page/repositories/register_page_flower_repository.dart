@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:either_dart/either.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../infrastructure/commons/base_url.dart';
 import '../models/register_user_dto.dart';
@@ -9,12 +10,13 @@ import '../models/user_view_model.dart';
 class RegisterPageFlowerRepository {
   final httpClient = http.Client();
 
-
   Map<String, String> customHeaders = {"content-type": "application/json"};
-  Future<Either<String, UserViewModel>> addRecords(RegisterUserDto dto) async {
-    final url = Uri.http(BaseUrl.baseUrl, 'auction');
+
+  Future<Either<String, UserViewModel>> addUser(RegisterUserDto dto) async {
+    final url = Uri.http(BaseUrl.baseUrl, 'users');
     final jsonDto = dto.toJson();
-    final responseOrException = await httpClient.post(url, body: json.encode(jsonDto), headers: customHeaders);
+    final responseOrException = await httpClient.post(url,
+        body: json.encode(jsonDto), headers: customHeaders);
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {
       return Right(
@@ -27,22 +29,20 @@ class RegisterPageFlowerRepository {
     }
   }
 
-  Future<Map<String, dynamic>> uploadImage(File imageFile, String url) async {
-    try {
-      var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
-      if (response.statusCode == 200) {
-        var jsonResponse = json.decode(response.body);
-        return jsonResponse;
+  Future<Either<String, bool>> checkEmailUser(String email) async {
+    final url = Uri.parse("http://127.0.0.1:3000/users?email=$email");
+    final responseOrException =
+        await httpClient.get(url, headers: customHeaders);
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      final responseData = jsonDecode(responseOrException.body);
+      if (responseData.isNotEmpty) {
+        return Left('Email already exists');
       } else {
-        throw Exception('Failed to upload image');
+        return Right(true);
       }
-    } catch (e) {
-      print(e.toString());
-      rethrow;
+    } else {
+      return const Left('Failed to check email availability');
     }
   }
-
 }
