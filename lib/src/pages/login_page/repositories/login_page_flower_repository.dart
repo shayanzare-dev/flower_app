@@ -12,7 +12,7 @@ class LoginPageFlowerRepository {
 
 
   Future<Either<String, bool>> checkEmailUser(String email) async {
-    final url = Uri.parse("http://127.0.0.1:3000/users?email=$email");
+    final url = Uri.parse("http://10.0.2.2:3000/users?email=$email");
     final responseOrException =
     await httpClient.get(url, headers: customHeaders);
     if (responseOrException.statusCode >= 200 &&
@@ -29,7 +29,7 @@ class LoginPageFlowerRepository {
   }
 
   Future<Either<String, bool>> checkPassWordUser(String passWord) async {
-    final url = Uri.parse("http://127.0.0.1:3000/users?passWord=$passWord");
+    final url = Uri.parse("http://10.0.2.2:3000/users?passWord=$passWord");
     final responseOrException =
     await httpClient.get(url, headers: customHeaders);
     if (responseOrException.statusCode >= 200 &&
