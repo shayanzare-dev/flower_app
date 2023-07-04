@@ -16,18 +16,36 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
               _iconUser(),
               _inputEmail(),
               _inputPassword(),
-              Obx(() => Checkbox(
-                value: controller.rememberMe.value,
-                onChanged: (value) {
-                  controller.toggleRememberMe(value!);
-                },
-              )),
+              _rememberMe(),
               _myButton(context),
               _myButtonSignUp(),
             ],
           ),
         ),
       );
+
+  Widget _rememberMe() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Remember me'),
+              Obx(() => Checkbox(
+                    value: controller.rememberMe.value,
+                    onChanged: (value) {
+                      controller.toggleRememberMe(value!);
+                    },
+                  ))
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _iconUser() {
     return Padding(

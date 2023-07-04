@@ -24,7 +24,7 @@ class LoginPageFlowerController extends GetxController {
     isLoggedIn().then((loggedIn) {
       if (loggedIn) {
         Get.offAndToNamed(
-            RouteNames.loginPageFlower + RouteNames.homePageFlower);
+            RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
       }
     });
   }
@@ -69,28 +69,28 @@ class LoginPageFlowerController extends GetxController {
       final Either<String, bool> resultOrExceptionPassWord =
           await _repository.checkPassWordUser(passWordController.text);
       resultOrExceptionPassWord.fold((left) async {
-
         final Either<String, bool> resultOrExceptionUserType =
             await _repository.checkUserType(
                 passWord: passWordController.text,
                 email: emailController.text,
                 user: 1);
-        resultOrExceptionUserType.fold(
-            (left) {
-              saveLoginStatus(rememberMe.value);
-              Get.offAndToNamed(
-                  RouteNames.loginPageFlower + RouteNames.homePageFlower);
-              return ;
-            },
-            (right) => Get.snackbar('Login', 'user1 not found'));
+        resultOrExceptionUserType.fold((left) {
+          saveLoginStatus(rememberMe.value);
+          Get.offAndToNamed(
+              RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+          return;
+        }, (right) => Get.snackbar('Login', 'user1 not found'));
         final Either<String, bool> resultOrExceptionUserType1 =
-        await _repository.checkUserType(
-            passWord: passWordController.text,
-            email: emailController.text,
-            user: 2);
-        resultOrExceptionUserType1.fold(
-                (left) => Get.snackbar('Login', 'user type2'),
-                (right) => Get.snackbar('Login', 'user2 not found'));
+            await _repository.checkUserType(
+                passWord: passWordController.text,
+                email: emailController.text,
+                user: 2);
+        resultOrExceptionUserType1.fold((left) {
+          saveLoginStatus(rememberMe.value);
+          Get.offAndToNamed(
+              RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
+          return;
+        }, (right) => Get.snackbar('Login', 'user2 not found'));
 
         return;
       }, (right) => Get.snackbar('Login', 'passWord is not  found'));
