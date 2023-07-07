@@ -53,7 +53,7 @@ class RegisterPageFlowerController extends GetxController {
         base64Image = base64Encode(imageBytes);
       }
     } else {
-      print('No image selected.');
+      Get.snackbar('Image', 'No image selected.');
     }
   }
 
@@ -82,6 +82,7 @@ class RegisterPageFlowerController extends GetxController {
                 'Your registration is not successfully code error:$error'),
             (UserViewModel addRecord) {
           Get.snackbar('Register', 'Your registration is successfully');
+          registerFormKey.currentState?.reset();
           Get.offAndToNamed(RouteNames.loginPageFlower);
         });
       }
@@ -96,14 +97,14 @@ class RegisterPageFlowerController extends GetxController {
 
   String? validateFirstName(String value) {
     if (value.isEmpty || value.length < 3) {
-      return "Password must be of 6 characters";
+      return "first name must be of 3 characters";
     }
     return null;
   }
 
   String? validateLastName(String value) {
     if (value.isEmpty || value.length < 3) {
-      return "Password must be of 6 characters";
+      return "last name must be of 3 characters";
     }
     return null;
   }

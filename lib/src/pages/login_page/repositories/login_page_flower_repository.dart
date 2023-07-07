@@ -52,6 +52,7 @@ class LoginPageFlowerRepository {
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {
       final responseData = jsonDecode(responseOrException.body);
+
       if (responseData.isNotEmpty) {
         return const Left('passWord already exists');
       } else {

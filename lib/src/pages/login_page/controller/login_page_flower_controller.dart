@@ -11,8 +11,15 @@ class LoginPageFlowerController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final LoginPageFlowerRepository _repository = LoginPageFlowerRepository();
   RxBool obscureText = true.obs;
-
   RxBool rememberMe = false.obs;
+  RxBool clearRememberMe = false.obs;
+  late int usertype;
+
+  String vendorUserEmail='';
+
+  void toggleClearRememberMe(bool value) {
+    clearRememberMe.value = value;
+  }
 
   void toggleRememberMe(bool value) {
     rememberMe.value = value;
@@ -23,11 +30,21 @@ class LoginPageFlowerController extends GetxController {
     super.onInit();
     isLoggedIn().then((loggedIn) {
       if (loggedIn) {
-        Get.offAndToNamed(
-            RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+        userType().then((userType) {
+          if (userType == 1) {
+            Get.offAndToNamed(
+                RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower );
+          } else if (userType == 2) {
+            Get.offAndToNamed(
+                RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
+          }
+        });
       }
     });
+
+
   }
+
 
   String? validateEmail(String value) {
     RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -45,16 +62,34 @@ class LoginPageFlowerController extends GetxController {
     return null;
   }
 
-  void saveLoginStatus(bool isLoggedIn) async {
+  void saveLoginStatus(bool isLoggedIn,int userType,String userEmail) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', isLoggedIn);
+    await prefs.setInt('userType',userType);
+    await prefs.setString('userEmail',userEmail);
+
+  }
+
+  Future<String> userEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userEmail') ?? emailController.text;
+  }
+
+  void clearLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+  }
+
+
+  Future<int> userType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('userType') ?? 1 ;
   }
 
   Future<bool> isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
     return prefs.getBool('isLoggedIn') ?? false;
+
   }
 
   Future<void> onSubmitLogin() async {
@@ -75,9 +110,11 @@ class LoginPageFlowerController extends GetxController {
                 email: emailController.text,
                 user: 1);
         resultOrExceptionUserType.fold((left) {
-          saveLoginStatus(rememberMe.value);
-          Get.offAndToNamed(
-              RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+          saveLoginStatus(rememberMe.value,1,emailController.text);
+          usertype = 1;
+          Get.toNamed(
+              RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower );
+          loginFormKey.currentState?.reset();
           return;
         }, (right) => Get.snackbar('Login', 'user1 not found'));
         final Either<String, bool> resultOrExceptionUserType1 =
@@ -86,9 +123,11 @@ class LoginPageFlowerController extends GetxController {
                 email: emailController.text,
                 user: 2);
         resultOrExceptionUserType1.fold((left) {
-          saveLoginStatus(rememberMe.value);
-          Get.offAndToNamed(
+          saveLoginStatus(rememberMe.value,2,emailController.text);
+          usertype = 2;
+          Get.toNamed(
               RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
+          loginFormKey.currentState?.reset();
           return;
         }, (right) => Get.snackbar('Login', 'user2 not found'));
 

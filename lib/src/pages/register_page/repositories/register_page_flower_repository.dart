@@ -37,9 +37,9 @@ class RegisterPageFlowerRepository {
         responseOrException.statusCode <= 400) {
       final responseData = jsonDecode(responseOrException.body);
       if (responseData.isNotEmpty) {
-        return Left('Email already exists');
+        return const Left('Email already exists');
       } else {
-        return Right(true);
+        return const Right(true);
       }
     } else {
       return const Left('Failed to check email availability');
