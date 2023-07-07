@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../flower_app.dart';
 import '../models/add_flower_dto.dart';
+import '../models/edit_flower_dto.dart';
 import '../models/flower_list_view_model.dart';
 import '../models/user_view_model.dart';
 import '../repositories/vendor_home_page_flower_repository.dart';
@@ -23,6 +24,8 @@ class VendorHomePageFlowerController extends GetxController {
   final TextEditingController flowerPriceController = TextEditingController();
   final TextEditingController flowerCountController = TextEditingController();
 
+  RxList<FlowerListViewModel> flowerList = RxList();
+
   RxList<UserViewModel> vendorUser = RxList();
 
   final VendorHomePageFlowerRepository _repository =
@@ -33,8 +36,10 @@ class VendorHomePageFlowerController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
     Future.delayed(const Duration(seconds: 2), () {
       getVendorUser();
+      getFlowerList();
     });
     Future.delayed(const Duration(seconds: 1), () {
       userEmail().then((userEmail) {
@@ -42,6 +47,125 @@ class VendorHomePageFlowerController extends GetxController {
       });
     });
 
+  }
+
+  RxInt count = 0.obs;
+  RxInt minCount = 0.obs;
+  RxInt maxCount = 10.obs;
+
+  void increment() {
+    if (count.value < maxCount.value) {
+      count++;
+    }
+  }
+
+  void decrement() {
+    if (count.value > minCount.value) {
+      count--;
+    }
+  }
+
+  Future<void> editCountFlowerPlus(FlowerListViewModel flowerItem) async {
+    final EditFlowerDto dto = EditFlowerDto(
+        id: flowerItem.id,
+        price: flowerItem.price,
+        shortDescription: flowerItem.shortDescription,
+        countInStock:flowerItem.countInStock+1,
+        category: flowerItem.category,
+        name: flowerItem.name,
+        color: flowerItem.color,
+        image: flowerItem.image,
+        customerUser: null,
+        vendorUser: UserViewModel(
+            id: flowerItem.vendorUser.id,
+            passWord: flowerItem.vendorUser.passWord,
+            firstName: flowerItem.vendorUser.firstName,
+            lastName: flowerItem.vendorUser.lastName,
+            email: flowerItem.vendorUser.email,
+            image: flowerItem.vendorUser.image,
+            userType: flowerItem.vendorUser.userType));
+
+    final Either<String, FlowerListViewModel> resultOrException =
+    (await _repository.editFlower(dto,flowerItem.id));
+    resultOrException.fold(
+            (String error) => Get.snackbar('Register',
+            'Your registration is not successfully code error:$error'),
+            (FlowerListViewModel addRecord) {
+              getFlowerList();
+          Get.snackbar('edit Flower', 'Your Add Flower is successfully');
+
+        });
+    return;
+  }
+
+  Future<void> editCountFlowerMinus(FlowerListViewModel flowerItem) async {
+    final EditFlowerDto dto = EditFlowerDto(
+        id: flowerItem.id,
+        price: flowerItem.price,
+        shortDescription: flowerItem.shortDescription,
+        countInStock:flowerItem.countInStock-1,
+        category: flowerItem.category,
+        name: flowerItem.name,
+        color: flowerItem.color,
+        image: flowerItem.image,
+        customerUser: null,
+        vendorUser: UserViewModel(
+            id: flowerItem.vendorUser.id,
+            passWord: flowerItem.vendorUser.passWord,
+            firstName: flowerItem.vendorUser.firstName,
+            lastName: flowerItem.vendorUser.lastName,
+            email: flowerItem.vendorUser.email,
+            image: flowerItem.vendorUser.image,
+            userType: flowerItem.vendorUser.userType));
+
+    final Either<String, FlowerListViewModel> resultOrException =
+    (await _repository.editFlower(dto,flowerItem.id));
+    resultOrException.fold(
+            (String error) => Get.snackbar('Register',
+            'Your registration is not successfully code error:$error'),
+            (FlowerListViewModel addRecord) {
+          getFlowerList();
+          Get.snackbar('edit Flower', 'Your Add Flower is successfully');
+
+        });
+    return;
+  }
+
+
+  Future<void> deleteFlowerItem(FlowerListViewModel record) async {
+    final result = await _repository.deleteFlowerItem(record.id);
+
+    if (result.right == 'success') {
+      getFlowerList();
+      Get.snackbar('done', result.right);
+    } else {
+      Get.snackbar('error', result.left);
+    }
+  }
+
+  void alertDialogSelect({
+    required int itemSelect,
+    required FlowerListViewModel flowerItem,
+    required BuildContext context,
+  }) {
+    switch (itemSelect) {
+      case 1:
+        break;
+      case 2:
+        deleteFlowerItem(flowerItem);
+        Navigator.of(context).pop();
+        break;
+    }
+  }
+
+  Future<void> getFlowerList() async {
+    flowerList.clear();
+    final result = await _repository.getFlowerList(vendorUserEmail);
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      flowerList.addAll(result.right);
+    }
   }
 
   Future<void> getVendorUser() async {
@@ -96,9 +220,12 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   final Rx<Color> selectedColor = const Color(0xff54786c).obs;
+  Color selectedColors = const Color(0xff54786c);
+
 
   void changeColor(Color color) {
     selectedColor.value = color;
+    selectedColors =color;
   }
 
   final selectedIndex = RxInt(0);
@@ -153,7 +280,7 @@ class VendorHomePageFlowerController extends GetxController {
         countInStock: int.parse(flowerCountController.text),
         category: categoryChips,
         name: flowerNameController.text,
-        color: selectedColor.toString(),
+        color: selectedColors.value,
         image: base64Image,
         customerUser: null,
         vendorUser: UserViewModel(

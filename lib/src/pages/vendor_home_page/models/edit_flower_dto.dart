@@ -3,15 +3,16 @@ import 'package:get/get.dart';
 
 import '../../shared/user_type_enum.dart';
 
-class AddFlowerDto {
-  final int price, countInStock,color;
+class EditFlowerDto {
+  final int price, countInStock, color, id;
   final String name, image, shortDescription;
-  final RxList<String> category;
+  final List category;
   final UserViewModel vendorUser;
   UserViewModel? customerUser;
 
-  AddFlowerDto(
-      {required this.price,
+  EditFlowerDto(
+      {required this.id,
+      required this.price,
       required this.countInStock,
       required this.name,
       required this.image,
@@ -22,6 +23,7 @@ class AddFlowerDto {
       this.customerUser});
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'name': name,
         'price': price,
         'countInStock': countInStock,

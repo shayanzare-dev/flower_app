@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../infrastructure/commons/base_url.dart';
 import '../models/add_flower_dto.dart';
+import '../models/edit_flower_dto.dart';
 import '../models/flower_list_view_model.dart';
 import '../models/user_view_model.dart';
 
@@ -44,8 +45,37 @@ class VendorHomePageFlowerRepository {
     }
   }
 
-  Future<Either<String, List<FlowerListViewModel>>> getFlowerList() async {
-    final url = Uri.http(BaseUrl.baseUrl, 'flowerList');
+  Future<Either<String, String>> deleteFlowerItem(
+      final int flowerId) async {
+    final url = Uri.http(BaseUrl.baseUrl, 'flowerList/$flowerId');
+    final responseOrException = await httpClient.delete(url);
+
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      return const Right ('success');
+    } else {
+      return const Left('error');
+    }
+  }
+
+  Future<Either<String, FlowerListViewModel>> editFlower(EditFlowerDto dto,int flowerId) async {
+    final url = Uri.http(BaseUrl.baseUrl, 'flowerList/$flowerId');
+    final jsonDto = dto.toJson();
+    final responseOrException = await httpClient.put(url, body: json.encode(jsonDto), headers: customHeaders);
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      return Right(
+        FlowerListViewModel.fromJson(
+          json.decode(responseOrException.body),
+        ),
+      );
+    } else {
+      return const Left('error');
+    }
+  }
+
+  Future<Either<String, List<FlowerListViewModel>>> getFlowerList(String email) async {
+    final url = Uri.parse("http://10.0.2.2:3000/flowerList?vendorUser.email=$email");
     final responseOrException = await httpClient.get(url);
 
     if (responseOrException.statusCode >= 200 &&

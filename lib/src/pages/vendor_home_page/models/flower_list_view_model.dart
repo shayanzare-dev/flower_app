@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../../shared/user_type_enum.dart';
 
 class FlowerListViewModel {
-  final int id, price, countInStock;
-  final String name, image, shortDescription, color;
+  final int id, price, countInStock,color;
+  final String name, image, shortDescription ;
   final List category;
   final UserViewModel vendorUser;
   UserViewModel? customerUser;
