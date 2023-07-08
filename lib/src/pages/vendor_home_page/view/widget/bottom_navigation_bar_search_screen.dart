@@ -1,7 +1,11 @@
-
+import 'package:flower_app/src/pages/vendor_home_page/view/widget/search_alert_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SearchScreen extends StatelessWidget {
+import '../../controller/vendor_home_page_flower_controller.dart';
+import 'flower_item.dart';
+
+class SearchScreen extends GetView<VendorHomePageFlowerController> {
   const SearchScreen({super.key});
 
   @override
@@ -11,23 +15,33 @@ class SearchScreen extends StatelessWidget {
       child: Column(
         children: [
           TextField(
-            decoration: InputDecoration(
-              hintText: 'Search...',
-            ),
+            controller: controller.searchController,
             onChanged: (value) {
-              // _searchText.value = value;
+              controller.searchFlowers(value);
             },
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    Icons.clear,
+                    color: Colors.green,
+                  ),
+                  onPressed: () {
+                    controller.clearFilteredFlowerList();
+                  },
+                ),
+                labelText: 'Search or for filter press search icon',
+                prefixIcon: SearchAlertDialog()),
           ),
-          /* Expanded(
-            child: Obx(() => ListView.builder(
-              itemCount: _filteredItems.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_filteredItems[index]),
-                );
-              },
-            )),
-          ),*/
+          SizedBox(height: 16),
+          Expanded(
+            child: Obx(() {
+              return ListView.builder(
+                itemCount: controller.filteredFlowerList.length,
+                itemBuilder: (final context, final index) => FlowerItem(
+                    flowerItem: controller.filteredFlowerList[index]),
+              );
+            }),
+          ),
         ],
       ),
     );

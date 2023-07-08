@@ -4,6 +4,8 @@ import 'package:flower_app/src/pages/register_page/view/register_page_flower.dar
 import 'package:get/get.dart';
 import '../../pages/customer_home_page/commons/customer_home_page_flower_bindings.dart';
 import '../../pages/customer_home_page/view/customer_home_page_flower.dart';
+import '../../pages/edit_flower_page/commons/edit_flower_page_bindings.dart';
+import '../../pages/edit_flower_page/view/edit_flower_page.dart';
 import '../../pages/register_page/commons/register_page_flower_bindings.dart';
 import '../../pages/vendor_home_page/commons/vendor_home_page_flower_bindings.dart';
 import '../../pages/vendor_home_page/view/vendor_home_page_flower.dart';
@@ -25,6 +27,13 @@ class RoutePages {
           name: RouteNames.vendorHomePageFlower,
           page: () =>  const VendorHomePageFlower(),
           binding: VendorHomePageFlowerBindings(),
+          children: [
+            GetPage(
+              name: RouteNames.editPageFlower,
+              page: () => const EditFlowerPage(),
+              binding: EditFlowerPageBindings(),
+            ),
+          ]
         ),
         GetPage(
           name: RouteNames.customerHomePageFlower,

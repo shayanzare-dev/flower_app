@@ -11,6 +11,20 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
+            automaticallyImplyLeading: false,
+            actions: [
+              Row(
+                children: [
+                  const Text('Refresh'),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () {
+                      controller.refresh();
+                    },
+                  ),
+                ],
+              ),
+            ],
             title: const Text('Vendor Home page flower'),
             backgroundColor: const Color(0xff04927c)),
         body: Obx(() => VendorHomePageFlowerController.widgetOptions.elementAt(controller.selectedIndex.value)),

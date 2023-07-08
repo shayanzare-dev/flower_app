@@ -24,12 +24,22 @@ class VendorHomePageFlowerController extends GetxController {
   final TextEditingController flowerPriceController = TextEditingController();
   final TextEditingController flowerCountController = TextEditingController();
 
-  RxList<FlowerListViewModel> flowerList = RxList();
+  final TextEditingController searchController = TextEditingController();
 
+  RxList<FlowerListViewModel> filteredFlowerList = RxList();
+  RxList<FlowerListViewModel> flowerList = RxList();
   RxList<UserViewModel> vendorUser = RxList();
 
   final VendorHomePageFlowerRepository _repository =
       VendorHomePageFlowerRepository();
+
+  void searchFlowers(String query) {
+    filteredFlowerList.value = flowerList.where((flower) {
+      return flower.name.toLowerCase().contains(query.toLowerCase()) ||
+          flower.shortDescription.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+  }
+
 
   String vendorUserEmail = '';
 
@@ -46,23 +56,34 @@ class VendorHomePageFlowerController extends GetxController {
         vendorUserEmail = userEmail;
       });
     });
-
   }
 
-  RxInt count = 0.obs;
-  RxInt minCount = 0.obs;
-  RxInt maxCount = 10.obs;
-
-  void increment() {
-    if (count.value < maxCount.value) {
-      count++;
-    }
+  void clearFilteredFlowerList() {
+    filteredFlowerList.clear();
+    searchController.clear();
   }
 
-  void decrement() {
-    if (count.value > minCount.value) {
-      count--;
-    }
+  @override
+  void dispose() {
+    categoryTextController.dispose();
+    searchController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Future<void> refresh() async {
+    filteredFlowerList.clear();
+    Future.delayed(const Duration(seconds: 2), () {
+      getVendorUser();
+      getFlowerList();
+    });
+    Future.delayed(const Duration(seconds: 1), () {
+      userEmail().then((userEmail) {
+        vendorUserEmail = userEmail;
+      });
+    });
+    Get.snackbar('Refresh Flower list', 'Refresh is successfully');
   }
 
   Future<void> editCountFlowerPlus(FlowerListViewModel flowerItem) async {
@@ -70,7 +91,7 @@ class VendorHomePageFlowerController extends GetxController {
         id: flowerItem.id,
         price: flowerItem.price,
         shortDescription: flowerItem.shortDescription,
-        countInStock:flowerItem.countInStock+1,
+        countInStock: flowerItem.countInStock + 1,
         category: flowerItem.category,
         name: flowerItem.name,
         color: flowerItem.color,
@@ -86,15 +107,14 @@ class VendorHomePageFlowerController extends GetxController {
             userType: flowerItem.vendorUser.userType));
 
     final Either<String, FlowerListViewModel> resultOrException =
-    (await _repository.editFlower(dto,flowerItem.id));
+        (await _repository.editFlower(dto, flowerItem.id));
     resultOrException.fold(
-            (String error) => Get.snackbar('Register',
+        (String error) => Get.snackbar('Register',
             'Your registration is not successfully code error:$error'),
-            (FlowerListViewModel addRecord) {
-              getFlowerList();
-          Get.snackbar('edit Flower', 'Your Add Flower is successfully');
-
-        });
+        (FlowerListViewModel addRecord) {
+      getFlowerList();
+      Get.snackbar('edit Flower', 'Your Add Flower is successfully');
+    });
     return;
   }
 
@@ -103,7 +123,7 @@ class VendorHomePageFlowerController extends GetxController {
         id: flowerItem.id,
         price: flowerItem.price,
         shortDescription: flowerItem.shortDescription,
-        countInStock:flowerItem.countInStock-1,
+        countInStock: flowerItem.countInStock - 1,
         category: flowerItem.category,
         name: flowerItem.name,
         color: flowerItem.color,
@@ -119,21 +139,19 @@ class VendorHomePageFlowerController extends GetxController {
             userType: flowerItem.vendorUser.userType));
 
     final Either<String, FlowerListViewModel> resultOrException =
-    (await _repository.editFlower(dto,flowerItem.id));
+        (await _repository.editFlower(dto, flowerItem.id));
     resultOrException.fold(
-            (String error) => Get.snackbar('Register',
+        (String error) => Get.snackbar('Register',
             'Your registration is not successfully code error:$error'),
-            (FlowerListViewModel addRecord) {
-          getFlowerList();
-          Get.snackbar('edit Flower', 'Your Add Flower is successfully');
-
-        });
+        (FlowerListViewModel addRecord) {
+      getFlowerList();
+      Get.snackbar('edit Flower', 'Your Add Flower is successfully');
+    });
     return;
   }
 
-
-  Future<void> deleteFlowerItem(FlowerListViewModel record) async {
-    final result = await _repository.deleteFlowerItem(record.id);
+  Future<void> deleteFlowerItem(FlowerListViewModel flowerItem) async {
+    final result = await _repository.deleteFlowerItem(flowerItem.id);
 
     if (result.right == 'success') {
       getFlowerList();
@@ -195,12 +213,6 @@ class VendorHomePageFlowerController extends GetxController {
 
   void removeChip(int index) => categoryChips.removeAt(index);
 
-  @override
-  void dispose() {
-    categoryTextController.dispose();
-    super.dispose();
-  }
-
   File? imageFile;
   String base64Image = "";
 
@@ -222,10 +234,9 @@ class VendorHomePageFlowerController extends GetxController {
   final Rx<Color> selectedColor = const Color(0xff54786c).obs;
   Color selectedColors = const Color(0xff54786c);
 
-
   void changeColor(Color color) {
     selectedColor.value = color;
-    selectedColors =color;
+    selectedColors = color;
   }
 
   final selectedIndex = RxInt(0);
@@ -303,6 +314,12 @@ class VendorHomePageFlowerController extends GetxController {
     });
 
     return;
+  }
+
+  void goToEditFlowerPage(FlowerListViewModel flowerItem) {
+    Get.toNamed(RouteNames.loginPageFlower +
+        RouteNames.vendorHomePageFlower +
+        RouteNames.editPageFlower,arguments: flowerItem);
   }
 
   void goToLoginPage() {

@@ -1,3 +1,4 @@
+import 'package:flower_app/src/pages/vendor_home_page/view/widget/string_to_image_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../login_page/controller/login_page_flower_controller.dart';
@@ -12,6 +13,32 @@ class ProfileScreen extends GetView<VendorHomePageFlowerController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(
+            width: 200,
+            height: 200,
+            child: StringToImageProfile(base64String: controller.vendorUser.first.image)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Fisrst Name : '),
+            Text(controller.vendorUser.first.firstName),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Last Name : '),
+            Text(controller.vendorUser.first.lastName),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Email : '),
+            Text(controller.vendorUser.first.email),
+          ],
+        ),
+
         _myButtonSignOut(),
       ],
     );
@@ -46,8 +73,6 @@ class ProfileScreen extends GetView<VendorHomePageFlowerController> {
               controller.goToLoginPage();
             },
           ),
-
-         Text(controller.vendorUser.first.firstName),
         ],
       ),
     );
