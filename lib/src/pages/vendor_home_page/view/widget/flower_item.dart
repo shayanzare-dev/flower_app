@@ -83,7 +83,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                       IconButton(
                         icon: Icon(Icons.remove),
                         onPressed: () {
-                          controller.editCountFlowerMinus(flowerItem);
+                            controller.editCountFlowerMinus(flowerItem);
                         },
                       ),
                       Text('Count Flower: ${flowerItem.countInStock}'),

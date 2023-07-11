@@ -68,6 +68,7 @@ class LoginPageFlowerController extends GetxController {
     await prefs.setInt('userType',userType);
     await prefs.setString('userEmail',userEmail);
 
+
   }
 
   Future<String> userEmail() async {
@@ -83,6 +84,7 @@ class LoginPageFlowerController extends GetxController {
 
   Future<int> userType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     return prefs.getInt('userType') ?? 1 ;
   }
 

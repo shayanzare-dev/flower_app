@@ -1,11 +1,12 @@
-import 'package:flower_app/src/pages/vendor_home_page/view/widget/string_to_image_profile.dart';
+import 'package:flower_app/src/pages/customer_home_page/view/widget/string_to_image_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../login_page/controller/login_page_flower_controller.dart';
-import '../../controller/vendor_home_page_flower_controller.dart';
+import '../../controller/customer_home_page_flower_controller.dart';
 
-class ProfileScreen extends GetView<VendorHomePageFlowerController> {
-  ProfileScreen({super.key});
+
+class CustomerProfileScreen extends GetView<CustomerHomePageFlowerController> {
+  CustomerProfileScreen({super.key});
 
   final loginPageFlowerController = Get.put(LoginPageFlowerController());
 
@@ -16,26 +17,26 @@ class ProfileScreen extends GetView<VendorHomePageFlowerController> {
         SizedBox(
             width: 200,
             height: 200,
-            child: StringToImageProfile(base64String: controller.vendorUser.first.image)),
+            child: StringToImageProfile(base64String: controller.customerUser.first.image)),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('First Name : '),
-            Text(controller.vendorUser.first.firstName),
+            Text(controller.customerUser.first.firstName),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Last Name : '),
-            Text(controller.vendorUser.first.lastName),
+            Text(controller.customerUser.first.lastName),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Email : '),
-            Text(controller.vendorUser.first.email),
+            Text(controller.customerUser.first.email),
           ],
         ),
 

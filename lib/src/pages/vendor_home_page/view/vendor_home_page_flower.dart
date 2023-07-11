@@ -51,6 +51,10 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                 label: 'Search',
               ),
               BottomNavigationBarItem(
+                icon: Icon(Icons.history),
+                label: 'History',
+              ),
+              BottomNavigationBarItem(
                 icon: Icon(Icons.person),
                 label: 'Profile',
               ),

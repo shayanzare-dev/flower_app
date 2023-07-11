@@ -2,7 +2,7 @@ import 'package:flower_app/src/pages/shared/user_type_enum.dart';
 
 class UserViewModel {
   final int id;
-  final String firstName, lastName, email, image,passWord;
+  final String firstName, lastName, email, image ,passWord;
   final UserType userType;
 
   UserViewModel({
