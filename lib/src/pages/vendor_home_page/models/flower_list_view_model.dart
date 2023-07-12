@@ -1,14 +1,12 @@
-import 'package:flower_app/src/pages/vendor_home_page/models/user_view_model.dart';
-import 'package:get/get.dart';
+import 'package:flower_app/src/pages/vendor_home_page/models/vendor_view_model.dart';
 
-import '../../shared/user_type_enum.dart';
 
 class FlowerListViewModel {
   final int id, price, countInStock,color;
   final String name, image, shortDescription ;
   final List category;
-  final UserViewModel vendorUser;
-  UserViewModel? customerUser;
+  final vendorViewModel vendorUser;
+
 
   FlowerListViewModel({
     required this.id,
@@ -22,6 +20,30 @@ class FlowerListViewModel {
     required this.vendorUser,
   });
 
+  FlowerListViewModel copyWith({
+    int? id,
+    int? price,
+    int? countInStock,
+    int? color,
+    String? name,
+    String? image,
+    String? shortDescription,
+    List? category,
+    vendorViewModel? vendorUser,
+  }) {
+    return FlowerListViewModel(
+      id: id ?? this.id,
+      price: price ?? this.price,
+      countInStock: countInStock ?? this.countInStock,
+      name: name ?? this.name,
+      image: image ?? this.image,
+      shortDescription: shortDescription ?? this.shortDescription,
+      color: color ?? this.color,
+      category: category ?? this.category,
+      vendorUser: vendorUser ?? this.vendorUser,
+    );
+  }
+
   factory FlowerListViewModel.fromJson(final Map<String, dynamic> json) {
     return FlowerListViewModel(
       id: json['id'],
@@ -32,8 +54,29 @@ class FlowerListViewModel {
       category: json['category'],
       countInStock: json['countInStock'],
       shortDescription: json['shortDescription'],
-      vendorUser: UserViewModel.fromJson(json['vendorUser']),
+      vendorUser: vendorViewModel.fromJson(json['vendorUser']),
 
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'price': price,
+    'countInStock': countInStock,
+    'image': image,
+    'shortDescription': shortDescription,
+    'color': color,
+    'category': category,
+    'vendorUser': {
+      "firstName": vendorUser.firstName,
+      "lastName": vendorUser.lastName,
+      "email": vendorUser.email,
+      "passWord": vendorUser.passWord,
+      "userType": vendorUser.userType.value,
+      "image": vendorUser.image,
+      "id": vendorUser.id
+    },
+  };
+
 }

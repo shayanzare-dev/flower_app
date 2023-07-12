@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../vendor_home_page/models/edit_flower_dto.dart';
 import '../../vendor_home_page/models/flower_list_view_model.dart';
-import '../../vendor_home_page/models/user_view_model.dart';
+import '../../vendor_home_page/models/vendor_view_model.dart';
 import '../repositories/edit_flower_repository.dart';
 
 class EditFlowerPageController extends GetxController {
@@ -91,8 +91,7 @@ class EditFlowerPageController extends GetxController {
         name: flowerNameController.text,
         color: selectedColors.value,
         image: base64Image,
-        customerUser: null,
-        vendorUser: UserViewModel(
+        vendorUser: vendorViewModel(
             id: editFlowerItem.vendorUser.id,
             passWord: editFlowerItem.vendorUser.passWord,
             firstName:editFlowerItem.vendorUser.firstName,
@@ -108,7 +107,7 @@ class EditFlowerPageController extends GetxController {
             'Your registration is not successfully code error:$error'),
             (FlowerListViewModel addRecord) {
 
-          Get.toNamed (RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower);
+          Get.offAndToNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower);
           Get.snackbar('edit Flower', 'Your Add Flower is successfully');
 
         });

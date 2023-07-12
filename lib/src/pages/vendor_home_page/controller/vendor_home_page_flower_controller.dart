@@ -8,8 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../flower_app.dart';
 import '../models/add_flower_dto.dart';
 import '../models/edit_flower_dto.dart';
+import '../models/edit_vendor_dto.dart';
 import '../models/flower_list_view_model.dart';
-import '../models/user_view_model.dart';
+import '../models/vendor_view_model.dart';
 import '../repositories/vendor_home_page_flower_repository.dart';
 import '../view/widget/bottom_navigation_bar_add_screen.dart';
 import '../view/widget/bottom_navigation_bar_history_screen.dart';
@@ -31,7 +32,8 @@ class VendorHomePageFlowerController extends GetxController {
   RxList<FlowerListViewModel> filteredFlowerList = RxList();
 
   RxList<FlowerListViewModel> flowerList = RxList();
-  RxList<UserViewModel> vendorUser = RxList();
+
+  RxList<vendorViewModel> vendorUser = RxList();
 
   final SharedPreferences _prefs = Get.find<SharedPreferences>();
 
@@ -102,8 +104,11 @@ class VendorHomePageFlowerController extends GetxController {
     super.onInit();
 
     Future.delayed(const Duration(seconds: 2), () {
-      getVendorUser();
+      getProfileUser();
       getFlowerList();
+    });
+    Future.delayed(const Duration(seconds: 3), () {
+      editVendorFlowerList();
     });
     Future.delayed(const Duration(seconds: 1), () {
       userEmail().then((userEmail) {
@@ -141,9 +146,13 @@ class VendorHomePageFlowerController extends GetxController {
   Future<void> refresh() async {
     filteredFlowerList.clear();
     selectedItemDropDown = Rx<String>('select a item');
+
     Future.delayed(const Duration(seconds: 2), () {
-      getVendorUser();
+      getProfileUser();
       getFlowerList();
+    });
+    Future.delayed(const Duration(seconds: 3), () {
+      editVendorFlowerList();
     });
     Future.delayed(const Duration(seconds: 1), () {
       userEmail().then((userEmail) {
@@ -163,8 +172,7 @@ class VendorHomePageFlowerController extends GetxController {
         name: flowerItem.name,
         color: flowerItem.color,
         image: flowerItem.image,
-        customerUser: null,
-        vendorUser: UserViewModel(
+        vendorUser: vendorViewModel(
             id: flowerItem.vendorUser.id,
             passWord: flowerItem.vendorUser.passWord,
             firstName: flowerItem.vendorUser.firstName,
@@ -180,6 +188,9 @@ class VendorHomePageFlowerController extends GetxController {
             'Your registration is not successfully code error:$error'),
         (FlowerListViewModel addRecord) {
       getFlowerList();
+      Future.delayed(const Duration(seconds: 3), () {
+        editVendorFlowerList();
+      });
       Get.snackbar('edit Flower', 'Your Add Flower is successfully');
     });
     return;
@@ -196,8 +207,7 @@ class VendorHomePageFlowerController extends GetxController {
           name: flowerItem.name,
           color: flowerItem.color,
           image: flowerItem.image,
-          customerUser: null,
-          vendorUser: UserViewModel(
+          vendorUser: vendorViewModel(
               id: flowerItem.vendorUser.id,
               passWord: flowerItem.vendorUser.passWord,
               firstName: flowerItem.vendorUser.firstName,
@@ -212,6 +222,9 @@ class VendorHomePageFlowerController extends GetxController {
               'Your registration is not successfully code error:$error'),
           (FlowerListViewModel addRecord) {
         getFlowerList();
+        Future.delayed(const Duration(seconds: 3), () {
+          editVendorFlowerList();
+        });
         Get.snackbar('edit Flower', 'Your Add Flower is successfully');
       });
     } else {
@@ -219,6 +232,7 @@ class VendorHomePageFlowerController extends GetxController {
     }
     return;
   }
+
 
   Future<void> deleteFlowerItem(FlowerListViewModel flowerItem) async {
     final result = await _repository.deleteFlowerItem(flowerItem.id);
@@ -246,7 +260,7 @@ class VendorHomePageFlowerController extends GetxController {
     }
   }
 
-  Future<void> getVendorUser() async {
+  Future<void> getProfileUser() async {
     final result = await _repository.getVendorUser(vendorUserEmail);
     if (result.isLeft) {
       Get.snackbar('Login', 'user not found');
@@ -341,6 +355,22 @@ class VendorHomePageFlowerController extends GetxController {
     return null;
   }
 
+  Future<void> editVendorFlowerList() async {
+    final EditVendorDto dto = EditVendorDto(
+        id: vendorUser.first.id,
+        passWord: vendorUser.first.passWord,
+        firstName: vendorUser.first.firstName,
+        lastName: vendorUser.first.lastName,
+        email: vendorUser.first.email,
+        image: vendorUser.first.image,
+        userType: vendorUser.first.userType,
+        flowerList: flowerList);
+    // dto.copyWith(flowerList: flowerList);
+    final Either<String, String> resultOrException =
+        (await _repository.editVendorUser(dto, vendorUser.first.id));
+    for (int i = 0; i < flowerList.length; i++) {}
+  }
+
   Future<void> onSubmitAddFlower() async {
     if (!addFlowerFormKey.currentState!.validate()) {
       Get.snackbar('Add Flower', 'Your must be enter required field');
@@ -354,8 +384,7 @@ class VendorHomePageFlowerController extends GetxController {
         name: flowerNameController.text,
         color: selectedColors.value,
         image: base64Image,
-        customerUser: null,
-        vendorUser: UserViewModel(
+        vendorUser: vendorViewModel(
             id: vendorUser.first.id,
             passWord: vendorUser.first.passWord,
             firstName: vendorUser.first.firstName,
@@ -369,8 +398,9 @@ class VendorHomePageFlowerController extends GetxController {
     resultOrException.fold(
         (String error) => Get.snackbar('Register',
             'Your registration is not successfully code error:$error'),
-        (FlowerListViewModel addRecord) {
+        (FlowerListViewModel addRecord) async {
       Get.snackbar('Add Flower', 'Your Add Flower is successfully');
+      refresh();
       addFlowerFormKey.currentState?.reset();
     });
 

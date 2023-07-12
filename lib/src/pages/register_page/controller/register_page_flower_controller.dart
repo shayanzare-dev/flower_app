@@ -8,7 +8,8 @@ import 'dart:io';
 
 import '../../../../flower_app.dart';
 import '../models/register_user_dto.dart';
-import '../models/user_view_model.dart';
+import '../models/register_vendor_dto.dart';
+
 import '../repositories/register_page_flower_repository.dart';
 
 class RegisterPageFlowerController extends GetxController {
@@ -62,32 +63,77 @@ class RegisterPageFlowerController extends GetxController {
       Get.snackbar('Register', 'Your must be enter required field');
       return;
     }
-    final Either<String, bool> resultOrExceptionEmail =
-        await _repository.checkEmailUser(emailController.text);
-    resultOrExceptionEmail.fold(
-        (String error) => Get.snackbar('Register', 'Email already exists'),
-        (right) async {
-      if (right) {
-        final RegisterUserDto dto = RegisterUserDto(
-            userType: userType.value,
-            firstName: firstNameController.text,
-            lastName: lastNameController.text,
-            passWord: passWordConfirmController.text,
-            email: emailController.text,
-            image: base64Image);
-        final Either<String, UserViewModel> resultOrException =
-            (await _repository.addUser(dto));
-        resultOrException.fold(
-            (String error) => Get.snackbar('Register',
-                'Your registration is not successfully code error:$error'),
-            (UserViewModel addRecord) {
-          Get.snackbar('Register', 'Your registration is successfully');
-          registerFormKey.currentState?.reset();
-          Get.offAndToNamed(RouteNames.loginPageFlower);
-        });
-      }
-      return;
-    });
+    if (selectedTypeUser.value == 1) {
+      final Either<String, bool> resultOrExceptionEmailVendor =
+          await _repository.checkEmailVendor(emailController.text);
+      resultOrExceptionEmailVendor.fold(
+          (String error) => Get.snackbar('Register', 'Email already exists'),
+          (right) async {
+        if (right) {
+          final Either<String, bool> resultOrExceptionEmailUser =
+              await _repository.checkEmailUser(emailController.text);
+          resultOrExceptionEmailUser.fold(
+              (String error) =>
+                  Get.snackbar('Register', 'Email already exists'),
+              (right) async {
+            final RegisterVendorDto dto = RegisterVendorDto(
+                userType: userType.value,
+                firstName: firstNameController.text,
+                lastName: lastNameController.text,
+                passWord: passWordConfirmController.text,
+                email: emailController.text,
+                image: base64Image);
+            final Either<String, String> resultOrException =
+                (await _repository.addVendor(dto));
+            resultOrException.fold(
+                (String error) => Get.snackbar('Register',
+                    'Your registration is not successfully code error:$error'),
+                (String addRecord) {
+              Get.snackbar('Register', 'Your registration is successfully');
+              registerFormKey.currentState?.reset();
+              Get.offAndToNamed(RouteNames.loginPageFlower);
+            });
+            return;
+          });
+        }
+        return;
+      });
+    } else if (selectedTypeUser.value == 2) {
+      final Either<String, bool> resultOrExceptionEmail =
+          await _repository.checkEmailUser(emailController.text);
+      resultOrExceptionEmail.fold(
+          (String error) => Get.snackbar('Register', 'Email already exists'),
+          (right) async {
+        if (right) {
+          final Either<String, bool> resultOrExceptionEmailVendor =
+              await _repository.checkEmailVendor(emailController.text);
+          resultOrExceptionEmailVendor.fold(
+              (String error) =>
+                  Get.snackbar('Register', 'Email already exists'),
+              (right) async {
+            final RegisterUserDto dto = RegisterUserDto(
+                userType: userType.value,
+                firstName: firstNameController.text,
+                lastName: lastNameController.text,
+                passWord: passWordConfirmController.text,
+                email: emailController.text,
+                image: base64Image);
+            final Either<String, String> resultOrException =
+                (await _repository.addUser(dto));
+            resultOrException.fold(
+                (String error) => Get.snackbar('Register',
+                    'Your registration is not successfully code error:$error'),
+                (String addRecord) {
+              Get.snackbar('Register', 'Your registration is successfully');
+              registerFormKey.currentState?.reset();
+              Get.offAndToNamed(RouteNames.loginPageFlower);
+            });
+            return;
+          });
+        }
+        return;
+      });
+    }
   }
 
   @override

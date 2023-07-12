@@ -25,4 +25,14 @@ class UserViewModel {
         email: json['email'],
         id: json['id']);
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'userType': userType.value,
+    'firstName': firstName,
+    'lastName': lastName,
+    'email': email,
+    'passWord': passWord,
+    'image': image,
+  };
 }

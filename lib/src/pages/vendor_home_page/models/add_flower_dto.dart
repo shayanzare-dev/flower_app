@@ -1,14 +1,13 @@
-import 'package:flower_app/src/pages/vendor_home_page/models/user_view_model.dart';
+import 'package:flower_app/src/pages/vendor_home_page/models/vendor_view_model.dart';
 import 'package:get/get.dart';
 
-import '../../shared/user_type_enum.dart';
 
 class AddFlowerDto {
   final int price, countInStock,color;
   final String name, image, shortDescription;
   final RxList<String> category;
-  final UserViewModel vendorUser;
-  UserViewModel? customerUser;
+  final vendorViewModel vendorUser;
+
 
   AddFlowerDto(
       {required this.price,
@@ -19,7 +18,7 @@ class AddFlowerDto {
       required this.color,
       required this.category,
       required this.vendorUser,
-      this.customerUser});
+      });
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -38,6 +37,6 @@ class AddFlowerDto {
           "image": vendorUser.image,
           "id": vendorUser.id
         },
-        'customerUser': {},
       };
+
 }

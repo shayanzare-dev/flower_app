@@ -192,7 +192,9 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                           fontWeight: FontWeight.bold)),
                 ],
               )),
-          onTap: () {},
+          onTap: () {
+            controller.addFlowerToBoughtFlowers(flowerItem);
+          },
         ),
       ],
     );

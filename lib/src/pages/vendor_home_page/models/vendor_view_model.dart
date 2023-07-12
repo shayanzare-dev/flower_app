@@ -1,11 +1,11 @@
 import 'package:flower_app/src/pages/shared/user_type_enum.dart';
 
-class UserViewModel {
+class vendorViewModel {
   final int id;
   final String firstName, lastName, email, image,passWord;
   final UserType userType;
 
-  UserViewModel({
+  vendorViewModel({
     required this.id,
     required this.passWord,
     required this.firstName,
@@ -15,8 +15,8 @@ class UserViewModel {
     required this.userType,
   });
 
-  factory UserViewModel.fromJson(final Map<String, dynamic> json) {
-    return UserViewModel(
+  factory vendorViewModel.fromJson(final Map<String, dynamic> json) {
+    return vendorViewModel(
         passWord: json['passWord'],
         image: json['image'],
         lastName: json['lastName'],

@@ -1,10 +1,10 @@
 import '../../shared/user_type_enum.dart';
 
-class RegisterUserDto {
+class RegisterVendorDto {
   final UserType userType;
   final String firstName, lastName, email, passWord, image;
 
-  RegisterUserDto({
+  RegisterVendorDto({
     required this.userType,
     required this.firstName,
     required this.lastName,
@@ -20,6 +20,6 @@ class RegisterUserDto {
         'email': email,
         'passWord': passWord,
         'image': image,
-        'boughtList': []
+        'flowerList': []
       };
 }

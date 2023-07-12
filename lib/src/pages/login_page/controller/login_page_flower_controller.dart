@@ -15,7 +15,7 @@ class LoginPageFlowerController extends GetxController {
   RxBool clearRememberMe = false.obs;
   late int usertype;
 
-  String vendorUserEmail='';
+  String vendorUserEmail = '';
 
   void toggleClearRememberMe(bool value) {
     clearRememberMe.value = value;
@@ -33,7 +33,7 @@ class LoginPageFlowerController extends GetxController {
         userType().then((userType) {
           if (userType == 1) {
             Get.offAndToNamed(
-                RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower );
+                RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
           } else if (userType == 2) {
             Get.offAndToNamed(
                 RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
@@ -41,10 +41,7 @@ class LoginPageFlowerController extends GetxController {
         });
       }
     });
-
-
   }
-
 
   String? validateEmail(String value) {
     RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -62,13 +59,11 @@ class LoginPageFlowerController extends GetxController {
     return null;
   }
 
-  void saveLoginStatus(bool isLoggedIn,int userType,String userEmail) async {
+  void saveLoginStatus(bool isLoggedIn, int userType, String userEmail) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', isLoggedIn);
-    await prefs.setInt('userType',userType);
-    await prefs.setString('userEmail',userEmail);
-
-
+    await prefs.setInt('userType', userType);
+    await prefs.setString('userEmail', userEmail);
   }
 
   Future<String> userEmail() async {
@@ -81,67 +76,50 @@ class LoginPageFlowerController extends GetxController {
     await prefs.clear();
   }
 
-
   Future<int> userType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    return prefs.getInt('userType') ?? 1 ;
+    return prefs.getInt('userType') ?? 1;
   }
 
   Future<bool> isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isLoggedIn') ?? false;
 
+    return prefs.getBool('isLoggedIn') ?? false;
   }
 
   Future<void> onSubmitLogin() async {
     if (!loginFormKey.currentState!.validate()) {
-      Get.snackbar('Register', 'Your must be enter required field');
-
+      Get.snackbar('login', 'Your must be enter required field');
       return;
     }
-    final Either<String, bool> resultOrExceptionEmail =
-        await _repository.checkEmailUser(emailController.text);
-    resultOrExceptionEmail.fold((String error) async {
-      final Either<String, bool> resultOrExceptionPassWord =
-          await _repository.checkPassWordUser(passWordController.text);
-      resultOrExceptionPassWord.fold((left) async {
-        final Either<String, bool> resultOrExceptionUserType =
-            await _repository.checkUserType(
-                passWord: passWordController.text,
-                email: emailController.text,
-                user: 1);
-        resultOrExceptionUserType.fold((left) {
-          saveLoginStatus(rememberMe.value,1,emailController.text);
-          usertype = 1;
-          Get.toNamed(
-              RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower );
-          loginFormKey.currentState?.reset();
-          return;
-        }, (right) => Get.snackbar('Login', 'user1 not found'));
-        final Either<String, bool> resultOrExceptionUserType1 =
-            await _repository.checkUserType(
-                passWord: passWordController.text,
-                email: emailController.text,
-                user: 2);
-        resultOrExceptionUserType1.fold((left) {
-          saveLoginStatus(rememberMe.value,2,emailController.text);
-          usertype = 2;
-          Get.toNamed(
-              RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
-          loginFormKey.currentState?.reset();
-          return;
-        }, (right) => Get.snackbar('Login', 'user2 not found'));
+    final Either<String, String> resultOrExceptionUserValidate2 =
+        await _repository.checkUserValidate(
+            passWord: passWordController.text,
+            email: emailController.text,
+            user: 2);
+    resultOrExceptionUserValidate2.fold((left) {
+      saveLoginStatus(rememberMe.value, 2, emailController.text);
+      usertype = 2;
+      Get.toNamed(
+          RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
+      loginFormKey.currentState?.reset();
+      return;
+    }, (right) => Get.snackbar('Login', 'user2 not found'));
 
-        return;
-      }, (right) => Get.snackbar('Login', 'passWord is not  found'));
+    final Either<String, String> resultOrExceptionVendorValidate1 =
+        await _repository.checkVendorValidate(
+            passWord: passWordController.text,
+            email: emailController.text,
+            user: 1);
+    resultOrExceptionVendorValidate1.fold((left) {
+      saveLoginStatus(rememberMe.value, 1, emailController.text);
+      usertype = 1;
+      Get.toNamed(RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+      loginFormKey.currentState?.reset();
       return;
-    }, (right) async {
-      if (right) {
-        Get.snackbar('Login', 'Email is not  found');
-      }
-      return;
-    });
+    }, (right) => Get.snackbar('Login', 'user not found'));
+    return;
   }
 
   void goToRegisterPage() {
