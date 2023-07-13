@@ -3,17 +3,18 @@ import 'package:get/get.dart';
 import '../../controller/customer_home_page_flower_controller.dart';
 import 'bought_item.dart';
 import 'cart_flower_item.dart';
+import 'customer_bought_item.dart';
 
 
-class BoughtList extends GetView<CustomerHomePageFlowerController> {
-  const BoughtList({super.key});
+class CustomerBoughtList extends GetView<CustomerHomePageFlowerController> {
+  const CustomerBoughtList({super.key});
 
   @override
   Widget build(BuildContext context) => Obx(() =>  ListView.builder(
     shrinkWrap: true,
-    itemCount: controller.boughtFlowerListCart.length,
+    itemCount: controller.boughtFlowerList.length,
     itemBuilder: (final context, final index) =>
-        BoughtItem( boughtFlower:controller.boughtFlowerListCart[index] , ),
+        CustomerBoughtItem( boughtFlower:controller.boughtFlowerList[index] , ),
   ),
   );
 }

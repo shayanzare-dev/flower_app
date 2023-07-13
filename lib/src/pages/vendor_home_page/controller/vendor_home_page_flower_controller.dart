@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../flower_app.dart';
+import '../../customer_home_page/models/bought_flowers_view_model.dart';
+import '../../customer_home_page/models/cart_order_view_model.dart';
 import '../models/add_flower_dto.dart';
 import '../models/edit_flower_dto.dart';
 import '../models/edit_vendor_dto.dart';
@@ -106,6 +108,7 @@ class VendorHomePageFlowerController extends GetxController {
     Future.delayed(const Duration(seconds: 2), () {
       getProfileUser();
       getFlowerList();
+      getOrderListVendorHistory();
     });
     Future.delayed(const Duration(seconds: 3), () {
       editVendorFlowerList();
@@ -115,6 +118,27 @@ class VendorHomePageFlowerController extends GetxController {
         vendorUserEmail = userEmail;
       });
     });
+  }
+
+  RxList<BoughtFlowers> boughtFlowerList = RxList();
+  RxList<CartOrder> boughtOrderList = RxList();
+
+  Future<void> getOrderListVendorHistory() async {
+    boughtOrderList.clear();
+    final result = await _repository.getVendorUserOrdersHistory();
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      boughtOrderList.addAll(result.right);
+      for (final item in result.right) {
+        for (final items in item.boughtFlowers) {
+          if (items.flowerListViewModel.vendorUser.email ==
+              vendorUser[0].email) {
+            boughtFlowerList.addAll(item.boughtFlowers);
+          }
+        }
+      }
+    }
   }
 
   void toggleSelection(int index) {
@@ -150,6 +174,7 @@ class VendorHomePageFlowerController extends GetxController {
     Future.delayed(const Duration(seconds: 2), () {
       getProfileUser();
       getFlowerList();
+      getOrderListVendorHistory();
     });
     Future.delayed(const Duration(seconds: 3), () {
       editVendorFlowerList();
@@ -232,7 +257,6 @@ class VendorHomePageFlowerController extends GetxController {
     }
     return;
   }
-
 
   Future<void> deleteFlowerItem(FlowerListViewModel flowerItem) async {
     final result = await _repository.deleteFlowerItem(flowerItem.id);

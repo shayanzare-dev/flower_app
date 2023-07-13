@@ -4,6 +4,7 @@ import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../infrastructure/commons/base_url.dart';
+import '../../customer_home_page/models/cart_order_view_model.dart';
 import '../models/add_flower_dto.dart';
 import '../models/edit_flower_dto.dart';
 import '../models/edit_vendor_dto.dart';
@@ -27,6 +28,24 @@ class VendorHomePageFlowerRepository {
         vendorUser.add(vendorViewModel.fromJson(record));
       }
       return Right(vendorUser);
+    } else {
+      return const Left('error');
+    }
+  }
+
+  Future<Either<String, List<CartOrder>>> getVendorUserOrdersHistory(
+     ) async {
+    final url = Uri.parse("http://10.0.2.2:3000/orderList");
+    final responseOrException =
+    await httpClient.get(url, headers: customHeaders);
+
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      final List<CartOrder> customerUserOrders = [];
+      for (final record in json.decode(responseOrException.body)) {
+        customerUserOrders.add(CartOrder.fromJson(record));
+      }
+      return Right(customerUserOrders);
     } else {
       return const Left('error');
     }

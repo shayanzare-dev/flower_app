@@ -36,6 +36,7 @@ class FlowerListViewModel {
   }
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'name': name,
         'price': price,
         'countInStock': countInStock,

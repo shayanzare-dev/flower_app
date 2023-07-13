@@ -24,12 +24,11 @@ class CustomerHomePageFlowerController extends GetxController {
   RxList<FlowerListViewModel> customerFlowerList = RxList();
   RxMap<int, int> flowerBuyCount = RxMap();
 
-  RxList<BoughtFlowers> boughtFlowerList = RxList();
+  RxList<BoughtFlowers> boughtFlowerListCart = RxList();
   RxList<CartOrder> cartOrderList = RxList();
 
-  void refreshOrderList() {
-    cartOrderList.refresh();
-  }
+  RxList<BoughtFlowers> boughtFlowerList = RxList();
+  RxList<CartOrder> boughtOrderList = RxList();
 
   final selectedIndex = RxInt(0);
 
@@ -52,6 +51,7 @@ class CustomerHomePageFlowerController extends GetxController {
     Future.delayed(const Duration(seconds: 2), () {
       getCustomerUser();
       getFlowerList();
+      getOrderList();
     });
     Future.delayed(const Duration(seconds: 1), () {
       userEmail().then((userEmail) {
@@ -68,26 +68,28 @@ class CustomerHomePageFlowerController extends GetxController {
     if (buyCount == 0) {
       Get.snackbar('Add Flower', 'can not add to cart');
     } else {
+      String dateTime = DateTime.now().toString();
       int sumBuyPrice = buyCount! * flowerItem.price;
       BoughtFlowers boughtFlowers = BoughtFlowers(
           flowerListViewModel: flowerItem,
           buyCount: buyCount,
-          sumBuyPrice: sumBuyPrice);
-      boughtFlowerList.add(boughtFlowers);
+          sumBuyPrice: sumBuyPrice,
+          dateTime: dateTime,
+          user: customerUser[0]);
+      boughtFlowerListCart.add(boughtFlowers);
 
       editCountFlowerBuy(flowerItem, buyCount);
-      for (final item in boughtFlowerList) {
+      for (final item in boughtFlowerListCart) {
         if (item.flowerListViewModel.id == flowerItem.id) {
           totalPrice = totalPrice + item.sumBuyPrice;
         }
       }
 
-      String dateTime = DateTime.now().toString();
       CartOrder cartOrder = CartOrder(
           user: customerUser.first,
           dateTime: dateTime,
           totalPrice: totalPrice,
-          boughtFlowers: boughtFlowerList);
+          boughtFlowers: boughtFlowerListCart);
       if (cartOrderList.isEmpty) {
         cartOrderList.add(cartOrder);
         Get.snackbar('Add Flower', 'add to cart');
@@ -105,25 +107,26 @@ class CustomerHomePageFlowerController extends GetxController {
     FlowerListViewModel flowerItem,
     BoughtFlowers boughtFlowers,
   ) {
-    final int index = boughtFlowerList.indexOf(boughtFlowers);
+    final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     editCountFlowerCancelBuy(flowerItem);
-    int sumBuyPrice = boughtFlowerList[index].sumBuyPrice;
-    boughtFlowerList.removeAt(index);
+    int sumBuyPrice = boughtFlowerListCart[index].sumBuyPrice;
+    boughtFlowerListCart.removeAt(index);
     cartOrderList[0].totalPrice = sumBuyPrice;
     totalPrice = sumBuyPrice;
   }
 
   void editFlowerCountItemPlus(BoughtFlowers boughtFlowers) {
-    final int index = boughtFlowerList.indexOf(boughtFlowers);
-    if (boughtFlowerList[index].buyCount <
-        boughtFlowerList[index].flowerListViewModel.countInStock) {
-      boughtFlowerList[index].buyCount = boughtFlowerList[index].buyCount + 1;
-      boughtFlowerList[index].sumBuyPrice =
-          boughtFlowerList[index].sumBuyPrice +
-              boughtFlowerList[index].flowerListViewModel.price;
+    final int index = boughtFlowerListCart.indexOf(boughtFlowers);
+    if (boughtFlowerListCart[index].buyCount <
+        boughtFlowerListCart[index].flowerListViewModel.countInStock) {
+      boughtFlowerListCart[index].buyCount =
+          boughtFlowerListCart[index].buyCount + 1;
+      boughtFlowerListCart[index].sumBuyPrice =
+          boughtFlowerListCart[index].sumBuyPrice +
+              boughtFlowerListCart[index].flowerListViewModel.price;
       cartOrderList[0].totalPrice = cartOrderList[0].totalPrice +
-          boughtFlowerList[index].flowerListViewModel.price;
-      boughtFlowerList.refresh();
+          boughtFlowerListCart[index].flowerListViewModel.price;
+      boughtFlowerListCart.refresh();
       cartOrderList.refresh();
     } else {
       Get.snackbar('Edit Flower', 'cant plus count buy');
@@ -131,15 +134,16 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   void editFlowerCountItemMinus(BoughtFlowers boughtFlowers) {
-    final int index = boughtFlowerList.indexOf(boughtFlowers);
-    if (boughtFlowerList[index].buyCount > 1) {
-      boughtFlowerList[index].buyCount = boughtFlowerList[index].buyCount - 1;
-      boughtFlowerList[index].sumBuyPrice =
-          boughtFlowerList[index].sumBuyPrice -
-              boughtFlowerList[index].flowerListViewModel.price;
+    final int index = boughtFlowerListCart.indexOf(boughtFlowers);
+    if (boughtFlowerListCart[index].buyCount > 1) {
+      boughtFlowerListCart[index].buyCount =
+          boughtFlowerListCart[index].buyCount - 1;
+      boughtFlowerListCart[index].sumBuyPrice =
+          boughtFlowerListCart[index].sumBuyPrice -
+              boughtFlowerListCart[index].flowerListViewModel.price;
       cartOrderList[0].totalPrice = cartOrderList[0].totalPrice -
-          boughtFlowerList[index].flowerListViewModel.price;
-      boughtFlowerList.refresh();
+          boughtFlowerListCart[index].flowerListViewModel.price;
+      boughtFlowerListCart.refresh();
       cartOrderList.refresh();
     } else {
       Get.snackbar('Edit Flower', 'cant Minus count buy');
@@ -227,14 +231,12 @@ class CustomerHomePageFlowerController extends GetxController {
     return;
   }
 
-
-
   Future<void> onSubmitPurchaseCartOrder() async {
     final CartOrderDto dto = CartOrderDto(
         user: customerUser.first,
         dateTime: cartOrderList[0].dateTime,
         totalPrice: cartOrderList[0].totalPrice,
-        boughtFlowers: boughtFlowerList);
+        boughtFlowers: boughtFlowerListCart);
 
     final Either<String, String> resultOrException =
         (await _repository.addCartOrder(dto));
@@ -243,7 +245,7 @@ class CustomerHomePageFlowerController extends GetxController {
             'Your registration is not successfully code error:$error'),
         (String addRecord) async {
       Get.snackbar('Add cart', 'Your Add order is successfully');
-      boughtFlowerList.clear();
+      boughtFlowerListCart.clear();
       cartOrderList.clear();
     });
     return;
@@ -270,6 +272,19 @@ class CustomerHomePageFlowerController extends GetxController {
   Future<String> userEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('userEmail') ?? 'test@gmail.com';
+  }
+
+  Future<void> getOrderList() async {
+    boughtOrderList.clear();
+    final result = await _repository.getCustomerUserOrders(customerUserEmail);
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      boughtOrderList.addAll(result.right);
+      for (final item in result.right) {
+        boughtFlowerList.addAll(item.boughtFlowers);
+      }
+    }
   }
 
   Future<void> getFlowerList() async {
