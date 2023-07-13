@@ -121,7 +121,7 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   RxList<BoughtFlowers> boughtFlowerList = RxList();
-  RxList<CartOrder> boughtOrderList = RxList();
+  RxList<CartOrderViewModel> boughtOrderList = RxList();
 
   Future<void> getOrderListVendorHistory() async {
     boughtOrderList.clear();

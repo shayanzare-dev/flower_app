@@ -6,7 +6,7 @@ import '../../models/cart_order_view_model.dart';
 
 
 class CartFlowerItem extends GetView<CustomerHomePageFlowerController> {
-  final CartOrder cartOrderItem;
+  final CartOrderViewModel cartOrderItem;
 
   const CartFlowerItem({
     required this.cartOrderItem,

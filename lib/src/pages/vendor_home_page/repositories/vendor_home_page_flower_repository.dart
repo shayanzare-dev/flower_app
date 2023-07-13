@@ -33,7 +33,7 @@ class VendorHomePageFlowerRepository {
     }
   }
 
-  Future<Either<String, List<CartOrder>>> getVendorUserOrdersHistory(
+  Future<Either<String, List<CartOrderViewModel>>> getVendorUserOrdersHistory(
      ) async {
     final url = Uri.parse("http://10.0.2.2:3000/orderList");
     final responseOrException =
@@ -41,9 +41,9 @@ class VendorHomePageFlowerRepository {
 
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {
-      final List<CartOrder> customerUserOrders = [];
+      final List<CartOrderViewModel> customerUserOrders = [];
       for (final record in json.decode(responseOrException.body)) {
-        customerUserOrders.add(CartOrder.fromJson(record));
+        customerUserOrders.add(CartOrderViewModel.fromJson(record));
       }
       return Right(customerUserOrders);
     } else {

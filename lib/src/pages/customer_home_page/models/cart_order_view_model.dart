@@ -1,29 +1,29 @@
 import 'bought_flowers_view_model.dart';
 import 'user_view_model.dart';
 
-class CartOrder {
+class CartOrderViewModel {
   final UserViewModel user;
   final String dateTime;
   int totalPrice;
-  int? id;
+  int id;
   final List<BoughtFlowers> boughtFlowers;
 
-  CartOrder({
-    this.id,
+  CartOrderViewModel({
+    required this.id,
     required this.user,
     required this.dateTime,
     required this.totalPrice,
     required this.boughtFlowers,
   });
 
-  CartOrder copyWith({
+  CartOrderViewModel copyWith({
     int? id,
     UserViewModel? user,
     String? dateTime,
     int? totalPrice,
     List<BoughtFlowers>? boughtFlowers,
   }) {
-    return CartOrder(
+    return CartOrderViewModel(
       id : id ?? this.id,
       user: user ?? this.user,
       dateTime: dateTime ?? this.dateTime,
@@ -32,12 +32,12 @@ class CartOrder {
     );
   }
 
-  factory CartOrder.fromJson(Map<String, dynamic> json) {
+  factory CartOrderViewModel.fromJson(Map<String, dynamic> json) {
     List<dynamic> boughtFlowersJson = json['boughtFlowers'];
     List<BoughtFlowers> boughtFlowers =
         boughtFlowersJson.map((e) => BoughtFlowers.fromJson(e)).toList();
 
-    return CartOrder(
+    return CartOrderViewModel(
       user: UserViewModel.fromJson(json['user']),
       dateTime: json['dateTime'],
       totalPrice: json['totalPrice'],

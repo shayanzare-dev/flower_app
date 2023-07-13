@@ -101,7 +101,7 @@ class LoginPageFlowerController extends GetxController {
     resultOrExceptionUserValidate2.fold((left) {
       saveLoginStatus(rememberMe.value, 2, emailController.text);
       usertype = 2;
-      Get.toNamed(
+      Get.offAndToNamed(
           RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
       loginFormKey.currentState?.reset();
       return;
@@ -115,7 +115,7 @@ class LoginPageFlowerController extends GetxController {
     resultOrExceptionVendorValidate1.fold((left) {
       saveLoginStatus(rememberMe.value, 1, emailController.text);
       usertype = 1;
-      Get.toNamed(RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+      Get.offAndToNamed(RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
       loginFormKey.currentState?.reset();
       return;
     }, (right) => Get.snackbar('Login', 'user not found'));
