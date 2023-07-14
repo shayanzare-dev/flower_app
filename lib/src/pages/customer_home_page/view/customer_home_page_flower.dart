@@ -35,15 +35,48 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
             onTap: (value) {
               controller.onItemTapped(value);
             },
-            items: const <BottomNavigationBarItem>[
+            items:  <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
-                label: 'Cart',
-              ),
+            BottomNavigationBarItem(
+              icon: Stack(
+                  children: [
+                  Icon(Icons.shopping_cart),
+              Obx(() {
+                int cartCount = controller.cartCount.value;
+                if (cartCount == 0) {
+                  return SizedBox.shrink();
+                } else {
+                  return Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(2.0),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '$cartCount',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }
+              }),
+            ]),
+            label: 'Cart',
+          ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.search),
                 label: 'Search',

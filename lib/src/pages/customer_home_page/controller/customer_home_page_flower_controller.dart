@@ -44,6 +44,20 @@ class CustomerHomePageFlowerController extends GetxController {
     selectedIndex.value = index;
   }
 
+  void cartCountValue(int index) {
+    cartCount.value = index;
+  }
+  RxInt cartCount = 0.obs;
+
+  void incrementCartCount() {
+    cartCount.value++;
+  }
+
+  void decrementCartCount() {
+    cartCount.value--;
+  }
+
+
   String customerUserEmail = '';
 
   @override
@@ -98,15 +112,34 @@ class CustomerHomePageFlowerController extends GetxController {
         Get.snackbar('Add Flower', 'add to cart');
         flowerBuyCount[flowerItem.id] = 0;
         addCartOrder();
-        getOrderCart();
+        boughtFlowerListCart.clear();
+        cartOrderList.clear();
+        refresh();
       } else {
         cartOrderList.clear();
         cartOrderList.add(cartOrder);
         Get.snackbar('Add Flower', 'add to cart');
         flowerBuyCount[flowerItem.id] = 0;
         updateCartOrder(cartOrderList[0].id);
+        incrementCartCount();
       }
     }
+
+  }
+
+  @override
+  Future<void> refresh()async {
+    Future.delayed(const Duration(seconds: 2), () {
+      getCustomerUser();
+      getFlowerList();
+      getOrderCart();
+      getOrderList();
+    });
+    Future.delayed(const Duration(seconds: 1), () {
+      userEmail().then((userEmail) {
+        customerUserEmail = userEmail;
+      });
+    });
   }
 
   Future<void> addCartOrder() async {
@@ -151,8 +184,11 @@ class CustomerHomePageFlowerController extends GetxController {
     final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     int sumBuyPrice = boughtFlowerListCart[index].sumBuyPrice;
     boughtFlowerListCart.removeAt(index);
-    cartOrderList[0].totalPrice = sumBuyPrice;
-    totalPrice = sumBuyPrice;
+    decrementCartCount();
+    cartOrderList[0].totalPrice =cartOrderList[0].totalPrice - sumBuyPrice;
+    totalPrice = totalPrice - sumBuyPrice;
+    updateCartOrder(cartOrderList[0].id);
+    cartOrderList.refresh();
   }
 
   void editFlowerCountItemPlus(BoughtFlowers boughtFlowers) {
@@ -244,27 +280,34 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   Future<void> onSubmitPurchaseCartOrder() async {
-    final CartOrderDto dto = CartOrderDto(
-        user: customerUser.first,
-        dateTime: cartOrderList[0].dateTime,
-        totalPrice: cartOrderList[0].totalPrice,
-        boughtFlowers: boughtFlowerListCart);
-    for (final item in boughtFlowerListCart) {
-      editCountFlowerBuy(item.flowerListViewModel, item.buyCount);
-    }
-    Future.delayed(const Duration(seconds: 2), () async {
-      final Either<String, String> resultOrException =
-          (await _repository.addCartOrderToOrderList(dto));
-      resultOrException.fold(
-          (String error) => Get.snackbar('Register',
-              'Your registration is not successfully code error:$error'),
-          (String addRecord) {
-        Get.snackbar('Add cart', 'Your Add order is successfully');
-        deleteCartOrder(cartOrderList[0].id);
-        boughtFlowerListCart.clear();
-        cartOrderList.clear();
+    if (boughtFlowerListCart.isEmpty){
+      Get.snackbar('Add cart', 'Your cart  is empty');
+    }else {
+      final CartOrderDto dto = CartOrderDto(
+          user: customerUser.first,
+          dateTime: cartOrderList[0].dateTime,
+          totalPrice: cartOrderList[0].totalPrice,
+          boughtFlowers: boughtFlowerListCart);
+      for (final item in boughtFlowerListCart) {
+        editCountFlowerBuy(item.flowerListViewModel, item.buyCount);
+      }
+      Future.delayed(const Duration(seconds: 2), () async {
+        final Either<String, String> resultOrException =
+        (await _repository.addCartOrderToOrderList(dto));
+        resultOrException.fold(
+                (String error) => Get.snackbar('Register',
+                'Your registration is not successfully code error:$error'),
+                (String addRecord) {
+              Get.snackbar('Add cart', 'Your Add order is successfully');
+              deleteCartOrder(cartOrderList[0].id);
+              boughtFlowerListCart.clear();
+              cartOrderList.clear();
+              cartCount.value=0;
+            });
       });
-    });
+    }
+
+
   }
 
   Future<void> deleteCartOrder(int cartId) async {
@@ -301,6 +344,7 @@ class CustomerHomePageFlowerController extends GetxController {
 
   Future<void> getOrderCart() async {
     cartOrderList.clear();
+    boughtFlowerListCart.clear();
     final result = await _repository.getCartOrders(customerUserEmail);
     if (result.isLeft) {
       Get.snackbar('Login', 'user not found');
@@ -308,6 +352,9 @@ class CustomerHomePageFlowerController extends GetxController {
       cartOrderList.addAll(result.right);
       for (final item in result.right) {
         boughtFlowerListCart.addAll(item.boughtFlowers);
+        for (final items in item.boughtFlowers) {
+          incrementCartCount();
+        }
       }
     }
   }
