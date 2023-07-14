@@ -31,11 +31,11 @@ class SearchAlertDialog extends GetView<VendorHomePageFlowerController> {
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => controller.clearSearchFilterFlowers(),
                 child: const Text('clear Filter'),
               ),
               TextButton(
-                onPressed: () => controller.searchFilterFlowers(),
+                onPressed: () => controller.getSearchFilterFlowerList(),
                 child: const Text('OK'),
               )
             ],

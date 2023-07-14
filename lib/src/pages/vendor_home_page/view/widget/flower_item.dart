@@ -19,104 +19,104 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
-          onTap: () {
-            controller.goToEditFlowerPage(flowerItem);
-          },
+            onTap: () {
+              controller.goToEditFlowerPage(flowerItem);
+            },
             child: DecoratedBox(
-          decoration: const BoxDecoration(
-            color: Color(0xff9ae4ec),
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
-          ),
-          child: Column(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
+              decoration: const BoxDecoration(
+                color: Color(0xff9ae4ec),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
                 ),
-                constraints: const BoxConstraints.expand(
-                  height: 200,
-                ),
-                child: StringToImagePost(base64String: flowerItem.image),
               ),
-              Row(
+              child: Column(
                 children: [
-                  const Text('Flower Name : '),
-                  Text(flowerItem.name),
-                ],
-              ),
-              const Row(
-                children: [
-                  Text('Flower Description '),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(flowerItem.shortDescription),
-                ],
-              ),
-              Row(
-                children: [
-                  Text('Flower Color :'),
                   Container(
-                    height: 20,
-                    width: 20,
-                    color: Color(flowerItem.color),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                    ),
+                    constraints: const BoxConstraints.expand(
+                      height: 200,
+                    ),
+                    child: StringToImagePost(base64String: flowerItem.image),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text('Flower Price :'),
-                  Text(flowerItem.price.toString()),
-                ],
-              ),
-              Column(
-                children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () {
-                            controller.editCountFlowerMinus(flowerItem);
-                        },
+                      const Text('Flower Name : '),
+                      Text(flowerItem.name),
+                    ],
+                  ),
+                  const Row(
+                    children: [
+                      Text('Flower Description '),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(flowerItem.shortDescription),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Flower Color :'),
+                      Container(
+                        height: 20,
+                        width: 20,
+                        color: Color(flowerItem.color),
                       ),
-                      Text('Count Flower: ${flowerItem.countInStock}'),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          controller.editCountFlowerPlus(flowerItem);
-                        },
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Flower Price :'),
+                      Text(flowerItem.price.toString()),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.remove),
+                            onPressed: () {
+                              controller.editCountFlowerMinus(flowerItem);
+                            },
+                          ),
+                          Text('Count Flower: ${flowerItem.countInStock}'),
+                          IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              controller.editCountFlowerPlus(flowerItem);
+                            },
+                          ),
+                          DeleteAlertDialog(flowerItem: flowerItem),
+                        ],
                       ),
-                      DeleteAlertDialog(flowerItem: flowerItem),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      _flowerChip(),
                     ],
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  _flowerChip(),
-                ],
-              ),
-            ],
-          ),
-        )),
+            )),
       );
 
   Widget _flowerChip() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: 50,
-            width: 350,
+            height: 30,
+            width: 300,
             child: Column(
               children: [
                 Expanded(
@@ -143,8 +143,6 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
     );
   }
 }
-
-
 
 class ChipWithDeleteIcon extends StatelessWidget {
   final int index;

@@ -17,7 +17,7 @@ class SearchScreen extends GetView<VendorHomePageFlowerController> {
           TextField(
             controller: controller.searchController,
             onChanged: (value) {
-              controller.searchFlowers(value);
+              controller.getSearchFlowerList(value);
             },
             decoration: InputDecoration(
                 suffixIcon: IconButton(
@@ -32,7 +32,7 @@ class SearchScreen extends GetView<VendorHomePageFlowerController> {
                 labelText: 'Search or for filter press search icon',
                 prefixIcon: SearchAlertDialog()),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Expanded(
             child: Obx(() {
               return ListView.builder(

@@ -12,10 +12,9 @@ class HomeScreen extends GetView<VendorHomePageFlowerController> {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: RefreshIndicator(
-          onRefresh: controller.getFlowerList,
-          child:const FlowerList(),
-        ),
-
+        onRefresh: controller.getFlowerList,
+        child: const FlowerList(),
+      ),
     );
   }
 }

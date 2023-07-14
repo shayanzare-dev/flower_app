@@ -66,7 +66,7 @@ class VendorHomePageFlowerController extends GetxController {
     }
   }
 
-  Rx<RangeValues> valuesRange = Rx<RangeValues>(RangeValues(0, 100));
+  Rx<RangeValues> valuesRange = Rx<RangeValues>(RangeValues(0, 1000));
 
   RangeValues get values => valuesRange.value;
 
@@ -74,26 +74,69 @@ class VendorHomePageFlowerController extends GetxController {
     valuesRange.value = values;
   }
 
-  void searchFilterFlowers() {
-    int? colorFilter;
+  void clearSearchFilterFlowers() {
+    valuesRange = Rx<RangeValues>(const RangeValues(0, 1000));
+    selectedItemDropDown.value = 'select a item';
+    for (int i = 0; i < savedSelections.length; i++) {
+      items[i].isSelected = false;
+    }
+    List<String> selections =
+        items.map((item) => item.isSelected.toString()).toList();
+    _prefs.setStringList('selections', selections);
+    items.refresh();
+  }
+
+  Future<void> getSearchFilterFlowerList() async {
+    filteredFlowerList.clear();
+    final categoryResult = await _repository.searchFilterCategory(
+      category: selectedItemDropDown.value,
+      email: vendorUserEmail,
+    );
+    if (categoryResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (categoryResult.isRight) {
+      filteredFlowerList.addAll(categoryResult.right);
+    }
+    final priceResult = await _repository.searchFilterPriceRange(
+      email: vendorUserEmail,
+      min: valuesRange.value.start.toString(),
+      max: valuesRange.value.end.toString(),
+    );
+    if (priceResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (priceResult.isRight) {
+      filteredFlowerList.addAll(priceResult.right);
+    }
+    List<int> colorFilter = [];
     for (int i = 0; i < savedSelections.length; i++) {
       items[i].isSelected = savedSelections[i] == 'true';
       if (items[i].isSelected) {
-        colorFilter = items[i].color.value;
+        colorFilter.add(items[i].color.value);
       }
     }
-    filteredFlowerList.value = flowerList.where((flower) {
-      return flower.category.contains(selectedItemDropDown.toString()) ||
-          flower.color == colorFilter;
-    }).toList();
+    String colorFilters =
+        colorFilter.map((color) => 'color_like=$color').join('&');
+    final colorResult = await _repository.searchFilterColor(
+      email: vendorUserEmail,
+      colors: colorFilters,
+    );
+    if (colorResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (colorResult.isRight) {
+      filteredFlowerList.addAll(colorResult.right);
+    }
   }
 
-  void searchFlowers(String query) {
-    if (query != '') {
-      filteredFlowerList.value = flowerList.where((flower) {
-        return flower.name.toLowerCase().contains(query.toLowerCase()) ||
-            flower.shortDescription.toLowerCase().contains(query.toLowerCase());
-      }).toList();
+  Future<void> getSearchFlowerList(String search) async {
+    if (search != '') {
+      final result = await _repository.search(search, vendorUserEmail);
+      if (result.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (result.isRight) {
+        filteredFlowerList.addAll(result.right);
+      }
+    } else {
+      filteredFlowerList.clear();
     }
   }
 
@@ -162,7 +205,6 @@ class VendorHomePageFlowerController extends GetxController {
   void dispose() {
     categoryTextController.dispose();
     searchController.dispose();
-
     super.dispose();
   }
 
