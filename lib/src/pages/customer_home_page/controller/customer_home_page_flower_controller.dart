@@ -83,6 +83,49 @@ class CustomerHomePageFlowerController extends GetxController {
   void onItemTappedNavBar({required int navBarIndex}) {
     selectedIndex.value = navBarIndex;
   }
+  Future<String> userEmail() async {
+    return _prefs.getString('userEmail') ?? 'test@gmail.com';
+  }
+  Future<void> getOrderCart() async {
+    cartOrderList.clear();
+    boughtFlowerListCart.clear();
+    final result = await _repository.getCartOrders(customerUserEmail);
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      cartOrderList.addAll(result.right);
+      for (final item in result.right) {
+        boughtFlowerListCart.addAll(item.boughtFlowers);
+        for (final items in item.boughtFlowers) {
+          incrementCartCount();
+        }
+      }
+    }
+  }
+  Future<void> getFlowerList() async {
+    customerFlowerList.clear();
+    final result = await _repository.getFlowerList();
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      customerFlowerList.addAll(result.right);
+      for (final item in result.right) {
+        flowerBuyCount[item.id] = 0;
+        items.add(GridItem(color: Color(item.color)));
+        for (final categoryItem in item.category) {
+          dropDownButtonList.add(categoryItem.toString());
+        }
+      }
+    }
+  }
+  Future<void> getCustomerUser() async {
+    final result = await _repository.getCustomerUser(customerUserEmail);
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      customerUser.addAll(result.right);
+    }
+  }
 
   //Cart Screen
   void incrementCartCount() {
@@ -135,7 +178,7 @@ class CustomerHomePageFlowerController extends GetxController {
         cartOrderList.add(cartOrder);
         Get.snackbar('Add Flower', 'add to cart');
         flowerBuyCount[flowerItem.id] = 0;
-        updateCartOrder(cartOrderList[0].id);
+        updateCartOrder( cartId: cartOrderList[0].id);
         incrementCartCount();
       }
     }
@@ -156,7 +199,7 @@ class CustomerHomePageFlowerController extends GetxController {
           Get.snackbar('Add cart', 'Your Add order is successfully');
         });
   }
-  Future<void> updateCartOrder(int cartId) async {
+  Future<void> updateCartOrder({required int cartId}) async {
     final EditCartOrderDto dto = EditCartOrderDto(
         user: customerUser.first,
         dateTime: cartOrderList[0].dateTime,
@@ -183,7 +226,7 @@ class CustomerHomePageFlowerController extends GetxController {
     decrementCartCount();
     cartOrderList[0].totalPrice = cartOrderList[0].totalPrice - sumBuyPrice;
     totalPrice = totalPrice - sumBuyPrice;
-    updateCartOrder(cartOrderList[0].id);
+    updateCartOrder( cartId: cartOrderList[0].id);
     cartOrderList.refresh();
   }
   void editFlowerCountBuyCartPlus({required BoughtFlowersViewModel boughtFlowers}) {
@@ -199,7 +242,7 @@ class CustomerHomePageFlowerController extends GetxController {
           boughtFlowerListCart[index].flowerListViewModel.price;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
-      updateCartOrder(cartOrderList[0].id);
+      updateCartOrder( cartId: cartOrderList[0].id);
     } else {
       Get.snackbar('Edit Flower', 'cant plus count buy');
     }
@@ -216,7 +259,7 @@ class CustomerHomePageFlowerController extends GetxController {
           boughtFlowerListCart[index].flowerListViewModel.price;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
-      updateCartOrder(cartOrderList[0].id);
+      updateCartOrder(cartId: cartOrderList[0].id);
     } else {
       Get.snackbar('Edit Flower', 'cant Minus count buy');
     }
@@ -235,6 +278,92 @@ class CustomerHomePageFlowerController extends GetxController {
         Navigator.of(context).pop();
         break;
     }
+  }
+  Future<void> editCountFlowerBuy({
+      required FlowerListViewModel flowerItem, required int countBuy}) async {
+    if (flowerItem.countInStock > 0) {
+      final EditFlowerDto dto = EditFlowerDto(
+          id: flowerItem.id,
+          price: flowerItem.price,
+          shortDescription: flowerItem.shortDescription,
+          countInStock: flowerItem.countInStock - countBuy,
+          category: flowerItem.category,
+          name: flowerItem.name,
+          color: flowerItem.color,
+          image: flowerItem.image,
+          vendorUser: VendorViewModel(
+              id: flowerItem.vendorUser.id,
+              passWord: flowerItem.vendorUser.passWord,
+              firstName: flowerItem.vendorUser.firstName,
+              lastName: flowerItem.vendorUser.lastName,
+              email: flowerItem.vendorUser.email,
+              image: flowerItem.vendorUser.image,
+              userType: flowerItem.vendorUser.userType));
+      final Either<String, String> resultOrException =
+      (await _repository.editFlower(dto, flowerItem.id));
+      resultOrException.fold(
+              (String error) => Get.snackbar('Register',
+              'Your registration is not successfully code error:$error'),
+              (String editFlower) {
+            getFlowerList();
+            Get.snackbar('edit Flower', 'Your Add Flower is successfully');
+          });
+    } else {
+      Get.snackbar('edit Flower', 'can not minus count in stock');
+    }
+    return;
+  }
+  Future<void> onSubmitPurchaseCartOrder() async {
+    if (boughtFlowerListCart.isEmpty) {
+      Get.snackbar('Add cart', 'Your cart  is empty');
+    } else {
+      final AddCartOrderDto dto = AddCartOrderDto(
+          user: customerUser.first,
+          dateTime: cartOrderList[0].dateTime,
+          totalPrice: cartOrderList[0].totalPrice,
+          boughtFlowers: boughtFlowerListCart);
+      for (final item in boughtFlowerListCart) {
+        editCountFlowerBuy( flowerItem: item.flowerListViewModel, countBuy:  item.buyCount);
+      }
+      Future.delayed(const Duration(seconds: 2), () async {
+        final Either<String, String> resultOrException =
+        (await _repository.addCartOrderToOrderList(dto));
+        resultOrException.fold(
+                (String error) => Get.snackbar('Register',
+                'Your registration is not successfully code error:$error'),
+                (String addRecord) {
+              Get.snackbar('Add cart', 'Your Add order is successfully');
+              deleteCartOrder( cartId: cartOrderList[0].id);
+              boughtFlowerListCart.clear();
+              cartOrderList.clear();
+              cartCount.value = 0;
+            });
+      });
+    }
+  }
+  Future<void> deleteCartOrder({required int cartId}) async {
+    final result = await _repository.deleteCartOrder(cartId);
+    if (result.right == 'success') {
+      Get.snackbar('done', result.right);
+    } else {
+      Get.snackbar('error', result.left);
+    }
+  }
+  void editBuyCountFlowerPlus({required FlowerListViewModel flowerItem}) {
+    if (flowerItem.countInStock > flowerBuyCount[flowerItem.id]!) {
+      flowerBuyCount[flowerItem.id] = (flowerBuyCount[flowerItem.id]! + 1);
+    } else {
+      Get.snackbar('edit Flower', 'can not plus count in stock');
+    }
+    return;
+  }
+  void editBuyCountFlowerMinus({required FlowerListViewModel flowerItem}) {
+    if (flowerBuyCount[flowerItem.id]! > 0) {
+      flowerBuyCount[flowerItem.id] = (flowerBuyCount[flowerItem.id]! - 1);
+    } else {
+      Get.snackbar('edit Flower', 'can not minus count in stock');
+    }
+    return;
   }
 
   //Search Screen
@@ -319,141 +448,6 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   //History Screen
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  Future<void> editCountFlowerBuy(
-      FlowerListViewModel flowerItem, int countBuy) async {
-    if (flowerItem.countInStock > 0) {
-      final EditFlowerDto dto = EditFlowerDto(
-          id: flowerItem.id,
-          price: flowerItem.price,
-          shortDescription: flowerItem.shortDescription,
-          countInStock: flowerItem.countInStock - countBuy,
-          category: flowerItem.category,
-          name: flowerItem.name,
-          color: flowerItem.color,
-          image: flowerItem.image,
-          vendorUser: VendorViewModel(
-              id: flowerItem.vendorUser.id,
-              passWord: flowerItem.vendorUser.passWord,
-              firstName: flowerItem.vendorUser.firstName,
-              lastName: flowerItem.vendorUser.lastName,
-              email: flowerItem.vendorUser.email,
-              image: flowerItem.vendorUser.image,
-              userType: flowerItem.vendorUser.userType));
-      final Either<String, String> resultOrException =
-          (await _repository.editFlower(dto, flowerItem.id));
-      resultOrException.fold(
-          (String error) => Get.snackbar('Register',
-              'Your registration is not successfully code error:$error'),
-          (String editFlower) {
-        getFlowerList();
-        Get.snackbar('edit Flower', 'Your Add Flower is successfully');
-      });
-    } else {
-      Get.snackbar('edit Flower', 'can not minus count in stock');
-    }
-    return;
-  }
-
-  Future<void> onSubmitPurchaseCartOrder() async {
-    if (boughtFlowerListCart.isEmpty) {
-      Get.snackbar('Add cart', 'Your cart  is empty');
-    } else {
-      final AddCartOrderDto dto = AddCartOrderDto(
-          user: customerUser.first,
-          dateTime: cartOrderList[0].dateTime,
-          totalPrice: cartOrderList[0].totalPrice,
-          boughtFlowers: boughtFlowerListCart);
-      for (final item in boughtFlowerListCart) {
-        editCountFlowerBuy(item.flowerListViewModel, item.buyCount);
-      }
-      Future.delayed(const Duration(seconds: 2), () async {
-        final Either<String, String> resultOrException =
-            (await _repository.addCartOrderToOrderList(dto));
-        resultOrException.fold(
-            (String error) => Get.snackbar('Register',
-                'Your registration is not successfully code error:$error'),
-            (String addRecord) {
-          Get.snackbar('Add cart', 'Your Add order is successfully');
-          deleteCartOrder(cartOrderList[0].id);
-          boughtFlowerListCart.clear();
-          cartOrderList.clear();
-          cartCount.value = 0;
-        });
-      });
-    }
-  }
-
-  Future<void> deleteCartOrder(int cartId) async {
-    final result = await _repository.deleteCartOrder(cartId);
-    if (result.right == 'success') {
-      Get.snackbar('done', result.right);
-    } else {
-      Get.snackbar('error', result.left);
-    }
-  }
-
-  void editBuyCountFlowerPlus(FlowerListViewModel flowerItem) {
-    if (flowerItem.countInStock > flowerBuyCount[flowerItem.id]!) {
-      flowerBuyCount[flowerItem.id] = (flowerBuyCount[flowerItem.id]! + 1);
-    } else {
-      Get.snackbar('edit Flower', 'can not plus count in stock');
-    }
-    return;
-  }
-
-  void editBuyCountFlowerMinus(FlowerListViewModel flowerItem) {
-    if (flowerBuyCount[flowerItem.id]! > 0) {
-      flowerBuyCount[flowerItem.id] = (flowerBuyCount[flowerItem.id]! - 1);
-    } else {
-      Get.snackbar('edit Flower', 'can not minus count in stock');
-    }
-    return;
-  }
-
-  Future<String> userEmail() async {
-    return _prefs.getString('userEmail') ?? 'test@gmail.com';
-  }
-
-  Future<void> getOrderCart() async {
-    cartOrderList.clear();
-    boughtFlowerListCart.clear();
-    final result = await _repository.getCartOrders(customerUserEmail);
-    if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
-    } else if (result.isRight) {
-      cartOrderList.addAll(result.right);
-      for (final item in result.right) {
-        boughtFlowerListCart.addAll(item.boughtFlowers);
-        for (final items in item.boughtFlowers) {
-          incrementCartCount();
-        }
-      }
-    }
-  }
-
   Future<void> getOrderList() async {
     boughtOrderList.clear();
     final result = await _repository.getCustomerUserOrders(customerUserEmail);
@@ -467,31 +461,6 @@ class CustomerHomePageFlowerController extends GetxController {
     }
   }
 
-  Future<void> getFlowerList() async {
-    customerFlowerList.clear();
-    final result = await _repository.getFlowerList();
-    if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
-    } else if (result.isRight) {
-      customerFlowerList.addAll(result.right);
-      for (final item in result.right) {
-        flowerBuyCount[item.id] = 0;
-        items.add(GridItem(color: Color(item.color)));
-        for (final categoryItem in item.category) {
-          dropDownButtonList.add(categoryItem.toString());
-        }
-      }
-    }
-  }
-
-  Future<void> getCustomerUser() async {
-    final result = await _repository.getCustomerUser(customerUserEmail);
-    if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
-    } else if (result.isRight) {
-      customerUser.addAll(result.right);
-    }
-  }
 
   void goToLoginPage() {
     Get.offAndToNamed(RouteNames.loginPageFlower);

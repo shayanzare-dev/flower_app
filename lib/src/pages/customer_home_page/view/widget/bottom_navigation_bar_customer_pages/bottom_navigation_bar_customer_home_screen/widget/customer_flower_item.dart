@@ -208,7 +208,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                controller.editBuyCountFlowerMinus(flowerItem);
+                                controller.editBuyCountFlowerMinus(flowerItem: flowerItem);
                               },
                               icon: const Icon(
                                 Icons.remove,
@@ -225,7 +225,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                                 )),
                             IconButton(
                               onPressed: () {
-                                controller.editBuyCountFlowerPlus(flowerItem);
+                                controller.editBuyCountFlowerPlus( flowerItem: flowerItem);
                               },
                               icon: const Icon(
                                 Icons.add,
