@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../../controller/vendor_home_page_flower_controller.dart';
+
+
+import '../../controller/edit_flower_page_controller.dart';
 
 class AddChipTextField extends StatelessWidget {
   const AddChipTextField({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<VendorHomePageFlowerController>(
+    return GetBuilder<EditFlowerPageController>(
       builder: (controller) => TextField(
         controller: controller.categoryTextController,
         decoration: InputDecoration(

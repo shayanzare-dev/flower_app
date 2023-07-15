@@ -1,13 +1,11 @@
-import 'dart:typed_data';
-import 'package:flower_app/src/pages/customer_home_page/view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_home_screen/widget/flower_chip_list.dart';
-import 'package:flower_app/src/pages/customer_home_page/view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_home_screen/widget/string_to_image_post.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../../../../../../vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_profile_screen/widget/string_to_image_profile.dart';
-import '../../../../../controller/customer_home_page_flower_controller.dart';
-import '../../../../../models/flower_list_view_model.dart';
 import 'dart:convert';
 
+import 'package:flower_app/src/pages/customer_home_page/view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_home_screen/widget/flower_chip_list.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../../../controller/customer_home_page_flower_controller.dart';
+import '../../../../../models/flower_list_view_model.dart';
 import 'add_to_cart_btn.dart';
 
 class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
@@ -54,7 +52,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  stops: [0.2, 1.0],
+                  stops: const [0.2, 1.0],
                 ),
               ),
               child: Padding(
@@ -65,7 +63,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           'Name: ',
                           style: TextStyle(
                             color: Colors.white,
@@ -75,7 +73,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         ),
                         Text(
                           flowerItem.name,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 24.0,
                             fontWeight: FontWeight.bold,
@@ -83,36 +81,36 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.0),
+                    const SizedBox(height: 8.0),
                     Row(
                       children: [
-                        Text('Description: ',
+                        const Text('Description: ',
                             style:
                                 TextStyle(color: Colors.white, fontSize: 16)),
                         Text(
                           flowerItem.shortDescription,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16.0,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.0),
+                    const SizedBox(height: 8.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            Text('Vendor Name: ',
+                            const Text('Vendor Name: ',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 16)),
                             Text(flowerItem.vendorUser.firstName,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 16)),
-                            SizedBox(width: 5.0),
+                            const SizedBox(width: 5.0),
                             Text(flowerItem.vendorUser.lastName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 16)),
                           ],
                         ),
@@ -129,7 +127,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                                           flowerItem.vendorUser.image)),
                                 ),
                               ),
-                              child: SizedBox(
+                              child: const SizedBox(
                                 width: 30.0,
                                 height: 30.0,
                               ),
@@ -138,13 +136,13 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 5.0),
+                    const SizedBox(height: 5.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            Text('Color: ',
+                            const Text('Color: ',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 16)),
                             Container(
@@ -152,13 +150,13 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                                 color: Color(flowerItem.color),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 8.0),
                             ),
                           ],
                         ),
                         Row(children: [
-                          Text(
+                          const Text(
                             'Count: ',
                             style: TextStyle(
                               color: Colors.white,
@@ -168,7 +166,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                           ),
                           Text(
                             flowerItem.countInStock.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24.0,
                               fontWeight: FontWeight.bold,
@@ -177,17 +175,19 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         ]),
                         Row(
                           children: [
-                            AddToCartBtn(flowerItem: flowerItem,),
+                            AddToCartBtn(
+                              flowerItem: flowerItem,
+                            ),
                           ],
                         ),
                       ],
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(children: [
-                          Text(
+                          const Text(
                             'Price: ',
                             style: TextStyle(
                               color: Colors.white,
@@ -197,7 +197,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                           ),
                           Text(
                             ('\$${flowerItem.price}'),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24.0,
                               fontWeight: FontWeight.bold,
@@ -210,14 +210,14 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                               onPressed: () {
                                 controller.editBuyCountFlowerMinus(flowerItem);
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.remove,
                                 color: Colors.white,
                               ),
                             ),
                             Obx(() => Text(
                                   'Count Buy: ${controller.flowerBuyCount[flowerItem.id]}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.bold,
@@ -227,7 +227,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                               onPressed: () {
                                 controller.editBuyCountFlowerPlus(flowerItem);
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.add,
                                 color: Colors.white,
                               ),
@@ -353,8 +353,4 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
             )*/
         ),
       );
-
-
 }
-
-

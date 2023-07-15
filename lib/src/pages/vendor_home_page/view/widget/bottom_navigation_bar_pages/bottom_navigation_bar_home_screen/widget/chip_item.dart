@@ -16,7 +16,7 @@ class ChipItem extends StatelessWidget {
         
         backgroundColor: const Color(0xff04927c),
         label: Text(flowerItem.category[index],
-            style: TextStyle(color: Colors.white, fontSize: 15)),
+            style: const TextStyle(color: Colors.white, fontSize: 15)),
       ),
     );
   }

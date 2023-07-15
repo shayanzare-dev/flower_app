@@ -1,13 +1,11 @@
 import 'package:flower_app/src/pages/vendor_home_page/models/vendor_view_model.dart';
-import 'package:get/get.dart';
 
-import '../../shared/user_type_enum.dart';
 
 class EditFlowerDto {
   final int price, countInStock, color, id;
   final String name, image, shortDescription;
   final List category;
-  final vendorViewModel vendorUser;
+  final VendorViewModel vendorUser;
 
 
   EditFlowerDto(

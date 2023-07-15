@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../../controller/vendor_home_page_flower_controller.dart';
+import '../../controller/edit_flower_page_controller.dart';
 import 'add_chip.dart';
 import 'chip_item.dart';
 
@@ -25,7 +25,7 @@ class FlowerChipList extends StatelessWidget {
                   children: [
                     const AddChipTextField(),
                     Expanded(
-                      child: GetBuilder<VendorHomePageFlowerController>(
+                      child: GetBuilder<EditFlowerPageController>(
                         builder: (controller) => Obx(
                               () => ListView.builder(
                             shrinkWrap: true,

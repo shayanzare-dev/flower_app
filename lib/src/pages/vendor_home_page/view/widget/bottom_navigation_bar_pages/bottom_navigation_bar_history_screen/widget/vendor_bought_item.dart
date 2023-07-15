@@ -1,13 +1,11 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flower_app/src/pages/customer_home_page/models/bought_flowers_view_model.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../controller/vendor_home_page_flower_controller.dart';
 
 class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
-  final BoughtFlowers boughtFlower;
+  final BoughtFlowersViewModel boughtFlower;
 
   const VendorBoughtItem({
     required this.boughtFlower,
@@ -51,7 +49,7 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: [0.2, 1.0],
+                    stops: const [0.2, 1.0],
                   ),
                 ),
                 child: Padding(
@@ -62,7 +60,7 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                     children: [
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'Flower Name: ',
                             style: TextStyle(
                               color: Colors.white,
@@ -72,7 +70,7 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                           ),
                           Text(
                             boughtFlower.flowerListViewModel.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
@@ -80,46 +78,46 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          Text('Custome Name: ',
+                          const Text('Customer Name: ',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20)),
                           Text(
                             boughtFlower.user.firstName,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
                             ),
                           ),
-                          SizedBox(width: 5.0),
+                          const SizedBox(width: 5.0),
                           Text(
                             boughtFlower.user.lastName,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          Text('Bought Date: ',
+                          const Text('Bought Date: ',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16)),
                           Text(boughtFlower.dateTime,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16)),
                         ],
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                            Text(
+                            const Text(
                               'Price: ',
                               style: TextStyle(
                                 color: Colors.white,
@@ -129,7 +127,7 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                             ),
                             Text(
                               ('\$${boughtFlower.flowerListViewModel.price}'),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -138,7 +136,7 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                           ]),
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Count Bought: ',
                                 style: TextStyle(
                                   color: Colors.white,
@@ -148,7 +146,7 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                               ),
                               Text(
                                 boughtFlower.buyCount.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 24.0,
                                   fontWeight: FontWeight.bold,
@@ -162,48 +160,6 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                   ),
                 ),
               ),
-            )
-
-            /*Column(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                    ),
-                  ),
-                  constraints: const BoxConstraints.expand(
-                    height: 100,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text('Flower Name : '),
-                    Text(boughtFlower.flowerListViewModel.name),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Flower buy count : '),
-                    Text(boughtFlower.buyCount.toString()),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('customer Flower name : '),
-                    Text(boughtFlower.user.firstName),
-                    Text(boughtFlower.user.lastName),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('date : '),
-                    Text(boughtFlower.dateTime),
-                  ],
-                ),
-              ],
-            )*/
-            ),
+            )),
       );
 }

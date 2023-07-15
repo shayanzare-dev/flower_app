@@ -20,6 +20,5 @@ class RegisterUserDto {
         'email': email,
         'passWord': passWord,
         'image': image,
-        'boughtList': []
       };
 }

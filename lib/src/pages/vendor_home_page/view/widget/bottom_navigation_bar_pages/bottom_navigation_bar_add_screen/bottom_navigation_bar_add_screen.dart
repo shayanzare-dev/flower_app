@@ -60,7 +60,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerName(value!);
+              return controller.validateFlowerName( value: value!,);
             },
           ),
         ),
@@ -97,7 +97,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerDescription(value!);
+              return controller.validateFlowerDescription( value: value!,);
             },
           ),
         ),
@@ -121,7 +121,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
                     borderRadius: BorderRadius.circular(40),
                     child: InkWell(
                       onTap: () {
-                        controller.getImage(ImageSource.gallery);
+                        controller.getImage( imageSource: ImageSource.gallery,);
                       },
                       borderRadius: BorderRadius.circular(40),
                       child: Container(
@@ -158,7 +158,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(100),
                         onTap: () {
-                          controller.getImage(ImageSource.camera);
+                          controller.getImage( imageSource: ImageSource.camera,);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -288,7 +288,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerPrice(value!);
+              return controller.validateFlowerPrice( value: value!,);
             },
           ),
         ),
@@ -325,7 +325,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerCount(value!);
+              return controller.validateFlowerCount( value: value!,);
             },
           ),
         ),
@@ -343,9 +343,9 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             child: ColorPicker(
               pickerColor: controller.selectedColor.value,
               onColorChanged: (value) {
-                controller.changeColor(value);
+                controller.changeColor( color: value,);
               },
-              showLabel: true,
+
               pickerAreaHeightPercent: 0.8,
             ),
           ),

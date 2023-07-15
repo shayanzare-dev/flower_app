@@ -1,12 +1,9 @@
-import 'package:flower_app/src/pages/vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_home_screen/bottom_navigation_bar_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/vendor_home_page_flower_controller.dart';
 
 class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
   const VendorHomePageFlower({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -27,15 +24,15 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
             ],
             title: const Text('Vendor Home page flower'),
             backgroundColor: const Color(0xff04927c)),
-        body: Obx(() => VendorHomePageFlowerController.widgetOptions.elementAt(controller.selectedIndex.value)),
+        body: Obx(() => VendorHomePageFlowerController.widgetOptionsNavBar.elementAt(controller.selectedIndexNavBar.value)),
         bottomNavigationBar: Obx(
           () => BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             fixedColor: Colors.white,
             backgroundColor: const Color(0xff8ab178),
-            currentIndex: controller.selectedIndex.value,
+            currentIndex: controller.selectedIndexNavBar.value,
             onTap:(value) {
-              controller.onItemTapped(value);
+              controller.onItemTappedNavBar( index: value);
             },
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(

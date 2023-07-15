@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../../controller/customer_home_page_flower_controller.dart';
 
-
-
 class MyDropdownButton extends GetView<CustomerHomePageFlowerController> {
-  MyDropdownButton({Key? key}) : super(key: key);
+  const MyDropdownButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Obx(
@@ -20,7 +19,7 @@ class MyDropdownButton extends GetView<CustomerHomePageFlowerController> {
             );
           }).toList(),
           onChanged: (value) {
-           controller.selectedItemDropDown.value = value!;
+            controller.selectedItemDropDown.value = value!;
           },
         ),
       );

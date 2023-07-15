@@ -5,7 +5,7 @@ class FlowerListViewModel {
   final int id, price, countInStock,color;
   final String name, image, shortDescription ;
   final List category;
-  final vendorViewModel vendorUser;
+  final VendorViewModel vendorUser;
 
 
   FlowerListViewModel({
@@ -29,7 +29,7 @@ class FlowerListViewModel {
     String? image,
     String? shortDescription,
     List? category,
-    vendorViewModel? vendorUser,
+    VendorViewModel? vendorUser,
   }) {
     return FlowerListViewModel(
       id: id ?? this.id,
@@ -54,7 +54,7 @@ class FlowerListViewModel {
       category: json['category'],
       countInStock: json['countInStock'],
       shortDescription: json['shortDescription'],
-      vendorUser: vendorViewModel.fromJson(json['vendorUser']),
+      vendorUser: VendorViewModel.fromJson(json['vendorUser']),
 
     );
   }

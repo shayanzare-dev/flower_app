@@ -6,8 +6,9 @@ class LoginPageFlower extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('login Page'),backgroundColor:const Color(0xff04927c) ),
+        appBar: AppBar(
+            title: const Text('login Page'),
+            backgroundColor: const Color(0xff04927c)),
         body: const MyCustomLogin(),
-
       );
 }

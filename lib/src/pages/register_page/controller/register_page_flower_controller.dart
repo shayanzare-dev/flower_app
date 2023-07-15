@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
 import '../../../../flower_app.dart';
 import '../models/register_user_dto.dart';
 import '../models/register_vendor_dto.dart';
-
 import '../repositories/register_page_flower_repository.dart';
 
 class RegisterPageFlowerController extends GetxController {
@@ -26,23 +24,18 @@ class RegisterPageFlowerController extends GetxController {
   String passCheckConfirm = '';
   String passCheck = '';
   RxInt selectedTypeUser = 1.obs;
-
   void selectedTypeUserValue(int value) {
     selectedTypeUser.value = value;
-
     if (selectedTypeUser.value == 1) {
       userType = UserType.vendor.obs;
     } else {
       userType = UserType.customer.obs;
     }
   }
-
   RxBool obscureText = true.obs;
   RxBool obscureTextConfirm = true.obs;
-
   File? imageFile;
   String base64Image = "";
-
   Future<void> getImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
@@ -136,10 +129,6 @@ class RegisterPageFlowerController extends GetxController {
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   String? validateFirstName(String value) {
     if (value.isEmpty || value.length < 3) {

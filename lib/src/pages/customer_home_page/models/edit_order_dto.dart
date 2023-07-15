@@ -6,7 +6,7 @@ class EditCartOrderDto {
   final UserViewModel user;
   final String dateTime;
   int totalPrice;
-  final List<BoughtFlowers> boughtFlowers;
+  final List<BoughtFlowersViewModel> boughtFlowers;
 
   EditCartOrderDto({
     required this.id,

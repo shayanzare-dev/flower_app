@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../../controller/customer_home_page_flower_controller.dart';
 import '../../../../../models/bought_flowers_view_model.dart';
 import '../../../../../models/flower_list_view_model.dart';
 
 class DeleteAlertDialog extends GetView<CustomerHomePageFlowerController> {
   final FlowerListViewModel flowerItem;
-  final BoughtFlowers boughtFlowers;
+  final BoughtFlowersViewModel boughtFlowers;
 
   const DeleteAlertDialog(
       {required this.boughtFlowers, required this.flowerItem, super.key});
@@ -25,7 +26,7 @@ class DeleteAlertDialog extends GetView<CustomerHomePageFlowerController> {
                   child: const Text('Cancel'),
                 ),
                 TextButton(
-                  onPressed: () => controller.alertDialogSelect(
+                  onPressed: () => controller.deleteAlertDialogSelect(
                       context: context,
                       itemSelect: 2,
                       flowerItem: flowerItem,
@@ -38,12 +39,11 @@ class DeleteAlertDialog extends GetView<CustomerHomePageFlowerController> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: Color(0xff54786c),
+            color: const Color(0xff54786c),
             borderRadius: BorderRadius.circular(25.0),
           ),
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Text(
               'Delete',
               style: TextStyle(

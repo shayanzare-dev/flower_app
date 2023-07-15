@@ -10,7 +10,7 @@ class CustomerCartScreen extends GetView<CustomerHomePageFlowerController> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: <Widget>[
+      children: const <Widget>[
         SizedBox(
           height: 580,
           child: BoughtList(),

@@ -10,12 +10,11 @@ class RangeSliderPrice extends GetView<VendorHomePageFlowerController> {
   Widget build(BuildContext context) {
     return Obx(
       () => RangeSlider(
-
         values: controller.values,
         min: 0,
         max: 1000,
         onChanged: (values) {
-          controller.setValues(values);
+          controller.setValues(rangeValues: values);
         },
         labels: RangeLabels(
           '\$${controller.values.start.toInt()}',

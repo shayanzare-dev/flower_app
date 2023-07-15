@@ -1,14 +1,14 @@
 import 'flower_list_view_model.dart';
 import 'user_view_model.dart';
 
-class BoughtFlowers {
+class BoughtFlowersViewModel {
   final FlowerListViewModel flowerListViewModel;
   int buyCount;
   int sumBuyPrice;
   final String dateTime;
   final UserViewModel user;
 
-  BoughtFlowers({
+  BoughtFlowersViewModel({
     required this.user,
     required this.dateTime,
     required this.flowerListViewModel,
@@ -16,8 +16,8 @@ class BoughtFlowers {
     required this.sumBuyPrice,
   });
 
-  factory BoughtFlowers.fromJson(Map<String, dynamic> json) {
-    return BoughtFlowers(
+  factory BoughtFlowersViewModel.fromJson(Map<String, dynamic> json) {
+    return BoughtFlowersViewModel(
       flowerListViewModel:
           FlowerListViewModel.fromJson(json['flowerListViewModel']),
       buyCount: json['buyCount'],

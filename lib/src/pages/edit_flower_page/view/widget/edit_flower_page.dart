@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../vendor_home_page/controller/vendor_home_page_flower_controller.dart';
 import '../../controller/edit_flower_page_controller.dart';
+import 'flower_chip_list.dart';
 
 
 
@@ -27,7 +28,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
             _inputFlowerPrice(),
             _inputFlowerCount(),
             _colorFlower(context),
-            _flowerChip(),
+            const FlowerChipList(),
             _myButton(context),
           ],
         ),
@@ -263,45 +264,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
     );
   }
 
-  Widget _flowerChip() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 200,
-                width: 350,
-                child: Column(
-                  children: [
-                    AddChipTextField(),
-                    Expanded(
-                      child: GetBuilder<EditFlowerPageController>(
-                        builder: (controller) => Obx(
-                              () => ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: controller.categoryChips.length,
-                            itemBuilder: (_, index) => Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5),
-                              child: ChipWithDeleteIcon(index),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
+
 
   Widget _inputFlowerPrice() {
     return Padding(
@@ -389,7 +352,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
               onColorChanged: (value) {
                 controller.changeColor(value);
               },
-              showLabel: true,
+
               pickerAreaHeightPercent: 0.8,
             ),
           ),
@@ -442,43 +405,5 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
   }
 }
 
-class ChipWithDeleteIcon extends StatelessWidget {
-  final int index;
 
-  const ChipWithDeleteIcon(this.index, {super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<EditFlowerPageController>(
-      builder: (controller) => Chip(
-        backgroundColor: const Color(0xffb6d1ab),
-        label: Text(controller.categoryChips[index]),
-        deleteIcon: const Icon(Icons.cancel,color: Colors.white),
-        onDeleted: () => controller.removeChip(index),
-      ),
-    );
-  }
-}
-
-class AddChipTextField extends StatelessWidget {
-  const AddChipTextField({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<EditFlowerPageController>(
-      builder: (controller) => TextField(
-        controller: controller.categoryTextController,
-        decoration: InputDecoration(
-          hintText: 'Add a Category',
-          hintStyle: const TextStyle(
-              color: Color(0xff04927c), fontSize: 20, fontWeight: FontWeight.bold),
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.add,color: Color(0xff04927c)),
-            onPressed: controller.addChip,
-          ),
-        ),
-        onSubmitted: (_) => controller.addChip(),
-      ),
-    );
-  }
-}

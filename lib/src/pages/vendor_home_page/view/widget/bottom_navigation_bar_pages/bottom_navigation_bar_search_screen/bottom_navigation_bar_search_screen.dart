@@ -11,17 +11,17 @@ class SearchScreen extends GetView<VendorHomePageFlowerController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           TextField(
             controller: controller.searchController,
             onChanged: (value) {
-              controller.getSearchFlowerList(value);
+              controller.getSearchFlowerList( search: value);
             },
             decoration: InputDecoration(
                 suffixIcon: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.clear,
                     color: Colors.green,
                   ),
@@ -30,7 +30,7 @@ class SearchScreen extends GetView<VendorHomePageFlowerController> {
                   },
                 ),
                 labelText: 'Search or for filter press search icon',
-                prefixIcon: SearchAlertDialog()),
+                prefixIcon: const SearchAlertDialog()),
           ),
           const SizedBox(height: 16),
           Expanded(

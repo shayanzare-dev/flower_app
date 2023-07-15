@@ -22,13 +22,13 @@ class CartFlowerItem extends GetView<CustomerHomePageFlowerController> {
               children: [
                 Row(
                   children: [
-                    Text('Total Price: ',
+                    const Text('Total Price: ',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff04927c),
                             fontSize: 20)),
                     Text(cartOrderItem.totalPrice.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff04927c),
                             fontSize: 20)),

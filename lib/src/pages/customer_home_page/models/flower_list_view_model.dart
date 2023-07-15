@@ -1,13 +1,11 @@
 import 'package:flower_app/src/pages/vendor_home_page/models/vendor_view_model.dart';
-import 'package:get/get.dart';
-import '../../shared/user_type_enum.dart';
 
 class FlowerListViewModel {
   final int id, price, countInStock, color;
   final String name, image, shortDescription;
 
   final List category;
-  final vendorViewModel vendorUser;
+  final VendorViewModel vendorUser;
 
   FlowerListViewModel({
     required this.id,
@@ -31,7 +29,7 @@ class FlowerListViewModel {
       category: json['category'],
       countInStock: json['countInStock'],
       shortDescription: json['shortDescription'],
-      vendorUser: vendorViewModel.fromJson(json['vendorUser']),
+      vendorUser: VendorViewModel.fromJson(json['vendorUser']),
     );
   }
 

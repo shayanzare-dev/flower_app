@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../../controller/vendor_home_page_flower_controller.dart';
 import '../../../../../../shared/grid_item.dart';
 
 class CheckBoxColorFilter extends GetView<VendorHomePageFlowerController> {
+  const CheckBoxColorFilter({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<VendorHomePageFlowerController>(
@@ -12,7 +13,7 @@ class CheckBoxColorFilter extends GetView<VendorHomePageFlowerController> {
         () => GridView.builder(
           shrinkWrap: true,
           itemCount: controller.items.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 6,
             childAspectRatio: 1,
           ),
@@ -20,7 +21,7 @@ class CheckBoxColorFilter extends GetView<VendorHomePageFlowerController> {
             GridItem item = controller.items[index];
             return InkWell(
               onTap: () {
-                controller.toggleSelection(index);
+                controller.colorToggleSelection( colorToggleIndex: index);
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -30,8 +31,8 @@ class CheckBoxColorFilter extends GetView<VendorHomePageFlowerController> {
                 child: item.isSelected
                     ? Align(
                         child: Container(
-                          margin: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
+                          margin: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white,
                           ),

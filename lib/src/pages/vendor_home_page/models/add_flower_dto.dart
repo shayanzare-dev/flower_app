@@ -6,7 +6,7 @@ class AddFlowerDto {
   final int price, countInStock,color;
   final String name, image, shortDescription;
   final RxList<String> category;
-  final vendorViewModel vendorUser;
+  final VendorViewModel vendorUser;
 
 
   AddFlowerDto(

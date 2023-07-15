@@ -6,7 +6,7 @@ class CartOrderViewModel {
   final String dateTime;
   int totalPrice;
   int id;
-  final List<BoughtFlowers> boughtFlowers;
+  final List<BoughtFlowersViewModel> boughtFlowers;
 
   CartOrderViewModel({
     required this.id,
@@ -21,7 +21,7 @@ class CartOrderViewModel {
     UserViewModel? user,
     String? dateTime,
     int? totalPrice,
-    List<BoughtFlowers>? boughtFlowers,
+    List<BoughtFlowersViewModel>? boughtFlowers,
   }) {
     return CartOrderViewModel(
       id : id ?? this.id,
@@ -34,9 +34,8 @@ class CartOrderViewModel {
 
   factory CartOrderViewModel.fromJson(Map<String, dynamic> json) {
     List<dynamic> boughtFlowersJson = json['boughtFlowers'];
-    List<BoughtFlowers> boughtFlowers =
-        boughtFlowersJson.map((e) => BoughtFlowers.fromJson(e)).toList();
-
+    List<BoughtFlowersViewModel> boughtFlowers =
+        boughtFlowersJson.map((e) => BoughtFlowersViewModel.fromJson(e)).toList();
     return CartOrderViewModel(
       user: UserViewModel.fromJson(json['user']),
       dateTime: json['dateTime'],

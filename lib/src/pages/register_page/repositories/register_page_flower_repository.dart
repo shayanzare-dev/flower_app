@@ -8,7 +8,6 @@ import '../models/register_vendor_dto.dart';
 
 class RegisterPageFlowerRepository {
   final httpClient = http.Client();
-
   Map<String, String> customHeaders = {"content-type": "application/json"};
 
   Future<Either<String, String>> addUser(RegisterUserDto dto) async {

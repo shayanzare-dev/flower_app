@@ -20,6 +20,5 @@ class RegisterVendorDto {
         'email': email,
         'passWord': passWord,
         'image': image,
-        'flowerList': []
       };
 }

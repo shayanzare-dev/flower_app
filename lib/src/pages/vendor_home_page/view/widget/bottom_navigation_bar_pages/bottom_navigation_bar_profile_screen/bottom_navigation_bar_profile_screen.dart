@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flower_app/src/pages/vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_profile_screen/widget/string_to_image_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../login_page/controller/login_page_flower_controller.dart';
@@ -16,7 +14,7 @@ class ProfileScreen extends GetView<VendorHomePageFlowerController> {
     return SizedBox(
       width: 400,
       child: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xff04927c), Color(0xff8ab178)],
             begin: Alignment.topCenter,
@@ -39,83 +37,86 @@ class ProfileScreen extends GetView<VendorHomePageFlowerController> {
                   radius: 50.0,
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [  Text(
-                  'First Name: ',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
+                children: [
+                  const Text(
+                    'First Name: ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
                   Text(
                     controller.vendorUser.first.firstName,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Last Name: ',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [ Text(
-                  'Last Name: ',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
                   Text(
                     controller.vendorUser.first.lastName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),],
+                  ),
+                ],
               ),
-
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [  Text(
-                  'Email: ',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                  Text(
-                    controller.vendorUser.first.email,
+                children: [
+                  const Text(
+                    'Email: ',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),],
+                  ),
+                  Text(
+                    controller.vendorUser.first.email,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-
-              SizedBox(height: 30.0),
+              const SizedBox(height: 30.0),
               ElevatedButton(
                 onPressed: () {
                   loginPageFlowerController.clearLoginStatus();
                   controller.goToLoginPage();
                 },
-                child: Text(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey,
+                ),
+                child: const Text(
                   'Sign Out',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
                 ),
               ),
             ],
@@ -123,37 +124,5 @@ class ProfileScreen extends GetView<VendorHomePageFlowerController> {
         ),
       ),
     );
-
-    /*Column(
-      children: [
-        SizedBox(
-            width: 200,
-            height: 200,
-            child: StringToImageProfile(base64String: controller.vendorUser.first.image)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('First Name : '),
-            Text(controller.vendorUser.first.firstName),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Last Name : '),
-            Text(controller.vendorUser.first.lastName),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Email : '),
-            Text(controller.vendorUser.first.email),
-          ],
-        ),
-
-        _myButtonSignOut(),
-      ],
-    );*/
   }
 }

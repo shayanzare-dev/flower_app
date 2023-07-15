@@ -1,11 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../controller/vendor_home_page_flower_controller.dart';
 import '../../../../../models/flower_list_view_model.dart';
 import 'dart:convert';
-import 'chip_item.dart';
 import 'delete_alert_dialog.dart';
 import 'flower_chip_list.dart';
 
@@ -22,7 +19,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
             onTap: () {
-              controller.goToEditFlowerPage(flowerItem);
+              controller.goToEditFlowerPage( flowerItem: flowerItem);
             },
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -55,7 +52,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: [0.2, 1.0],
+                    stops: const [0.2, 1.0],
                   ),
                 ),
                 child: Padding(
@@ -66,7 +63,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                     children: [
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'Name: ',
                             style: TextStyle(
                               color: Colors.white,
@@ -76,7 +73,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                           ),
                           Text(
                             flowerItem.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24.0,
                               fontWeight: FontWeight.bold,
@@ -84,81 +81,81 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          Text('Description: ',style: TextStyle(color: Colors.white,fontSize: 16)),
+                          const Text('Description: ',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
                           Text(
                             flowerItem.shortDescription,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text('Color: ',style: TextStyle(color: Colors.white,fontSize: 16)),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color(flowerItem.color),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8.0),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            DeleteAlertDialog(flowerItem: flowerItem),
-                          ],
-                        ),
-
-
-                      ],
-                    ),
-
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 8.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                        Row(children: [
-                          Text(
-                            'Price: ',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Row(
+                            children: [
+                              const Text('Color: ',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16)),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(flowerItem.color),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8.0),
+                              ),
+                            ],
                           ),
-                          Text(
-                            ('\$${flowerItem.price}'),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Row(
+                            children: [
+                              DeleteAlertDialog(flowerItem: flowerItem),
+                            ],
                           ),
-                        ]),
-
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(children: [
+                            const Text(
+                              'Price: ',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              ('\$${flowerItem.price}'),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ]),
                           Row(
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  controller.editCountFlowerMinus(flowerItem);
+                                  controller.editCountFlowerMinus( flowerItem: flowerItem,);
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.remove,
                                   color: Colors.white,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Count: ',
                                 style: TextStyle(
                                   color: Colors.white,
@@ -168,7 +165,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                               ),
                               Text(
                                 flowerItem.countInStock.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 24.0,
                                   fontWeight: FontWeight.bold,
@@ -176,9 +173,9 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  controller.editCountFlowerPlus(flowerItem);
+                                  controller.editCountFlowerPlus(flowerItem: flowerItem,);
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.add,
                                   color: Colors.white,
                                 ),
@@ -196,94 +193,6 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                   ),
                 ),
               ),
-            )
-
-
-
-            /*DecoratedBox(
-              decoration: const BoxDecoration(
-                color: Color(0xff9ae4ec),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      ),
-                    ),
-                    constraints: const BoxConstraints.expand(
-                      height: 200,
-                    ),
-                    child: StringToImagePost(base64String: flowerItem.image),
-                  ),
-                  Row(
-                    children: [
-                      const Text('Flower Name : '),
-                      Text(flowerItem.name),
-                    ],
-                  ),
-                  const Row(
-                    children: [
-                      Text('Flower Description '),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(flowerItem.shortDescription),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('Flower Color :'),
-                      Container(
-                        height: 20,
-                        width: 20,
-                        color: Color(flowerItem.color),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('Flower Price :'),
-                      Text(flowerItem.price.toString()),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () {
-                              controller.editCountFlowerMinus(flowerItem);
-                            },
-                          ),
-                          Text('Count Flower: ${flowerItem.countInStock}'),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {
-                              controller.editCountFlowerPlus(flowerItem);
-                            },
-                          ),
-                          DeleteAlertDialog(flowerItem: flowerItem),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      FlowerChipList(flowerItem: flowerItem),
-                    ],
-                  ),
-                ],
-              ),
-            )*/
-            ),
+            )),
       );
 }

@@ -1,13 +1,13 @@
 import 'bought_flowers_view_model.dart';
 import 'user_view_model.dart';
 
-class CartOrderDto {
+class AddCartOrderDto {
   final UserViewModel user;
   final String dateTime;
   int totalPrice;
-  final List<BoughtFlowers> boughtFlowers;
+  final List<BoughtFlowersViewModel> boughtFlowers;
 
-  CartOrderDto({
+  AddCartOrderDto({
     required this.user,
     required this.dateTime,
     required this.totalPrice,

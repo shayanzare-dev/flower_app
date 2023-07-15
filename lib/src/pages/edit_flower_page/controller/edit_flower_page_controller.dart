@@ -17,11 +17,14 @@ class EditFlowerPageController extends GetxController {
       TextEditingController();
   final TextEditingController flowerPriceController = TextEditingController();
   final TextEditingController flowerCountController = TextEditingController();
-
   FlowerListViewModel editFlowerItem = Get.arguments;
-
   final EditFlowerRepository _repository = EditFlowerRepository();
-
+  Rx<Color> selectedColor = const Color(0xff54786c).obs;
+  Color selectedColors =  const Color(0xff54786c);
+  File? imageFile;
+  String base64Image = "";
+  RxList<dynamic> categoryChips = <dynamic>[].obs;
+  final TextEditingController categoryTextController = TextEditingController();
   @override
   void onInit() {
     super.onInit();
@@ -34,25 +37,15 @@ class EditFlowerPageController extends GetxController {
     categoryChips = editFlowerItem.category.obs;
     base64Image = editFlowerItem.image;
   }
-
   @override
   void dispose() {
     categoryTextController.dispose();
-
     super.dispose();
   }
-
-  Rx<Color> selectedColor = const Color(0xff54786c).obs;
-  Color selectedColors =  Color(0xff54786c);
-
   void changeColor(Color color) {
     selectedColor.value = color;
     selectedColors = color;
   }
-
-   RxList<dynamic> categoryChips = <dynamic>[].obs;
-  final TextEditingController categoryTextController = TextEditingController();
-
   void addChip() {
     final text = categoryTextController.text.trim();
     if (text.isNotEmpty && !categoryChips.contains(text)) {
@@ -60,12 +53,7 @@ class EditFlowerPageController extends GetxController {
       categoryTextController.clear();
     }
   }
-
   void removeChip(int index) => categoryChips.removeAt(index);
-
-  File? imageFile;
-  String base64Image = "";
-
   Future<void> getImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
@@ -80,7 +68,6 @@ class EditFlowerPageController extends GetxController {
       Get.snackbar('Image', 'No image selected.');
     }
   }
-
   Future<void> editFlower() async {
     final EditFlowerDto dto = EditFlowerDto(
         id: editFlowerItem.id,
@@ -91,7 +78,7 @@ class EditFlowerPageController extends GetxController {
         name: flowerNameController.text,
         color: selectedColors.value,
         image: base64Image,
-        vendorUser: vendorViewModel(
+        vendorUser: VendorViewModel(
             id: editFlowerItem.vendorUser.id,
             passWord: editFlowerItem.vendorUser.passWord,
             firstName:editFlowerItem.vendorUser.firstName,
@@ -106,14 +93,12 @@ class EditFlowerPageController extends GetxController {
             (String error) => Get.snackbar('Register',
             'Your registration is not successfully code error:$error'),
             (FlowerListViewModel addRecord) {
-
           Get.offAndToNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower);
-          Get.snackbar('edit Flower', 'Your Add Flower is successfully');
+          Get.snackbar('Edit Flower', 'Your Flower is edited successfully');
 
         });
     return;
   }
-
 
   String? validateFlowerName(String value) {
     if (value.isEmpty || value.length < 2) {
@@ -121,21 +106,18 @@ class EditFlowerPageController extends GetxController {
     }
     return null;
   }
-
   String? validateFlowerDescription(String value) {
     if (value.isEmpty || value.length < 10) {
       return "flower description must be of 10 characters";
     }
     return null;
   }
-
   String? validateFlowerPrice(String value) {
     if (value.isEmpty || value.length < 2) {
       return "flower price must be of 2 characters";
     }
     return null;
   }
-
   String? validateFlowerCount(String value) {
     if (value.isEmpty) {
       return "flower count is required ";
