@@ -53,12 +53,12 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                     top: 0,
                     right: 0,
                     child: Container(
-                      padding: EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.all(2.0),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      constraints: BoxConstraints(
+                      constraints: const BoxConstraints(
                         minWidth: 16,
                         minHeight: 16,
                       ),

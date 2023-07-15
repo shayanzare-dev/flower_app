@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import '../../../../../controller/customer_home_page_flower_controller.dart';
 import '../../../../../models/cart_order_view_model.dart';
 
-
 class CartFlowerItem extends GetView<CustomerHomePageFlowerController> {
   final CartOrderViewModel cartOrderItem;
 
@@ -15,18 +14,32 @@ class CartFlowerItem extends GetView<CustomerHomePageFlowerController> {
 
   @override
   Widget build(BuildContext context) => Column(
-    children: [
-      Row(
         children: [
-          Text(cartOrderItem.totalPrice.toString()),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  children: [
+                    Text('Total Price: ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff04927c),
+                            fontSize: 20)),
+                    Text(cartOrderItem.totalPrice.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff04927c),
+                            fontSize: 20)),
+                  ],
+                ),
+                _myButtonPurchase(),
+              ],
+            ),
+          ),
         ],
-      ),
-      _myButtonPurchase(),
-    ],
-  );
-
-
-
+      );
 
   Widget _myButtonPurchase() {
     return Row(
@@ -50,11 +63,10 @@ class CartFlowerItem extends GetView<CustomerHomePageFlowerController> {
                 ],
               )),
           onTap: () {
-             controller.onSubmitPurchaseCartOrder();
+            controller.onSubmitPurchaseCartOrder();
           },
         ),
       ],
     );
   }
-
 }

@@ -45,7 +45,7 @@ class VendorHomePageFlowerController extends GetxController {
   List<String> savedSelections = [];
 
   List<String> dropDownButtonList = [
-    'select a item',
+    'select a item'
   ];
   Rx<String> selectedItemDropDown = Rx<String>('select a item');
 

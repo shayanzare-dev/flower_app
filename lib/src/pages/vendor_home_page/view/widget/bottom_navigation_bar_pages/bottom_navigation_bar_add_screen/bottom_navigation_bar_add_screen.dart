@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../../controller/vendor_home_page_flower_controller.dart';
 
 class AddScreen extends GetView<VendorHomePageFlowerController> {
-  AddScreen({super.key});
+  const AddScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             _inputFlowerPrice(),
             _inputFlowerCount(),
             _colorFlower(context),
-            FlowerChipList(),
+            const FlowerChipList(),
             _myButton(context),
           ],
         ),
@@ -259,8 +258,6 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
       ),
     );
   }
-
-
 
   Widget _inputFlowerPrice() {
     return Padding(

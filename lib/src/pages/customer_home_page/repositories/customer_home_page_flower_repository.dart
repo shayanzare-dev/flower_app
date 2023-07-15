@@ -92,6 +92,7 @@ class CustomerHomePageFlowerRepository {
       return const Left('error');
     }
   }
+
   Future<Either<String, String>> deleteCartOrder(int cartId) async {
     final url = Uri.http(BaseUrl.baseUrl, 'cartOrder/$cartId');
     final responseOrException = await httpClient.delete(url);
@@ -133,6 +134,77 @@ class CustomerHomePageFlowerRepository {
 
   Future<Either<String, List<FlowerListViewModel>>> getFlowerList() async {
     final url = Uri.parse("http://10.0.2.2:3000/flowerList");
+    final responseOrException = await httpClient.get(url);
+
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      final List<FlowerListViewModel> flowerListVendor = [];
+      for (final record in json.decode(responseOrException.body)) {
+        flowerListVendor.add(FlowerListViewModel.fromJson(record));
+      }
+      return Right(flowerListVendor);
+    } else {
+      return const Left('error');
+    }
+  }
+
+
+  Future<Either<String, List<FlowerListViewModel>>> searchFilterColor(
+      {required String colors}) async {
+    final url = Uri.parse(
+        "http://10.0.2.2:3000/flowerList?$colors");
+    final responseOrException = await httpClient.get(url);
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      final List<FlowerListViewModel> flowerListVendor = [];
+      for (final record in json.decode(responseOrException.body)) {
+        flowerListVendor.add(FlowerListViewModel.fromJson(record));
+      }
+      return Right(flowerListVendor);
+    } else {
+      return const Left('error');
+    }
+  }
+
+  Future<Either<String, List<FlowerListViewModel>>> searchFilterPriceRange(
+      {required String min,required String max}) async {
+    final url = Uri.parse(
+        "http://10.0.2.2:3000/flowerList?price_gte=$min&price_lte=$max");
+    final responseOrException = await httpClient.get(url);
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      final List<FlowerListViewModel> flowerListVendor = [];
+      for (final record in json.decode(responseOrException.body)) {
+        flowerListVendor.add(FlowerListViewModel.fromJson(record));
+      }
+      return Right(flowerListVendor);
+    } else {
+      return const Left('error');
+    }
+  }
+
+  Future<Either<String, List<FlowerListViewModel>>> searchFilterCategory(
+      {required String category}) async {
+    final url = Uri.parse(
+        "http://10.0.2.2:3000/flowerList?category_like=$category");
+    final responseOrException = await httpClient.get(url);
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      final List<FlowerListViewModel> flowerListVendor = [];
+      for (final record in json.decode(responseOrException.body)) {
+        flowerListVendor.add(FlowerListViewModel.fromJson(record));
+      }
+      return Right(flowerListVendor);
+    } else {
+      return const Left('error');
+    }
+  }
+
+  Future<Either<String, List<FlowerListViewModel>>> search(
+      String search) async {
+    // final url = Uri.http(BaseUrl.baseUrl, 'flowerList', {"q": search,"email": email});
+    final url = Uri.parse(
+        "http://10.0.2.2:3000/flowerList?q=$search");
     final responseOrException = await httpClient.get(url);
 
     if (responseOrException.statusCode >= 200 &&

@@ -12,7 +12,7 @@ class CustomerCartScreen extends GetView<CustomerHomePageFlowerController> {
     return ListView(
       children: <Widget>[
         SizedBox(
-          height: 550,
+          height: 580,
           child: BoughtList(),
         ),
         SizedBox(
