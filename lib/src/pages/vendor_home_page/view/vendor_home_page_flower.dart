@@ -1,4 +1,4 @@
-import 'package:flower_app/src/pages/vendor_home_page/view/widget/bottom_navigation_bar_home_screen.dart';
+import 'package:flower_app/src/pages/vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_home_screen/bottom_navigation_bar_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/vendor_home_page_flower_controller.dart';

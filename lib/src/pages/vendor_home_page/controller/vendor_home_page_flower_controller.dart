@@ -14,12 +14,12 @@ import '../models/edit_vendor_dto.dart';
 import '../models/flower_list_view_model.dart';
 import '../models/vendor_view_model.dart';
 import '../repositories/vendor_home_page_flower_repository.dart';
-import '../view/widget/bottom_navigation_bar_add_screen.dart';
-import '../view/widget/bottom_navigation_bar_history_screen.dart';
-import '../view/widget/bottom_navigation_bar_home_screen.dart';
-import '../view/widget/bottom_navigation_bar_profile_screen.dart';
-import '../view/widget/bottom_navigation_bar_search_screen.dart';
-import '../view/widget/grid_item.dart';
+import '../view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_add_screen/bottom_navigation_bar_add_screen.dart';
+import '../view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_history_screen/bottom_navigation_bar_history_screen.dart';
+import '../view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_home_screen/bottom_navigation_bar_home_screen.dart';
+import '../view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_profile_screen/bottom_navigation_bar_profile_screen.dart';
+import '../view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_search_screen/bottom_navigation_bar_search_screen.dart';
+import '../../shared/grid_item.dart';
 
 class VendorHomePageFlowerController extends GetxController {
   final GlobalKey<FormState> addFlowerFormKey = GlobalKey<FormState>();
@@ -371,8 +371,8 @@ class VendorHomePageFlowerController extends GetxController {
     }
   }
 
-  final Rx<Color> selectedColor = const Color(0xff54786c).obs;
-  Color selectedColors = const Color(0xff54786c);
+  final Rx<Color> selectedColor = const Color(0xff04927c).obs;
+  Color selectedColors = const Color(0xff04927c);
 
   void changeColor(Color color) {
     selectedColor.value = color;

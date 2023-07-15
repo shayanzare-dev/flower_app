@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../flower_app.dart';
 import '../../vendor_home_page/models/vendor_view_model.dart';
@@ -12,11 +13,11 @@ import '../models/edit_order_dto.dart';
 import '../models/flower_list_view_model.dart';
 import '../models/user_view_model.dart';
 import '../repositories/customer_home_page_flower_repository.dart';
-import '../view/widget/bottom_navigation_bar_customer_cart_screen.dart';
-import '../view/widget/bottom_navigation_bar_customer_history_screen.dart';
-import '../view/widget/bottom_navigation_bar_customer_home_screen.dart';
-import '../view/widget/bottom_navigation_bar_customer_profile_screen.dart';
-import '../view/widget/bottom_navigation_bar_customer_search_screen.dart';
+import '../view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_cart_screen/bottom_navigation_bar_customer_cart_screen.dart';
+import '../view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_history_screen/bottom_navigation_bar_customer_history_screen.dart';
+import '../view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_home_screen/bottom_navigation_bar_customer_home_screen.dart';
+import '../view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_profile_screen/bottom_navigation_bar_customer_profile_screen.dart';
+import '../view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_search_screen/bottom_navigation_bar_customer_search_screen.dart';
 
 class CustomerHomePageFlowerController extends GetxController {
   final CustomerHomePageFlowerRepository _repository =
@@ -83,7 +84,9 @@ class CustomerHomePageFlowerController extends GetxController {
     if (buyCount == 0) {
       Get.snackbar('Add Flower', 'can not add to cart');
     } else {
-      String dateTime = DateTime.now().toString();
+      DateTime dateTimeNow = DateTime.now();
+      DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+      String dateTime = dateFormat.format(dateTimeNow);
       int sumBuyPrice = buyCount! * flowerItem.price;
       BoughtFlowers boughtFlowers = BoughtFlowers(
           flowerListViewModel: flowerItem,
