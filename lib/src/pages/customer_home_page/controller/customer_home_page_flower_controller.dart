@@ -28,9 +28,12 @@ class CustomerHomePageFlowerController extends GetxController {
   RxMap<int, int> flowerBuyCount = RxMap();
   RxList<BoughtFlowersViewModel> boughtFlowerListCart = RxList();
   RxList<CartOrderViewModel> cartOrderList = RxList();
+
   RxList<BoughtFlowersViewModel> boughtFlowerList = RxList();
   RxList<CartOrderViewModel> boughtOrderList = RxList();
+
   RxInt cartCount = 0.obs;
+
   String customerUserEmail = '';
   final selectedIndex = RxInt(0);
   RxList<FlowerListViewModel> filteredFlowerList = RxList();
@@ -57,6 +60,7 @@ class CustomerHomePageFlowerController extends GetxController {
     });
     super.onInit();
   }
+
   @override
   Future<void> refresh() async {
     Future.delayed(const Duration(seconds: 2), () {
@@ -152,7 +156,6 @@ class CustomerHomePageFlowerController extends GetxController {
       boughtFlowerListCart
           .removeWhere((item) => item.flowerListViewModel.id == flowerItem.id);
       boughtFlowerListCart.add(boughtFlowers);
-      // editCountFlowerBuy(flowerItem, buyCount);
       totalPrice = 0;
       for (final item in boughtFlowerListCart) {
         totalPrice = totalPrice + item.sumBuyPrice;
@@ -366,6 +369,8 @@ class CustomerHomePageFlowerController extends GetxController {
     return;
   }
 
+
+
   //Search Screen
   RangeValues get values => valuesRange.value;
   void setRangeValues({required RangeValues rangeValues}) {
@@ -459,6 +464,9 @@ class CustomerHomePageFlowerController extends GetxController {
         boughtFlowerList.addAll(item.boughtFlowers);
       }
     }
+  }
+  void clearLoginStatus() async {
+    await _prefs.clear();
   }
 
 

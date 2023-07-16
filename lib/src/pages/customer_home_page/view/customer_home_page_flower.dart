@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../flower_app.dart';
 import '../controller/customer_home_page_flower_controller.dart';
 
@@ -62,6 +61,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 title: const Text('Cart Flowers'),
                 onTap: () {
                   Get.toNamed(RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerCartPage);
+                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -69,6 +69,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 title: const Text('Search'),
                 onTap: () {
                   Get.toNamed(RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerSearchPage);
+                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -76,6 +77,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 title: const Text('History'),
                 onTap: () {
                   Get.toNamed(RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerHistoryPage);
+                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -83,6 +85,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 title: const Text('Profile'),
                 onTap: () {
                   Get.toNamed(RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerProfilePage);
+                  Navigator.pop(context);
                 },
               ),
               const Divider(),
@@ -90,6 +93,8 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 leading: const Icon(Icons.output_rounded),
                 title: const Text('Sign out'),
                 onTap: () {
+                  controller.clearLoginStatus();
+                  Get.offAndToNamed(RouteNames.loginPageFlower);
                   Navigator.pop(context);
                 },
               ),

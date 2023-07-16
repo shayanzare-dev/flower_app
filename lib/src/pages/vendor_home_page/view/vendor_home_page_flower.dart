@@ -64,6 +64,7 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                 title: const Text('Add Flowers'),
                 onTap: () {
                   Get.toNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.addFlowerPage);
+                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -71,6 +72,7 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                 title: const Text('Search'),
                 onTap: () {
                   Get.toNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorSearchPage);
+                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -78,6 +80,7 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                 title: const Text('History'),
                 onTap: () {
                   Get.toNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorHistoryPage);
+                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -85,6 +88,7 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                 title: const Text('Profile'),
                 onTap: () {
                   Get.toNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorProfilePage);
+                  Navigator.pop(context);
                 },
               ),
               const Divider(),
@@ -92,6 +96,8 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                 leading: const Icon(Icons.output_rounded),
                 title: const Text('Sign out'),
                 onTap: () {
+                  controller.clearLoginStatus();
+                  Get.offAndToNamed(RouteNames.loginPageFlower);
                   Navigator.pop(context);
                 },
               ),

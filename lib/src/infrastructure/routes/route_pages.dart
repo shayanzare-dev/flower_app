@@ -88,7 +88,7 @@ class RoutePages {
             ),
             GetPage(
               name: RouteNames.customerProfilePage,
-              page: () => const CustomerProfilePage(),
+              page: () =>  CustomerProfilePage(),
               binding: CustomerProfilePageBindings(),
             ),
             GetPage(
