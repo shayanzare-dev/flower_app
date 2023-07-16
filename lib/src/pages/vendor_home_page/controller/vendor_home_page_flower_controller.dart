@@ -226,6 +226,9 @@ class VendorHomePageFlowerController extends GetxController {
     }
   }
 
+
+
+
   //Add Screen
   void addChip() {
     final text = categoryTextController.text.trim();
@@ -430,8 +433,11 @@ class VendorHomePageFlowerController extends GetxController {
     Get.toNamed(
         RouteNames.loginPageFlower +
             RouteNames.vendorHomePageFlower +
-            RouteNames.editPageFlower,
+            RouteNames.editFlowerPage,
         arguments: flowerItem);
+  }
+  void clearLoginStatus() async {
+    await _prefs.clear();
   }
 
   void goToLoginPage() {

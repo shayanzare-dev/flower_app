@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../flower_app.dart';
 import '../controller/customer_home_page_flower_controller.dart';
 
 class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
-  const CustomerHomePageFlower({Key? key}) : super(key: key);
+  CustomerHomePageFlower({Key? key}) : super(key: key);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    key: _scaffoldKey,
         appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+              icon: Icon(Icons.menu),
+            ),
             automaticallyImplyLeading: false,
             actions: [
               Row(
@@ -23,8 +32,92 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 ],
               ),
             ],
-            title: const Text('Customer Home page flower'),
+            title: const Text('Customer Home page'),
             backgroundColor: const Color(0xff04927c)),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Color(0xff04927c),
+                ),
+                child: Text(
+                  'Customer Menu',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Home'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.shopping_cart),
+                title: const Text('Cart Flowers'),
+                onTap: () {
+                  Get.toNamed(RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerCartPage);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.search),
+                title: const Text('Search'),
+                onTap: () {
+                  Get.toNamed(RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerSearchPage);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.history),
+                title: const Text('History'),
+                onTap: () {
+                  Get.toNamed(RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerHistoryPage);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text('Profile'),
+                onTap: () {
+                  Get.toNamed(RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerProfilePage);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.output_rounded),
+                title: const Text('Sign out'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.language),
+                title: const Text('English'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.language),
+                title: const Text('فارسی'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.help),
+                title: const Text('Help'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
         body: Obx(() => CustomerHomePageFlowerController.widgetOptionsNavBar
             .elementAt(controller.selectedIndex.value)),
         bottomNavigationBar: Obx(
