@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 import '../../../shared/grid_item.dart';
 import '../../controller/customer_search_page_controller.dart';
 

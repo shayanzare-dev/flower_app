@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
+import '../view/widget/loading_widget.dart';
 import '../controller/vendor_add_flower_page_controller.dart';
 import '../view/widget/flower_chip_list.dart';
 
@@ -30,6 +30,17 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
               _colorFlower(context),
               const FlowerChipList(),
               _myButton(context),
+              SizedBox(
+                height: 30,
+                child: const Stack(
+                  children: <Widget>[
+                    Center(
+                      child: LoadingWidget(),
+                    ),
+                  ],
+                ),
+              )
+
             ],
           ),
         ),

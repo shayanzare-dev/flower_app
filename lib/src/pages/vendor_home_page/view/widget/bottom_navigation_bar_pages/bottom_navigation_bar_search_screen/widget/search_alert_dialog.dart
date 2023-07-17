@@ -14,7 +14,7 @@ class SearchAlertDialog extends GetView<VendorHomePageFlowerController> {
           context: context,
           builder: (BuildContext context) => AlertDialog(
             title: const Text('Search Filter'),
-            content: const SizedBox(
+            content:  const SizedBox(
               height: 350,
               width: 200,
               child: Column(
@@ -35,17 +35,17 @@ class SearchAlertDialog extends GetView<VendorHomePageFlowerController> {
                           color: Color(0xff04927c),
                           fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
-                  RangeSliderPrice(),
+                  VendorRangeSliderPrice(),
                 ],
               ),
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () => controller.clearSearchFilterFlowers(),
+                onPressed: () => controller.clearSearchFilterFlowers(context: context),
                 child: const Text('clear Filter'),
               ),
               TextButton(
-                onPressed: () => controller.getSearchFilterFlowerList(),
+                onPressed: () => controller.getSearchFilterFlowerList(context: context),
                 child: const Text('OK'),
               )
             ],

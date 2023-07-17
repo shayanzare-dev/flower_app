@@ -2,8 +2,9 @@ import 'package:either_dart/either.dart';
 import 'package:flower_app/flower_app.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../repositories/login_page_flower_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../repositories/login_page_flower_repository.dart';
 
 class LoginPageFlowerController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
@@ -14,22 +15,19 @@ class LoginPageFlowerController extends GetxController {
   RxBool obscureText = true.obs;
   RxBool rememberMe = false.obs;
 
+
   @override
   void onInit() {
     super.onInit();
-    isLoggedIn().then((loggedIn) {
-      if (loggedIn) {
-        userType().then((userType) {
-          if (userType == 1) {
-            Get.offAndToNamed(
-                RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
-          } else if (userType == 2) {
-            Get.offAndToNamed(
-                RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
-          }
-        });
-      }
-    });
+
+  }
+  var isLoading = false.obs;
+  void showLoading() {
+    isLoading.value = true;
+  }
+
+  void hideLoading() {
+    isLoading.value = false;
   }
 
   void toggleRememberMe(bool value) {
@@ -50,19 +48,16 @@ class LoginPageFlowerController extends GetxController {
     return _prefs.getString('userEmail') ?? emailController.text;
   }
 
-  Future<int> userType() async {
-    return _prefs.getInt('userType') ?? 1;
-  }
 
-  Future<bool> isLoggedIn() async {
-    return _prefs.getBool('isLoggedIn') ?? false;
-  }
+
+
 
   Future<void> onSubmitLogin() async {
     if (!loginFormKey.currentState!.validate()) {
       Get.snackbar('login', 'Your must be enter required field');
       return;
     }
+    showLoading();
     final Either<String, String> resultOrExceptionUserValidate2 =
         await _repository.checkUserValidate(
             passWord: passWordController.text,
@@ -71,8 +66,9 @@ class LoginPageFlowerController extends GetxController {
     resultOrExceptionUserValidate2.fold((left) {
       saveLoginStatus(rememberMe.value, 2, emailController.text);
       Get.offAndToNamed(
-          RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
+          RouteNames.loadingPageFlower+ RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
       loginFormKey.currentState?.reset();
+      hideLoading();
       return;
     }, (right) => null);
     final Either<String, String> resultOrExceptionVendorValidate1 =
@@ -83,7 +79,8 @@ class LoginPageFlowerController extends GetxController {
     resultOrExceptionVendorValidate1.fold((left) {
       saveLoginStatus(rememberMe.value, 1, emailController.text);
       Get.offAndToNamed(
-          RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+          RouteNames.loadingPageFlower+ RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+      hideLoading();
       loginFormKey.currentState?.reset();
       return;
     }, (right) => null);
@@ -107,6 +104,6 @@ class LoginPageFlowerController extends GetxController {
   }
 
   void goToRegisterPage() {
-    Get.toNamed(RouteNames.loginPageFlower + RouteNames.registerPageFlower);
+    Get.toNamed( RouteNames.loadingPageFlower+RouteNames.loginPageFlower + RouteNames.registerPageFlower);
   }
 }

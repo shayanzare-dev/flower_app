@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../view/widget/loading_widget.dart';
 import '../controller/vendor_history_page_controller.dart';
 import 'widget/vendor_bought_list.dart';
 
@@ -19,8 +19,8 @@ class VendorHistoryPage extends GetView<VendorHistoryPageController> {
           onRefresh: controller.getOrderListVendorHistory,
           child:const VendorBoughtList(),
         ),
-
       ),
+      bottomNavigationBar: const LoadingWidget(),
     );
   }
 }

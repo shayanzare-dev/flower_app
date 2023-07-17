@@ -26,11 +26,8 @@ class CustomerSearchPageController extends GetxController{
     Future.delayed(const Duration(seconds: 2), () {
       getFlowerList();
     });
-
     super.onInit();
   }
-
-
 
 
 

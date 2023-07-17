@@ -9,7 +9,7 @@ class FlowerApp extends StatelessWidget {
   Widget build(BuildContext context) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'flower app',
-        initialRoute: RouteNames.loginPageFlower,
+        initialRoute: RouteNames.loadingPageFlower,
         getPages: RoutePages.pages,
       );
 }

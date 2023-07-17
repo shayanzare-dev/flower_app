@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../controller/vendor_home_page_flower_controller.dart';
+import '../../loading_widget.dart';
 import 'widget/flower_list.dart';
 
 class HomeScreen extends GetView<VendorHomePageFlowerController> {
@@ -8,12 +9,18 @@ class HomeScreen extends GetView<VendorHomePageFlowerController> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: RefreshIndicator(
-        onRefresh: controller.getFlowerList,
-        child: const FlowerList(),
+    return RefreshIndicator(
+      onRefresh: controller.getFlowerList,
+      child:const Stack(
+        children: <Widget>[
+          FlowerList(),
+          Center(
+            child: LoadingWidget(),
+          ),
+        ],
       ),
+
+      /*const FlowerList()*/
     );
   }
 }

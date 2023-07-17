@@ -1,4 +1,3 @@
-
 import 'package:flower_app/src/pages/vendor_search_page/view/widget/range_slider_price.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,17 +35,17 @@ class SearchAlertDialog extends GetView<VendorSearchPageController> {
                           color: Color(0xff04927c),
                           fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
-                  RangeSliderPrice(),
+                  VendorRangeSliderPrice1(),
                 ],
               ),
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () => controller.clearSearchFilterFlowers(),
+                onPressed: () => controller.clearSearchFilterFlowers(context: context),
                 child: const Text('clear Filter'),
               ),
               TextButton(
-                onPressed: () => controller.getSearchFilterFlowerList(),
+                onPressed: () => controller.getSearchFilterFlowerList(context: context),
                 child: const Text('OK'),
               )
             ],

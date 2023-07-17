@@ -4,8 +4,8 @@ import '../../controller/vendor_search_page_controller.dart';
 
 
 
-class RangeSliderPrice extends GetView<VendorSearchPageController> {
-  const RangeSliderPrice({Key? key}) : super(key: key);
+class VendorRangeSliderPrice1 extends GetView<VendorSearchPageController> {
+  const VendorRangeSliderPrice1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

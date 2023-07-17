@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../flower_app.dart';
 import '../../customer_home_page/models/add_cart_order_dto.dart';
 import '../../customer_home_page/models/bought_flowers_view_model.dart';
 import '../../customer_home_page/models/cart_order_view_model.dart';
@@ -277,8 +278,10 @@ class CustomerCartPageController extends GetxController{
               cartCount.value = 0;
             });
       });
+      Get.offAndToNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.customerHomePageFlower);
     }
   }
+
   Future<void> deleteCartOrder({required int cartId}) async {
     final result = await _repository.deleteCartOrder(cartId);
     if (result.right == 'success') {

@@ -12,6 +12,14 @@ class VendorHistoryPageController extends GetxController {
   final VendorHistoryPageRepository _repository = VendorHistoryPageRepository();
   String vendorUserEmail = '';
 
+  var isLoading = false.obs;
+  void showLoading() {
+    isLoading.value = true;
+  }
+  void hideLoading() {
+    isLoading.value = false;
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -30,6 +38,7 @@ class VendorHistoryPageController extends GetxController {
   }
 
   Future<void> getOrderListVendorHistory() async {
+    showLoading();
     boughtOrderList.clear();
     final result = await _repository.getVendorUserOrdersHistory();
     if (result.isLeft) {
@@ -44,5 +53,6 @@ class VendorHistoryPageController extends GetxController {
         }
       }
     }
+    hideLoading();
   }
 }

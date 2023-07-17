@@ -24,6 +24,16 @@ class RegisterPageFlowerController extends GetxController {
   String passCheckConfirm = '';
   String passCheck = '';
   RxInt selectedTypeUser = 1.obs;
+  var isLoading = false.obs;
+
+  void showLoading() {
+    isLoading.value = true;
+  }
+
+  void hideLoading() {
+    isLoading.value = false;
+  }
+
   void selectedTypeUserValue(int value) {
     selectedTypeUser.value = value;
     if (selectedTypeUser.value == 1) {
@@ -56,18 +66,24 @@ class RegisterPageFlowerController extends GetxController {
       Get.snackbar('Register', 'Your must be enter required field');
       return;
     }
+    showLoading();
     if (selectedTypeUser.value == 1) {
       final Either<String, bool> resultOrExceptionEmailVendor =
           await _repository.checkEmailVendor(emailController.text);
       resultOrExceptionEmailVendor.fold(
-          (String error) => Get.snackbar('Register', 'Email already exists'),
+          (String error) {
+            hideLoading();
+            return Get.snackbar('Register', 'Email already exists');
+          },
           (right) async {
         if (right) {
           final Either<String, bool> resultOrExceptionEmailUser =
               await _repository.checkEmailUser(emailController.text);
           resultOrExceptionEmailUser.fold(
-              (String error) =>
-                  Get.snackbar('Register', 'Email already exists'),
+              (String error) {
+                hideLoading();
+                return Get.snackbar('Register', 'Email already exists');
+              },
               (right) async {
             final RegisterVendorDto dto = RegisterVendorDto(
                 userType: userType.value,
@@ -82,9 +98,10 @@ class RegisterPageFlowerController extends GetxController {
                 (String error) => Get.snackbar('Register',
                     'Your registration is not successfully code error:$error'),
                 (String addRecord) {
+                  hideLoading();
               Get.snackbar('Register', 'Your registration is successfully');
               registerFormKey.currentState?.reset();
-              Get.offAndToNamed(RouteNames.loginPageFlower);
+              Get.offAndToNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower);
             });
             return;
           });
@@ -95,14 +112,19 @@ class RegisterPageFlowerController extends GetxController {
       final Either<String, bool> resultOrExceptionEmail =
           await _repository.checkEmailUser(emailController.text);
       resultOrExceptionEmail.fold(
-          (String error) => Get.snackbar('Register', 'Email already exists'),
+          (String error) {
+            hideLoading();
+            return Get.snackbar('Register', 'Email already exists');
+          },
           (right) async {
         if (right) {
           final Either<String, bool> resultOrExceptionEmailVendor =
               await _repository.checkEmailVendor(emailController.text);
           resultOrExceptionEmailVendor.fold(
-              (String error) =>
-                  Get.snackbar('Register', 'Email already exists'),
+              (String error) {
+                hideLoading();
+                return Get.snackbar('Register', 'Email already exists');
+              },
               (right) async {
             final RegisterUserDto dto = RegisterUserDto(
                 userType: userType.value,
@@ -118,8 +140,9 @@ class RegisterPageFlowerController extends GetxController {
                     'Your registration is not successfully code error:$error'),
                 (String addRecord) {
               Get.snackbar('Register', 'Your registration is successfully');
+              hideLoading();
               registerFormKey.currentState?.reset();
-              Get.offAndToNamed(RouteNames.loginPageFlower);
+              Get.offAndToNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower);
             });
             return;
           });

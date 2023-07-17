@@ -4,6 +4,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../controller/vendor_home_page_flower_controller.dart';
+import '../../loading_widget.dart';
 
 class AddScreen extends GetView<VendorHomePageFlowerController> {
   const AddScreen({super.key});
@@ -25,10 +26,22 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             _colorFlower(context),
             const FlowerChipList(),
             _myButton(context),
+            SizedBox(
+              height: 30,
+              child: const Stack(
+                children: <Widget>[
+                  Center(
+                    child: LoadingWidget(),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
+
     );
+
   }
 
   Widget _inputFlowerName() {

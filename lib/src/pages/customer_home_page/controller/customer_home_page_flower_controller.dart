@@ -28,12 +28,9 @@ class CustomerHomePageFlowerController extends GetxController {
   RxMap<int, int> flowerBuyCount = RxMap();
   RxList<BoughtFlowersViewModel> boughtFlowerListCart = RxList();
   RxList<CartOrderViewModel> cartOrderList = RxList();
-
   RxList<BoughtFlowersViewModel> boughtFlowerList = RxList();
   RxList<CartOrderViewModel> boughtOrderList = RxList();
-
   RxInt cartCount = 0.obs;
-
   String customerUserEmail = '';
   final selectedIndex = RxInt(0);
   RxList<FlowerListViewModel> filteredFlowerList = RxList();
@@ -402,6 +399,7 @@ class CustomerHomePageFlowerController extends GetxController {
     _prefs.setStringList('selections', selections);
     items.refresh();
   }
+
   Future<void> getSearchFilterFlowerList() async {
     filteredFlowerList.clear();
     final categoryResult = await _repository.searchFilterCategory(
@@ -471,6 +469,6 @@ class CustomerHomePageFlowerController extends GetxController {
 
 
   void goToLoginPage() {
-    Get.offAndToNamed(RouteNames.loginPageFlower);
+    Get.offAndToNamed(RouteNames.loginPageFlower+RouteNames.loginPageFlower);
   }
 }

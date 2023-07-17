@@ -2,6 +2,7 @@ class RouteNames {
   static const vendorHomePageFlower = '/vendor_home_page';
   static const customerHomePageFlower = '/customer_home_page';
   static const loginPageFlower = '/login_page';
+  static const loadingPageFlower = '/loading_page';
   static const registerPageFlower = '/register_page';
   static const editFlowerPage = '/edit_flower_page';
   static const addFlowerPage = '/add_flower_page';

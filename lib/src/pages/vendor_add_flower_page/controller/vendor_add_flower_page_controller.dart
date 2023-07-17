@@ -30,6 +30,13 @@ class VendorAddFlowerPageController extends GetxController {
   Color selectedColors = const Color(0xff04927c);
   String vendorUserEmail = '';
 
+  var isLoading = false.obs;
+  void showLoading() {
+    isLoading.value = true;
+  }
+  void hideLoading() {
+    isLoading.value = false;
+  }
 
   @override
   void onInit() {
@@ -94,6 +101,7 @@ class VendorAddFlowerPageController extends GetxController {
       Get.snackbar('Add Flower', 'Your must be enter required field');
       return;
     }
+    showLoading();
     final AddFlowerDto dto = AddFlowerDto(
         price: int.parse(flowerPriceController.text),
         shortDescription: flowerDescriptionController.text,
@@ -118,7 +126,9 @@ class VendorAddFlowerPageController extends GetxController {
         (FlowerListViewModel addRecord) async {
       Get.snackbar('Add Flower', 'Your Add Flower is successfully');
       refresh();
+      goToHomeVendorPage();
       addFlowerFormKey.currentState?.reset();
+      hideLoading();
     });
     return;
   }
@@ -152,6 +162,6 @@ class VendorAddFlowerPageController extends GetxController {
   }
 
   void goToHomeVendorPage() {
-    Get.offAndToNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower);
+    Get.offAndToNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower);
   }
 }

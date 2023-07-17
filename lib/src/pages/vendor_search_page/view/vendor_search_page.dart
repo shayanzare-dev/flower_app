@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_home_screen/widget/flower_item.dart';
 import '../view/widget/search_alert_dialog.dart';
 import '../controller/vendor_search_page_controller.dart';
+import '../view/widget/loading_widget.dart';
 
 class VendorSearchPage extends GetView<VendorSearchPageController> {
   const VendorSearchPage({Key? key}) : super(key: key);
@@ -45,6 +46,14 @@ class VendorSearchPage extends GetView<VendorSearchPageController> {
                 );
               }),
             ),
+            const Stack(
+              children: <Widget>[
+                Center(
+                  child: LoadingWidget(),
+                ),
+              ],
+            )
+
           ],
         ),
       ),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/customer_search_page_controller.dart';
 
-class RangeSliderPrice extends GetView<CustomerSearchPageController> {
-  const RangeSliderPrice({Key? key}) : super(key: key);
+class CustomerRangeSliderPrice1 extends GetView<CustomerSearchPageController> {
+  const CustomerRangeSliderPrice1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

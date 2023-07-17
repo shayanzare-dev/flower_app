@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../../controller/customer_home_page_flower_controller.dart';
 
-class RangeSliderPrice extends GetView<CustomerHomePageFlowerController> {
-  const RangeSliderPrice({Key? key}) : super(key: key);
+class CustomerRangeSliderPrice extends GetView<CustomerHomePageFlowerController> {
+  const CustomerRangeSliderPrice({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -63,32 +63,32 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                 leading: const Icon(Icons.add),
                 title: const Text('Add Flowers'),
                 onTap: () {
-                  Get.toNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.addFlowerPage);
-                  Navigator.pop(context);
+                  Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.addFlowerPage);
+
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.search),
                 title: const Text('Search'),
                 onTap: () {
-                  Get.toNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorSearchPage);
-                  Navigator.pop(context);
+                  Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorSearchPage);
+
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.history),
                 title: const Text('History'),
                 onTap: () {
-                  Get.toNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorHistoryPage);
-                  Navigator.pop(context);
+                  Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorHistoryPage);
+
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text('Profile'),
                 onTap: () {
-                  Get.toNamed(RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorProfilePage);
-                  Navigator.pop(context);
+                  Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.vendorHomePageFlower+RouteNames.vendorProfilePage);
+
                 },
               ),
               const Divider(),
@@ -97,8 +97,7 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                 title: const Text('Sign out'),
                 onTap: () {
                   controller.clearLoginStatus();
-                  Get.offAndToNamed(RouteNames.loginPageFlower);
-                  Navigator.pop(context);
+                  Get.offAndToNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower);
                 },
               ),
               const Divider(),
