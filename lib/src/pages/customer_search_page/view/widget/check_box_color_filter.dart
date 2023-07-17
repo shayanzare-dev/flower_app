@@ -9,44 +9,48 @@ class CheckBoxColorFilter extends GetView<CustomerSearchPageController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CustomerSearchPageController>(
-      builder: (_) => Obx(
-        () => GridView.builder(
-          shrinkWrap: true,
-          itemCount: controller.items.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 6,
-            childAspectRatio: 1,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            GridItem item = controller.items[index];
-            return InkWell(
-              onTap: () {
-                controller.colorToggleSelection(colorIndex: index);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: item.color,
+      builder: (_) => SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.2,
+        child: Obx(
+          () => GridView.builder(
+            shrinkWrap: true,
+            itemCount: controller.items.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 6,
+              childAspectRatio: 1,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              GridItem item = controller.items[index];
+              return InkWell(
+                onTap: () {
+                  controller.colorToggleSelection(colorIndex: index);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: item.color,
+                  ),
+                  child: item.isSelected
+                      ? Align(
+                          child: Container(
+                            margin: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: Icon(
+                              Icons.check,
+                              size: 20,
+                              color: item.color,
+                            ),
+                          ),
+                        )
+                      : null,
                 ),
-                child: item.isSelected
-                    ? Align(
-                        child: Container(
-                          margin: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                          child: Icon(
-                            Icons.check,
-                            size: 20,
-                            color: item.color,
-                          ),
-                        ),
-                      )
-                    : null,
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

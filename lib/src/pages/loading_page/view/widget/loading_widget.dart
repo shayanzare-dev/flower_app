@@ -4,13 +4,13 @@ import '../../controller/loading_page_controller.dart';
 
 
 
-class LoadingWidget extends StatelessWidget {
+class LoadingWidget extends GetView<LoadingPageController> {
   const LoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Get.find<LoadingPageController>().isLoading.value
+      return controller.isLoading.value
           ? Container(
               color: Colors.green.withOpacity(0.5),
               child: const Center(

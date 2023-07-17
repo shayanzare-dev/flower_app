@@ -53,7 +53,6 @@ class VendorSearchPage extends GetView<VendorSearchPageController> {
                 ),
               ],
             )
-
           ],
         ),
       ),

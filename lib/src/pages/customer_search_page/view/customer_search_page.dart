@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../customer_home_page/view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_home_screen/widget/customer_flower_item.dart';
 import '../view/widget/search_alert_dialog.dart';
 import '../controller/customer_search_page_controller.dart';
+import '../view/widget/loading_widget.dart';
 
 class CustomerSearchPage extends GetView<CustomerSearchPageController> {
   const CustomerSearchPage({Key? key}) : super(key: key);
@@ -45,6 +46,14 @@ class CustomerSearchPage extends GetView<CustomerSearchPageController> {
                 );
               }),
             ),
+            const Stack(
+              children: <Widget>[
+                Center(
+                  child: LoadingWidget(),
+                ),
+              ],
+            )
+
           ],
         ),
       ),

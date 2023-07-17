@@ -13,6 +13,16 @@ class CustomerHistoryPageController extends GetxController {
   RxList<BoughtFlowersViewModel> boughtFlowerList = RxList();
   RxList<CartOrderViewModel> boughtOrderList = RxList();
 
+  var isLoading = false.obs;
+
+  void showLoading() {
+    isLoading.value = true;
+  }
+
+  void hideLoading() {
+    isLoading.value = false;
+  }
+
   @override
   void onInit() {
     Future.delayed(const Duration(seconds: 2), () {
@@ -31,6 +41,7 @@ class CustomerHistoryPageController extends GetxController {
   }
 
   Future<void> getOrderList() async {
+    showLoading();
     boughtOrderList.clear();
     final result = await _repository.getCustomerUserOrders(customerUserEmail);
     if (result.isLeft) {
@@ -41,5 +52,6 @@ class CustomerHistoryPageController extends GetxController {
         boughtFlowerList.addAll(item.boughtFlowers);
       }
     }
+    hideLoading();
   }
 }

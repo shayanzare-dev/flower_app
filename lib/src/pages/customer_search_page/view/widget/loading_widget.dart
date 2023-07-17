@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../controller/customer_search_page_controller.dart';
 
-import '../../controller/login_page_flower_controller.dart';
-
-class LoadingWidget extends GetView<LoginPageFlowerController> {
+class LoadingWidget extends GetView<CustomerSearchPageController> {
   const LoadingWidget({super.key});
 
   @override
@@ -13,7 +12,7 @@ class LoadingWidget extends GetView<LoginPageFlowerController> {
           ? Container(
               color: Colors.green.withOpacity(0.5),
               child: const Center(
-                child: CircularProgressIndicator(),
+                child: LinearProgressIndicator(),
               ),
             )
           : const SizedBox.shrink();

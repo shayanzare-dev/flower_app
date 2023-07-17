@@ -21,6 +21,16 @@ class CustomerSearchPageController extends GetxController{
   RxList<FlowerListViewModel> customerFlowerList = RxList();
   RxMap<int, int> flowerBuyCount = RxMap();
 
+  var isLoading = false.obs;
+
+  void showLoading() {
+    isLoading.value = true;
+  }
+
+  void hideLoading() {
+    isLoading.value = false;
+  }
+
   @override
   void onInit() {
     Future.delayed(const Duration(seconds: 2), () {
@@ -67,7 +77,8 @@ class CustomerSearchPageController extends GetxController{
       items.refresh();
     }
   }
-  void clearSearchFilterFlowers() {
+
+  void clearSearchFilterFlowers({required BuildContext context}) {
     valuesRange = Rx<RangeValues>(const RangeValues(0, 1000));
     selectedItemDropDown.value = 'select a item';
     for (int i = 0; i < savedSelections.length; i++) {
@@ -76,17 +87,25 @@ class CustomerSearchPageController extends GetxController{
     List<String> selections =
     items.map((item) => item.isSelected.toString()).toList();
     _prefs.setStringList('selections', selections);
+    savedSelections = _prefs.getStringList('selections') ?? [];
     items.refresh();
+    Navigator.of(context).pop();
   }
-  Future<void> getSearchFilterFlowerList() async {
+
+  Future<void> getSearchFilterFlowerList(
+      {required BuildContext context}) async {
+    showLoading();
     filteredFlowerList.clear();
-    final categoryResult = await _repository.searchFilterCategory(
-      category: selectedItemDropDown.value,
-    );
-    if (categoryResult.isLeft) {
-      Get.snackbar('Login', 'user not found');
-    } else if (categoryResult.isRight) {
-      filteredFlowerList.addAll(categoryResult.right);
+    Navigator.of(context).pop();
+    if (selectedItemDropDown.value != 'select a item') {
+      final categoryResult = await _repository.searchFilterCategory(
+        category: selectedItemDropDown.value,
+      );
+      if (categoryResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (categoryResult.isRight) {
+        filteredFlowerList.addAll(categoryResult.right);
+      }
     }
     final priceResult = await _repository.searchFilterPriceRange(
       min: valuesRange.value.start.toString(),
@@ -106,16 +125,20 @@ class CustomerSearchPageController extends GetxController{
     }
     String colorFilters =
     colorFilter.map((color) => 'color_like=$color').join('&');
-    final colorResult = await _repository.searchFilterColor(
-      colors: colorFilters,
-    );
-    if (colorResult.isLeft) {
-      Get.snackbar('Login', 'user not found');
-    } else if (colorResult.isRight) {
-      filteredFlowerList.addAll(colorResult.right);
+    if (colorFilters != '') {
+      final colorResult = await _repository.searchFilterColor(
+        colors: colorFilters,
+      );
+      if (colorResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (colorResult.isRight) {
+        filteredFlowerList.addAll(colorResult.right);
+      }
     }
+    hideLoading();
   }
   Future<void> getSearchFlowerList({required String search}) async {
+    showLoading();
     if (search != '') {
       final result = await _repository.search(search);
       if (result.isLeft) {
@@ -126,6 +149,7 @@ class CustomerSearchPageController extends GetxController{
     } else {
       filteredFlowerList.clear();
     }
+    hideLoading();
   }
 
 

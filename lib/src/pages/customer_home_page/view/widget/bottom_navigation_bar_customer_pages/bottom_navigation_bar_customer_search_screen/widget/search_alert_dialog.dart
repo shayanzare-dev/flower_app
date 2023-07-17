@@ -15,7 +15,7 @@ class SearchAlertDialog extends GetView<CustomerHomePageFlowerController> {
           builder: (BuildContext context) => AlertDialog(
             title: const Text('Search Filter'),
             content: const SizedBox(
-              height: 300,
+              height: 350,
               width: 200,
               child: Column(
                 children: [
@@ -41,11 +41,11 @@ class SearchAlertDialog extends GetView<CustomerHomePageFlowerController> {
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () => controller.clearSearchFilterFlowers(),
+                onPressed: () => controller.clearSearchFilterFlowers(context: context),
                 child: const Text('clear Filter'),
               ),
               TextButton(
-                onPressed: () => controller.getSearchFilterFlowerList(),
+                onPressed: () => controller.getSearchFilterFlowerList(context: context),
                 child: const Text('OK'),
               )
             ],

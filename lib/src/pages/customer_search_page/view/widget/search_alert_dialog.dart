@@ -1,14 +1,13 @@
 import 'package:flower_app/src/pages/customer_search_page/view/widget/range_slider_price.dart';
 import 'package:flower_app/src/pages/customer_search_page/view/widget/check_box_color_filter.dart';
 import 'package:flower_app/src/pages/customer_search_page/view/widget/dropdown_button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../customer_home_page/controller/customer_home_page_flower_controller.dart';
+import '../../controller/customer_search_page_controller.dart';
 
 
 
-class SearchAlertDialog extends GetView<CustomerHomePageFlowerController> {
+class SearchAlertDialog extends GetView<CustomerSearchPageController> {
   const SearchAlertDialog({super.key});
 
   @override
@@ -18,7 +17,7 @@ class SearchAlertDialog extends GetView<CustomerHomePageFlowerController> {
           builder: (BuildContext context) => AlertDialog(
             title: const Text('Search Filter'),
             content: const SizedBox(
-              height: 300,
+              height: 350,
               width: 200,
               child: Column(
                 children: [
@@ -44,11 +43,11 @@ class SearchAlertDialog extends GetView<CustomerHomePageFlowerController> {
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () => controller.clearSearchFilterFlowers(),
+                onPressed: () => controller.clearSearchFilterFlowers(context: context),
                 child: const Text('clear Filter'),
               ),
               TextButton(
-                onPressed: () => controller.getSearchFilterFlowerList(),
+                onPressed: () => controller.getSearchFilterFlowerList(context: context),
                 child: const Text('OK'),
               )
             ],

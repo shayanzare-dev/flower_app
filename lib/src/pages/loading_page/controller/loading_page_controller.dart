@@ -16,18 +16,19 @@ class LoadingPageController extends GetxController{
         showLoading();
         userType().then((userType) {
           if (userType == 1) {
-            Get.offAndToNamed(
+            Get.toNamed(
                 RouteNames.loadingPageFlower+ RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
             hideLoading();
           } else if (userType == 2) {
-            Get.offAndToNamed(
+            Get.toNamed(
                 RouteNames.loadingPageFlower+ RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
             hideLoading();
           }
         });
       }else{
-        Get.offAndToNamed(
+        Get.toNamed(
             RouteNames.loadingPageFlower+RouteNames.loginPageFlower);
+        hideLoading();
       }
     });
   }

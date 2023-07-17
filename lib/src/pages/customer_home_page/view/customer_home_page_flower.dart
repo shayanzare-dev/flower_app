@@ -25,7 +25,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                   IconButton(
                     icon: const Icon(Icons.refresh),
                     onPressed: () {
-                      // controller.refresh();
+                      controller.refresh();
                     },
                   ),
                 ],
@@ -57,7 +57,39 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.shopping_cart),
+                leading: Stack(children: [
+                  const Icon(Icons.shopping_cart),
+                  Obx(() {
+                    int cartCount = controller.cartCount.value;
+                    if (cartCount == 0) {
+                      return const SizedBox.shrink();
+                    } else {
+                      return Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2.0),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            '$cartCount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    }
+                  }),
+                ]),
                 title: const Text('Cart Flowers'),
                 onTap: () {
                   Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerCartPage);
