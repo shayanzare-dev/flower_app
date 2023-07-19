@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flower_app/generated/locales.g.dart';
 import 'package:flower_app/src/pages/customer_home_page/models/bought_flowers_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -60,8 +61,8 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                     children: [
                       Row(
                         children: [
-                          const Text(
-                            'Flower Name: ',
+                           Text(
+                            LocaleKeys.vendor_home_history_flower_name.tr ,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -81,7 +82,7 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                       const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          const Text('Customer Name: ',
+                           Text( LocaleKeys.vendor_home_history_customer_name.tr,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20)),
                           Text(
@@ -104,7 +105,7 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                       const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          const Text('Bought Date: ',
+                           Text( LocaleKeys.vendor_home_history_bought_date.tr,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16)),
                           Text(boughtFlower.dateTime,
@@ -117,8 +118,8 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                            const Text(
-                              'Price: ',
+                             Text(
+                              LocaleKeys.vendor_home_history_price.tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
@@ -136,8 +137,8 @@ class VendorBoughtItem extends GetView<VendorHomePageFlowerController> {
                           ]),
                           Row(
                             children: [
-                              const Text(
-                                'Count Bought: ',
+                               Text(
+                                LocaleKeys.vendor_home_history_count_bought.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,

@@ -11,7 +11,7 @@ class CustomerRangeSliderPrice1 extends GetView<CustomerSearchPageController> {
       () => RangeSlider(
         values: controller.values,
         min: 0,
-        max: 1000,
+        max: controller.maxPrice,
         onChanged: (values) {
           controller.setRangeValues(rangeValues: values);
         },

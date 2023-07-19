@@ -1,0 +1,104 @@
+{
+  "login": {
+    "email": "ایمیل",
+    "passWord": "پسورد",
+    "remember_me": "مرا به خاطر بسپار",
+    "login_button": "ورود",
+    "sign_up_button": "رجیستر",
+    "title": "صفحه ورود"
+  },
+  "register": {
+    "title": "صفحه ثبت نام",
+    "first_name": "نام",
+    "last_name": "نام خانوادگی",
+    "email": "ایمیل",
+    "password": "رمز عبور",
+    "confirmPassword": "تکرار رمز عبور ",
+    "vendor": "فروشنده",
+    "customer": "خریداد",
+    "register_button": "ثبت نام"
+  },
+  "vendor_page": {
+    "title": "صفحه خانه فروشنده",
+    "refresh": "بارگذاری مجدد",
+    "home": "خانه",
+    "add_flower": "افزودن گل",
+    "search": "جستوجو",
+    "history": "تاریخچه",
+    "profile": "مشخصات",
+    "english_btn": "English",
+    "farsi_btn": "فارسی",
+    "about": "در باره ما"
+  },
+  "vendor_home_item": {
+    "name": "نام",
+    "description": "شرح",
+    "color": "رنگ",
+    "delete_btn": "حذف",
+    "price": "قیمت",
+    "count": "تعداد"
+  },
+  "vendor_home_add": {
+    "flower_name": "نام گل",
+    "flower_description": "شرح گل",
+    "flower_image": "عکس کل",
+    "flower_price": "قیمت گل",
+    "flower_count": "تعداد گل",
+    "flower_color": "رنگ گل",
+    "flower_category": "دسته بندی گل",
+    "flower_add_btn": "افزودن گل"
+  },
+  "home_search": {
+    "search": "جستجو یا برای فیلتر نماد جستجو را فشار دهید",
+    "search_filter": "فیلتر جستجو",
+    "search_color": "فیلتر رنگ",
+    "search_price": "فیلتر محدوده قیمت",
+    "search_ok_btn": "تایید",
+    "search_clear_btn": "حذف فیلتر "
+  },
+  "vendor_home_history": {
+    "flower_name": "نام گل",
+    "customer_name": "نام مشتری",
+    "bought_date": "تاریخ خرید",
+    "price": "قیمت",
+    "count_bought": "تعداد خرید"
+  },
+  "profile": {
+    "first_name": "نام",
+    "last_name": "نام خانوادگی",
+    "email": "ایمیل",
+    "sign_out_btn": "خروج"
+  },
+  "customer_page": {
+    "title": "صفحه خانه خریدار",
+    "refresh": "بارگذاری مجدد",
+    "home": "خانه",
+    "cart": "سبد خرید",
+    "search": "جستوجو",
+    "history": "تاریخچه",
+    "profile": "مشخصات",
+    "english_btn": "English",
+    "farsi_btn": "فارسی",
+    "about": "در باره ما"
+  },
+  "customer_home_item": {
+    "name": "نام",
+    "description": "شرح",
+    "vendor_name": "اسم فروشنده",
+    "color": "رنگ",
+    "add_cart_btn": "اضافه به سبد",
+    "price": "قیمت",
+    "count": "تعداد",
+    "out_of_stock": "تمام شده",
+    "count_buy": "تعداد خرید",
+    "total_price": "قیمت کل",
+    "purchase": "خرید"
+  },
+  "customer_home_history": {
+    "flower_name": "نام گل",
+    "vendor_name": "نام فروشنده",
+    "bought_date": "تاریخ خرید",
+    "price": "قیمت",
+    "count_bought": "تعداد خرید"
+  }
+}

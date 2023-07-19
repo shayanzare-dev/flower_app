@@ -30,7 +30,23 @@ class VendorAddFlowerPageRepository {
       return const Left('error');
     }
   }
+  Future<Either<String, List<FlowerListViewModel>>> getFlowerList(
+      String email) async {
+    final url =
+    Uri.parse("http://10.0.2.2:3000/flowerList?vendorUser.email=$email");
+    final responseOrException = await httpClient.get(url);
 
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      final List<FlowerListViewModel> flowerListVendor = [];
+      for (final record in json.decode(responseOrException.body)) {
+        flowerListVendor.add(FlowerListViewModel.fromJson(record));
+      }
+      return Right(flowerListVendor);
+    } else {
+      return const Left('error');
+    }
+  }
   Future<Either<String, List<VendorViewModel>>> getVendorUser(
       String email) async {
     final url = Uri.parse("http://10.0.2.2:3000/vendors?email=$email");

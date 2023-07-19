@@ -1,6 +1,5 @@
-/*
 import 'package:get/get.dart';
-import 'package:my_food_recipe_2_lan/generated/locales.g.dart' as locale;
+import 'package:flower_app/generated/locales.g.dart' as locale;
 
 class LocalizationService extends Translations {
   Map<String, String> fa = {}, en = {};
@@ -17,4 +16,3 @@ class LocalizationService extends Translations {
         'en': en,
       };
 }
-*/

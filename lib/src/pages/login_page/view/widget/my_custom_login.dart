@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../../generated/locales.g.dart';
 import '../../controller/login_page_flower_controller.dart';
 
 class MyCustomLogin extends GetView<LoginPageFlowerController> {
@@ -33,7 +34,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Remember me'),
+               Text(LocaleKeys.login_remember_me.tr),
               Obx(() => Checkbox(
                     value: controller.rememberMe.value,
                     onChanged: (value) {
@@ -63,7 +64,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                     height: 150,
                     width: 150,
                     decoration: BoxDecoration(
-                      color: Color(0xff159947),
+                      color: const Color(0xff159947),
                       borderRadius: BorderRadius.circular(1000),
                     ),
                     child: const Icon(
@@ -95,14 +96,14 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.emailController,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.mail, color: Colors.white),
+            decoration:  InputDecoration(
+              icon: const Icon(Icons.mail, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
-                  'email',
-                  style: TextStyle(
+                  LocaleKeys.login_email.tr,
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -149,11 +150,11 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                         color: Colors.white,
                       )),
                   border: InputBorder.none,
-                  label: const Padding(
-                    padding: EdgeInsets.only(right: 15),
+                  label:  Padding(
+                    padding: const EdgeInsets.only(right: 15),
                     child: Text(
-                      'password',
-                      style: TextStyle(
+                      LocaleKeys.login_passWord.tr,
+                      style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
@@ -182,11 +183,11 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                     borderRadius: BorderRadius.circular(20)),
                 height: 45,
                 width: 100,
-                child: const Row(
+                child:  Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('login',
+                    Text(LocaleKeys.login_login_button.tr,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -215,12 +216,12 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                     borderRadius: BorderRadius.circular(20)),
                 height: 45,
                 width: 100,
-                child: const Row(
+                child:  Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Sign Up',
-                        style: TextStyle(
+                    Text(LocaleKeys.login_sign_up_button.tr,
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.bold)),

@@ -4,6 +4,7 @@ import 'package:flower_app/src/pages/customer_home_page/view/widget/bottom_navig
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../../../../generated/locales.g.dart';
 import '../../../../../controller/customer_home_page_flower_controller.dart';
 import '../../../../../models/flower_list_view_model.dart';
 import 'add_to_cart_btn.dart';
@@ -63,8 +64,8 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                   children: [
                     Row(
                       children: [
-                        const Text(
-                          'Name: ',
+                        Text(
+                          LocaleKeys.customer_home_item_name.tr,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
@@ -84,7 +85,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                     const SizedBox(height: 8.0),
                     Row(
                       children: [
-                        const Text('Description: ',
+                        Text(LocaleKeys.customer_home_item_description.tr,
                             style:
                                 TextStyle(color: Colors.white, fontSize: 16)),
                         Text(
@@ -102,7 +103,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                       children: [
                         Row(
                           children: [
-                            const Text('Vendor Name: ',
+                            Text(LocaleKeys.customer_home_item_vendor_name.tr,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 16)),
                             Text(flowerItem.vendorUser.firstName,
@@ -142,7 +143,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                       children: [
                         Row(
                           children: [
-                            const Text('Color: ',
+                            Text(LocaleKeys.customer_home_item_color.tr,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 16)),
                             Container(
@@ -156,8 +157,8 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                           ],
                         ),
                         Row(children: [
-                          const Text(
-                            'Count: ',
+                          Text(
+                            LocaleKeys.customer_home_item_color.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
@@ -187,8 +188,8 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(children: [
-                          const Text(
-                            'Price: ',
+                          Text(
+                            LocaleKeys.customer_home_item_price.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
@@ -208,24 +209,40 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                controller.editBuyCountFlowerMinus(flowerItem: flowerItem);
+                                controller.editBuyCountFlowerMinus(
+                                    flowerItem: flowerItem);
                               },
                               icon: const Icon(
                                 Icons.remove,
                                 color: Colors.white,
                               ),
                             ),
-                            Obx(() => Text(
-                                  'Count Buy: ${controller.flowerBuyCount[flowerItem.id]}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )),
+                            Row(
+                              children: [
+                                flowerItem.countInStock == 0
+                                    ? Text(
+                                        LocaleKeys
+                                            .customer_home_item_out_of_stock.tr,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    : Obx(() => Text(
+                                          "${LocaleKeys.customer_home_item_count_buy.tr} : ${controller.flowerBuyCount[flowerItem.id]}",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                              ],
+                            ),
                             IconButton(
                               onPressed: () {
-                                controller.editBuyCountFlowerPlus( flowerItem: flowerItem);
+                                controller.editBuyCountFlowerPlus(
+                                    flowerItem: flowerItem);
                               },
                               icon: const Icon(
                                 Icons.add,

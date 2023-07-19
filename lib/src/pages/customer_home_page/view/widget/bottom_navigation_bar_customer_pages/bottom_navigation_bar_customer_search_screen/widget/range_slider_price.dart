@@ -11,7 +11,7 @@ class CustomerRangeSliderPrice extends GetView<CustomerHomePageFlowerController>
       () => RangeSlider(
         values: controller.values,
         min: 0,
-        max: 1000,
+        max: controller.maxPrice,
         onChanged: (values) {
           controller.setRangeValues(rangeValues: values);
         },
@@ -19,7 +19,7 @@ class CustomerRangeSliderPrice extends GetView<CustomerHomePageFlowerController>
           '\$${controller.values.start.toInt()}',
           '\$${controller.values.end.toInt()}',
         ),
-        divisions: 100,
+        divisions: 10,
       ),
     );
   }

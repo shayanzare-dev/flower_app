@@ -15,13 +15,14 @@ class LoginPageFlowerController extends GetxController {
   RxBool obscureText = true.obs;
   RxBool rememberMe = false.obs;
 
-
   @override
   void onInit() {
+    refresh();
     super.onInit();
-
   }
+
   var isLoading = false.obs;
+
   void showLoading() {
     isLoading.value = true;
   }
@@ -44,14 +45,6 @@ class LoginPageFlowerController extends GetxController {
     await _prefs.clear();
   }
 
-  Future<String> userEmail() async {
-    return _prefs.getString('userEmail') ?? emailController.text;
-  }
-
-
-
-
-
   Future<void> onSubmitLogin() async {
     if (!loginFormKey.currentState!.validate()) {
       Get.snackbar('login', 'Your must be enter required field');
@@ -65,12 +58,13 @@ class LoginPageFlowerController extends GetxController {
             user: 2);
     resultOrExceptionUserValidate2.fold((left) {
       saveLoginStatus(rememberMe.value, 2, emailController.text);
-      Get.offAndToNamed(
-          RouteNames.loadingPageFlower+ RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
+      Get.offAndToNamed(RouteNames.loadingPageFlower +
+          RouteNames.loginPageFlower +
+          RouteNames.customerHomePageFlower);
       loginFormKey.currentState?.reset();
       hideLoading();
       return;
-    }, (right) => null);
+    }, (right) {});
     final Either<String, String> resultOrExceptionVendorValidate1 =
         await _repository.checkVendorValidate(
             passWord: passWordController.text,
@@ -78,12 +72,15 @@ class LoginPageFlowerController extends GetxController {
             user: 1);
     resultOrExceptionVendorValidate1.fold((left) {
       saveLoginStatus(rememberMe.value, 1, emailController.text);
-      Get.offAndToNamed(
-          RouteNames.loadingPageFlower+ RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+      Get.offAndToNamed(RouteNames.loadingPageFlower +
+          RouteNames.loginPageFlower +
+          RouteNames.vendorHomePageFlower);
       hideLoading();
       loginFormKey.currentState?.reset();
       return;
-    }, (right) => null);
+    }, (right) {
+      hideLoading();
+    });
     return;
   }
 
@@ -104,6 +101,8 @@ class LoginPageFlowerController extends GetxController {
   }
 
   void goToRegisterPage() {
-    Get.toNamed( RouteNames.loadingPageFlower+RouteNames.loginPageFlower + RouteNames.registerPageFlower);
+    Get.toNamed(RouteNames.loadingPageFlower +
+        RouteNames.loginPageFlower +
+        RouteNames.registerPageFlower);
   }
 }

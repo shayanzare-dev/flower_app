@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../../../../../generated/locales.g.dart';
 import '../../../../../controller/vendor_home_page_flower_controller.dart';
 import '../../../../../models/flower_list_view_model.dart';
 import 'dart:convert';
@@ -63,8 +64,8 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                     children: [
                       Row(
                         children: [
-                          const Text(
-                            'Name: ',
+                           Text(
+                            LocaleKeys.vendor_home_item_name.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -84,7 +85,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                       const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          const Text('Description: ',
+                           Text(LocaleKeys.vendor_home_item_description.tr,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16)),
                           Text(
@@ -102,7 +103,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                         children: [
                           Row(
                             children: [
-                              const Text('Color: ',
+                               Text(LocaleKeys.vendor_home_item_color.tr,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16)),
                               Container(
@@ -127,8 +128,8 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                            const Text(
-                              'Price: ',
+                             Text(
+                              LocaleKeys.vendor_home_item_price.tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
@@ -155,8 +156,8 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                                   color: Colors.white,
                                 ),
                               ),
-                              const Text(
-                                'Count: ',
+                               Text(
+                                LocaleKeys.vendor_home_item_count.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,

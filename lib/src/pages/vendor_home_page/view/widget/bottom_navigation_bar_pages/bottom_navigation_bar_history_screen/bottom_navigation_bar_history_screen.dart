@@ -13,9 +13,11 @@ class HistoryScreen extends GetView<VendorHomePageFlowerController> {
       child: RefreshIndicator(
         onRefresh: controller.getFlowerList,
         child:const VendorBoughtList(),
+
       ),
 
     );
+
   }
 
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,7 +26,7 @@ import '../view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_ba
 class CustomerHomePageFlowerController extends GetxController {
   final CustomerHomePageFlowerRepository _repository =
       CustomerHomePageFlowerRepository();
-  final SharedPreferences _prefs = Get.find<SharedPreferences>();
+  SharedPreferences _prefs = Get.find<SharedPreferences>();
   RxList<UserViewModel> customerUser = RxList();
   RxList<FlowerListViewModel> customerFlowerList = RxList();
   RxMap<int, int> flowerBuyCount = RxMap();
@@ -56,53 +58,43 @@ class CustomerHomePageFlowerController extends GetxController {
 
   @override
   void onInit() {
-    Future.delayed(const Duration(seconds: 2), () {
+    _prefs = Get.find<SharedPreferences>();
+    Future.delayed(const Duration(seconds: 1), () {
+      customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
       getCustomerUser();
       getFlowerList();
-      getOrderCart();
       getOrderList();
     });
-    Future.delayed(const Duration(seconds: 1), () {
-      userEmail().then((userEmail) {
-        customerUserEmail = userEmail;
-      });
+    Future.delayed(const Duration(seconds: 2), () {
+      getOrderCart();
     });
     super.onInit();
   }
 
   @override
   Future<void> refresh() async {
-    dropDownButtonList.clear();
-    dropDownButtonList = ['select a item'];
-    selectedItemDropDown = Rx<String>('select a item');
-    Future.delayed(const Duration(seconds: 2), () {
+    customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
+    Future.delayed(const Duration(seconds: 1), () {
       getCustomerUser();
       getFlowerList();
-      getOrderCart();
       getOrderList();
     });
-    Future.delayed(const Duration(seconds: 1), () {
-      userEmail().then((userEmail) {
-        customerUserEmail = userEmail;
-      });
+    Future.delayed(const Duration(seconds: 2), () {
+      getOrderCart();
     });
   }
 
   //Home Screen
   static List<Widget> widgetOptionsNavBar = <Widget>[
-    CustomerHomeScreen(),
+    const CustomerHomeScreen(),
     const CustomerCartScreen(),
-    CustomerSearchScreen(),
-    CustomerHistoryScreen(),
+    const CustomerSearchScreen(),
+    const CustomerHistoryScreen(),
     CustomerProfileScreen(),
   ];
 
   void onItemTappedNavBar({required int navBarIndex}) {
     selectedIndex.value = navBarIndex;
-  }
-
-  Future<String> userEmail() async {
-    return _prefs.getString('userEmail') ?? 'test@gmail.com';
   }
 
   Future<void> getOrderCart() async {
@@ -118,6 +110,7 @@ class CustomerHomePageFlowerController extends GetxController {
       for (final item in result.right) {
         boughtFlowerListCart.addAll(item.boughtFlowers);
         for (final items in item.boughtFlowers) {
+          flowerBuyCount[items.flowerListViewModel.id] = items.buyCount;
           incrementCartCount();
         }
       }
@@ -125,23 +118,37 @@ class CustomerHomePageFlowerController extends GetxController {
     hideLoading();
   }
 
+  List<int> priceList = [];
+  double maxPrice = 0.0;
+
+  void maxPrices() {
+    priceList.sort();
+    maxPrice = priceList.last.toDouble();
+    valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
+  }
+
   Future<void> getFlowerList() async {
     showLoading();
     items.clear();
+    dropDownButtonList.clear();
     customerFlowerList.clear();
+    dropDownButtonList = ['select a item'];
+    selectedItemDropDown = Rx<String>('select a item');
     final result = await _repository.getFlowerList();
     if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
+      Get.snackbar('Flower List', 'Flowers not found');
     } else if (result.isRight) {
       customerFlowerList.addAll(result.right);
       for (final item in result.right) {
         flowerBuyCount[item.id] = 0;
         items.add(GridItem(color: Color(item.color)));
+        priceList.add(item.price);
         for (final categoryItem in item.category) {
           dropDownButtonList.add(categoryItem.toString());
         }
       }
     }
+    maxPrices();
     hideLoading();
   }
 
@@ -197,7 +204,6 @@ class CustomerHomePageFlowerController extends GetxController {
       if (cartOrderList.isEmpty) {
         cartOrderList.add(cartOrder);
         Get.snackbar('Add Flower', 'add to cart');
-        flowerBuyCount[flowerItem.id] = 0;
         addCartOrder();
         boughtFlowerListCart.clear();
         cartOrderList.clear();
@@ -207,13 +213,11 @@ class CustomerHomePageFlowerController extends GetxController {
         cartOrderList.clear();
         cartOrderList.add(cartOrder);
         Get.snackbar('Add Flower', 'add to cart');
-        flowerBuyCount[flowerItem.id] = 0;
         updateCartOrder(cartId: cartOrderList[0].id);
         refresh();
         incrementCartCount();
         hideLoading();
       }
-
     }
   }
 
@@ -249,7 +253,7 @@ class CustomerHomePageFlowerController extends GetxController {
         (String error) => Get.snackbar(
             'Register', 'Your update is not successfully code error:$error'),
         (String addRecord) async {
-      Get.snackbar('Add cart', 'Your Add order is successfully');
+      Get.snackbar('Update cart', 'Your Update Cart is successfully');
     });
     hideLoading();
   }
@@ -265,6 +269,7 @@ class CustomerHomePageFlowerController extends GetxController {
     cartOrderList[0].totalPrice = cartOrderList[0].totalPrice - sumBuyPrice;
     totalPrice = totalPrice - sumBuyPrice;
     updateCartOrder(cartId: cartOrderList[0].id);
+    refresh();
     cartOrderList.refresh();
   }
 
@@ -283,6 +288,7 @@ class CustomerHomePageFlowerController extends GetxController {
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id);
+      refresh();
     } else {
       Get.snackbar('Edit Flower', 'cant plus count buy');
     }
@@ -346,13 +352,14 @@ class CustomerHomePageFlowerController extends GetxController {
     final Either<String, String> resultOrException =
         (await _repository.editFlower(dto, flowerItem.id));
     resultOrException.fold(
-        (String error) => Get.snackbar('Register',
-            'Your registration is not successfully code error:$error'),
+        (String error) => Get.snackbar(
+            'Edit', 'Your edit is not successfully code error:$error'),
         (String editFlower) {});
     return;
   }
 
   Future<void> onSubmitPurchaseCartOrder() async {
+    showLoading();
     if (boughtFlowerListCart.isEmpty) {
       Get.snackbar('Add cart', 'Your cart  is empty');
     } else {
@@ -367,24 +374,23 @@ class CustomerHomePageFlowerController extends GetxController {
           (String error) => Get.snackbar('Register',
               'Your registration is not successfully code error:$error'),
           (String addRecord) {
-        minusCountInStockFlower();
         Get.snackbar('Add cart', 'Your Add order is successfully');
         deleteCartOrder(cartId: cartOrderList[0].id);
-        boughtFlowerListCart.clear();
-        cartOrderList.clear();
-        hideLoading();
         cartCount.value = 0;
-        refresh();
-
+      });
+      Future.delayed(const Duration(seconds: 2), () {
+        minusCountInStockFlower();
+        hideLoading();
       });
     }
   }
 
-  void minusCountInStockFlower() {
+  void minusCountInStockFlower() async {
     for (final item in boughtFlowerListCart) {
-      editCountFlowerBuy(
+       await editCountFlowerBuy(
           flowerItem: item.flowerListViewModel, countBuy: item.buyCount);
     }
+    refresh();
   }
 
   Future<void> deleteCartOrder({required int cartId}) async {
@@ -439,7 +445,7 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   void clearSearchFilterFlowers({required BuildContext context}) {
-    valuesRange = Rx<RangeValues>(const RangeValues(0, 1000));
+    valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
     selectedItemDropDown.value = 'select a item';
     for (int i = 0; i < savedSelections.length; i++) {
       items[i].isSelected = false;
@@ -457,6 +463,7 @@ class CustomerHomePageFlowerController extends GetxController {
     showLoading();
     filteredFlowerList.clear();
     Navigator.of(context).pop();
+
     if (selectedItemDropDown.value != 'select a item') {
       final categoryResult = await _repository.searchFilterCategory(
         category: selectedItemDropDown.value,
@@ -465,16 +472,29 @@ class CustomerHomePageFlowerController extends GetxController {
         Get.snackbar('Login', 'user not found');
       } else if (categoryResult.isRight) {
         filteredFlowerList.addAll(categoryResult.right);
+        for (final items in filteredFlowerList) {
+          filteredFlowerList.removeWhere((item) => item.id == items.id);
+          filteredFlowerList.addAll(categoryResult.right);
+        }
+        hideLoading();
       }
     }
-    final priceResult = await _repository.searchFilterPriceRange(
-      min: valuesRange.value.start.toString(),
-      max: valuesRange.value.end.toString(),
-    );
-    if (priceResult.isLeft) {
-      Get.snackbar('Login', 'user not found');
-    } else if (priceResult.isRight) {
-      filteredFlowerList.addAll(priceResult.right);
+    if (valuesRange.value.start != 0 || valuesRange.value.end != maxPrice) {
+      final priceResult = await _repository.searchFilterPriceRange(
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+      );
+      if (priceResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (priceResult.isRight) {
+        if (filteredFlowerList.isEmpty) {
+          filteredFlowerList.addAll(priceResult.right);
+        } else {
+          filteredFlowerList.removeWhere((item) => item.id == item.id);
+          filteredFlowerList.addAll(priceResult.right);
+        }
+        hideLoading();
+      }
     }
     List<int> colorFilter = [];
     for (int i = 0; i < savedSelections.length; i++) {
@@ -493,8 +513,14 @@ class CustomerHomePageFlowerController extends GetxController {
         Get.snackbar('Login', 'user not found');
       } else if (colorResult.isRight) {
         filteredFlowerList.addAll(colorResult.right);
+        for (final items in filteredFlowerList) {
+          filteredFlowerList.removeWhere((item) => item.id == items.id);
+          filteredFlowerList.addAll(colorResult.right);
+        }
+        hideLoading();
       }
     }
+
     hideLoading();
   }
 
@@ -532,6 +558,6 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   void goToLoginPage() {
-    Get.offAndToNamed(RouteNames.loadingPageFlower + RouteNames.loginPageFlower);
+    Get.toNamed(RouteNames.loadingPageFlower + RouteNames.loginPageFlower);
   }
 }

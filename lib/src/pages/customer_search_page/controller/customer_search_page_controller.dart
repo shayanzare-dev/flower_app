@@ -42,20 +42,34 @@ class CustomerSearchPageController extends GetxController{
 
 
   Future<void> getFlowerList() async {
+    items.clear();
+    dropDownButtonList.clear();
     customerFlowerList.clear();
+    dropDownButtonList = ['select a item'];
+    selectedItemDropDown = Rx<String>('select a item');
     final result = await _repository.getFlowerList();
     if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
+      Get.snackbar('Flower List', 'Flowers not found');
     } else if (result.isRight) {
       customerFlowerList.addAll(result.right);
       for (final item in result.right) {
         flowerBuyCount[item.id] = 0;
         items.add(GridItem(color: Color(item.color)));
+        priceList.add(item.price);
         for (final categoryItem in item.category) {
           dropDownButtonList.add(categoryItem.toString());
         }
       }
     }
+    maxPrices();
+  }
+  List<int> priceList = [];
+  double maxPrice = 0.0;
+
+  void maxPrices() {
+    priceList.sort();
+    maxPrice = priceList.last.toDouble();
+    valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
   }
 
   RangeValues get values => valuesRange.value;
@@ -79,7 +93,7 @@ class CustomerSearchPageController extends GetxController{
   }
 
   void clearSearchFilterFlowers({required BuildContext context}) {
-    valuesRange = Rx<RangeValues>(const RangeValues(0, 1000));
+    valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
     selectedItemDropDown.value = 'select a item';
     for (int i = 0; i < savedSelections.length; i++) {
       items[i].isSelected = false;
@@ -97,6 +111,7 @@ class CustomerSearchPageController extends GetxController{
     showLoading();
     filteredFlowerList.clear();
     Navigator.of(context).pop();
+
     if (selectedItemDropDown.value != 'select a item') {
       final categoryResult = await _repository.searchFilterCategory(
         category: selectedItemDropDown.value,
@@ -105,16 +120,29 @@ class CustomerSearchPageController extends GetxController{
         Get.snackbar('Login', 'user not found');
       } else if (categoryResult.isRight) {
         filteredFlowerList.addAll(categoryResult.right);
+        for (final items in filteredFlowerList) {
+          filteredFlowerList.removeWhere((item) => item.id == items.id);
+          filteredFlowerList.addAll(categoryResult.right);
+        }
+        hideLoading();
       }
     }
-    final priceResult = await _repository.searchFilterPriceRange(
-      min: valuesRange.value.start.toString(),
-      max: valuesRange.value.end.toString(),
-    );
-    if (priceResult.isLeft) {
-      Get.snackbar('Login', 'user not found');
-    } else if (priceResult.isRight) {
-      filteredFlowerList.addAll(priceResult.right);
+    if (valuesRange.value.start != 0 || valuesRange.value.end != maxPrice) {
+      final priceResult = await _repository.searchFilterPriceRange(
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+      );
+      if (priceResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (priceResult.isRight) {
+        if (filteredFlowerList.isEmpty) {
+          filteredFlowerList.addAll(priceResult.right);
+        } else {
+          filteredFlowerList.removeWhere((item) => item.id == item.id);
+          filteredFlowerList.addAll(priceResult.right);
+        }
+        hideLoading();
+      }
     }
     List<int> colorFilter = [];
     for (int i = 0; i < savedSelections.length; i++) {
@@ -133,8 +161,14 @@ class CustomerSearchPageController extends GetxController{
         Get.snackbar('Login', 'user not found');
       } else if (colorResult.isRight) {
         filteredFlowerList.addAll(colorResult.right);
+        for (final items in filteredFlowerList) {
+          filteredFlowerList.removeWhere((item) => item.id == items.id);
+          filteredFlowerList.addAll(colorResult.right);
+        }
+        hideLoading();
       }
     }
+
     hideLoading();
   }
   Future<void> getSearchFlowerList({required String search}) async {

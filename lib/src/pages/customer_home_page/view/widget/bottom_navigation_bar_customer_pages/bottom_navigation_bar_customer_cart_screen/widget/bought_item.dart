@@ -4,6 +4,7 @@ import 'package:flower_app/src/pages/customer_home_page/models/bought_flowers_vi
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../../../../generated/locales.g.dart';
 import '../../../../../controller/customer_home_page_flower_controller.dart';
 import 'delete_alert_dialog.dart';
 
@@ -63,8 +64,8 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                     children: [
                       Row(
                         children: [
-                          const Text(
-                            'Name: ',
+                          Text(
+                            LocaleKeys.customer_home_item_name.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -84,7 +85,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                       const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          const Text('Description: ',
+                          Text(LocaleKeys.customer_home_item_description.tr,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16)),
                           Text(
@@ -102,7 +103,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                         children: [
                           Row(
                             children: [
-                              const Text('Vendor Name: ',
+                              Text(LocaleKeys.customer_home_item_vendor_name.tr,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16)),
                               Text(
@@ -150,7 +151,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                         children: [
                           Row(
                             children: [
-                              const Text('Color: ',
+                              Text(LocaleKeys.customer_home_item_color.tr,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16)),
                               Container(
@@ -165,8 +166,8 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                             ],
                           ),
                           Row(children: [
-                            const Text(
-                              'Count: ',
+                            Text(
+                              LocaleKeys.customer_home_item_count.tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
@@ -198,8 +199,8 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                            const Text(
-                              'Price: ',
+                            Text(
+                              LocaleKeys.customer_home_item_price.tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
@@ -219,8 +220,8 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  controller
-                                      .editFlowerCountBuyCartMinus( boughtFlowers: boughtFlower);
+                                  controller.editFlowerCountBuyCartMinus(
+                                      boughtFlowers: boughtFlower);
                                 },
                                 icon: const Icon(
                                   Icons.remove,
@@ -228,7 +229,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                                 ),
                               ),
                               Text(
-                                'Count Buy: ${boughtFlower.buyCount}',
+                                "${LocaleKeys.customer_home_item_count_buy.tr} : ${boughtFlower.buyCount}",
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
@@ -237,8 +238,8 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  controller
-                                      .editFlowerCountBuyCartPlus(boughtFlowers: boughtFlower);
+                                  controller.editFlowerCountBuyCartPlus(
+                                      boughtFlowers: boughtFlower);
                                 },
                                 icon: const Icon(
                                   Icons.add,
@@ -253,71 +254,6 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                   ),
                 ),
               ),
-            )
-
-            /*Column(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-              ),
-              constraints: const BoxConstraints.expand(
-                height: 100,
-              ),
-              child: StringToImagePost(base64String: boughtFlower.flowerListViewModel.image),
-            ),
-            Row(
-              children: [
-                Text('Flower Name : '),
-                Text(boughtFlower.flowerListViewModel.name),
-              ],
-            ),
-            Row(
-              children: [
-                Text('Flower buy count : '),
-                Text(boughtFlower.flowerListViewModel.countInStock.toString()),
-              ],
-            ),
-            Row(
-              children: [
-                Text('Flower buy count : '),
-                Text(boughtFlower.buyCount.toString()),
-              ],
-            ),
-            Row(
-              children: [
-                Text('vendor Flower name : '),
-                Text(boughtFlower.flowerListViewModel.vendorUser.firstName),
-                Text(boughtFlower.flowerListViewModel.vendorUser.lastName),
-              ],
-            ),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        controller.editFlowerCountItemMinus(boughtFlower);
-                      },
-                    ),
-                    Text('Flower Buy count: ${boughtFlower.buyCount}'),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        controller.editFlowerCountItemPlus(boughtFlower);
-                      },
-                    ),
-                  ],
-                ),
-                DeleteAlertDialog(flowerItem: boughtFlower.flowerListViewModel, boughtFlowers: boughtFlower,),
-              ],
-            ),
-          ],
-        )*/
-            ),
+            )),
       );
 }

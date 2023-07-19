@@ -1,6 +1,7 @@
 import 'package:flower_app/src/pages/customer_home_page/view/widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_search_screen/widget/range_slider_price.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../../../../../generated/locales.g.dart';
 import '../../../../../controller/customer_home_page_flower_controller.dart';
 import 'check_box_color_filter.dart';
 import 'dropdown_button.dart';
@@ -13,15 +14,15 @@ class SearchAlertDialog extends GetView<CustomerHomePageFlowerController> {
         onPressed: () => showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-            title: const Text('Search Filter'),
-            content: const SizedBox(
-              height: 350,
+            title:  Text(LocaleKeys.home_search_search_filter.tr),
+            content:  SizedBox(
+              height: 380,
               width: 200,
               child: Column(
                 children: [
                   MyDropdownButton(),
                   SizedBox(height: 8),
-                  Text('Color Filter',
+                  Text(LocaleKeys.home_search_search_color.tr,
                       style: TextStyle(
                           fontSize: 18,
                           color: Color(0xff04927c),
@@ -29,7 +30,7 @@ class SearchAlertDialog extends GetView<CustomerHomePageFlowerController> {
                   SizedBox(height: 8),
                   CheckBoxColorFilter(),
                   SizedBox(height: 8),
-                  Text('Price Range Filter',
+                  Text(LocaleKeys.home_search_search_price.tr,
                       style: TextStyle(
                           fontSize: 18,
                           color: Color(0xff04927c),
@@ -42,11 +43,11 @@ class SearchAlertDialog extends GetView<CustomerHomePageFlowerController> {
             actions: <Widget>[
               TextButton(
                 onPressed: () => controller.clearSearchFilterFlowers(context: context),
-                child: const Text('clear Filter'),
+                child:  Text(LocaleKeys.home_search_search_clear_btn.tr),
               ),
               TextButton(
                 onPressed: () => controller.getSearchFilterFlowerList(context: context),
-                child: const Text('OK'),
+                child:  Text(LocaleKeys.home_search_search_ok_btn.tr),
               )
             ],
           ),

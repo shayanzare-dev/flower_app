@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../../controller/vendor_home_page_flower_controller.dart';
 import 'add_chip.dart';
 import 'chip_item.dart';
 
-class FlowerChipList extends StatelessWidget {
-
-  const FlowerChipList({Key? key, }) : super(key: key);
+class FlowerChipList extends GetView<VendorHomePageFlowerController> {
+  const FlowerChipList({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +27,43 @@ class FlowerChipList extends StatelessWidget {
                   children: [
                     const AddChipTextField(),
                     Expanded(
+                      child: Obx(
+                        () => ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.suggestions.length,
+                          itemBuilder: (context, index) {
+                            final suggestion = controller.suggestions[index];
+                            return ListTile(
+                              title: Text(suggestion),
+                              onTap: () {
+                                controller.categoryTextController.text =
+                                    suggestion;
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Expanded(
                       child: GetBuilder<VendorHomePageFlowerController>(
                         builder: (controller) => Obx(
-                              () => ListView.builder(
+                          () => ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemCount: controller.categoryChips.length,
                             itemBuilder: (_, index) => Padding(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 5),
-                              child: ChipItem( index: index,),
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: ChipItem(
+                                index: index,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    // if (controller.suggestions.isNotEmpty)
                   ],
                 ),
               )

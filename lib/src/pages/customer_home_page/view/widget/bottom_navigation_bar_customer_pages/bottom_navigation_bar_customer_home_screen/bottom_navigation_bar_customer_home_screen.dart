@@ -11,7 +11,7 @@ class CustomerHomeScreen extends GetView<CustomerHomePageFlowerController> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: controller.getFlowerList,
+      onRefresh: controller.refresh,
       child: const Stack(
         children: <Widget>[
           CustomerFlowerList(),

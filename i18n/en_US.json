@@ -1,0 +1,104 @@
+{
+  "login": {
+    "email": "Email",
+    "passWord": "Password",
+    "remember_me": "Remember Me",
+    "login_button": "Login",
+    "sign_up_button": "Sign Up",
+    "title": "Login Page"
+  },
+  "register": {
+    "title": "Register Page",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "vendor": "Vendor",
+    "customer": "Customer",
+    "register_button": "Register"
+  },
+  "vendor_page": {
+    "title": "Vendor Home Page",
+    "refresh": "Refresh",
+    "home": "Home",
+    "add_flower": "Add Flowers",
+    "search": "Search",
+    "history": "History",
+    "profile": "Profile",
+    "english_btn": "English",
+    "farsi_btn": "فارسی",
+    "about": "about"
+  },
+  "vendor_home_item": {
+    "name": "Name",
+    "description": "Description",
+    "color": "Color",
+    "delete_btn": "Delete",
+    "price": "Price",
+    "count": "Count"
+  },
+  "vendor_home_add": {
+    "flower_name": "Flower Name",
+    "flower_description": "Flower Description",
+    "flower_image": "Add Flower Image",
+    "flower_price": "Flower Price",
+    "flower_count": "Flower Count",
+    "flower_color": "Add Flower Color",
+    "flower_category": "Add a Category",
+    "flower_add_btn": "Add Flower"
+  },
+  "home_search": {
+    "search": "Search Or For Filter Press Search Icon",
+    "search_filter": "Search Filter",
+    "search_color": "Color Filter",
+    "search_price": "Price Range Filter",
+    "search_ok_btn": "ok",
+    "search_clear_btn": "Clear Filter"
+  },
+  "vendor_home_history": {
+    "flower_name": "Flower Name",
+    "customer_name": "Customer Name",
+    "bought_date": "Bought Date",
+    "price": "Price",
+    "count_bought": "Count Bought"
+  },
+  "profile": {
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email": "Email",
+    "sign_out_btn": "Sign Out"
+  },
+  "customer_page": {
+    "title": "Customer Home Page",
+    "refresh": "Refresh",
+    "home": "Home",
+    "cart": "Cart",
+    "search": "Search",
+    "history": "History",
+    "profile": "Profile",
+    "english_btn": "English",
+    "farsi_btn": "فارسی",
+    "about": "about"
+  },
+  "customer_home_item": {
+    "name": "Name",
+    "description": "Description",
+    "vendor_name": "Vendor Name",
+    "color": "Color",
+    "add_cart_btn": "Add to cart",
+    "price": "Price",
+    "count": "Count",
+    "out_of_stock": "Out of Stock",
+    "count_buy": "Count Buy",
+    "total_price": "Total Price",
+    "purchase": "Purchase"
+  },
+  "customer_home_history": {
+    "flower_name": "Flower Name",
+    "vendor_name": "Vendor Name",
+    "bought_date": "Bought Date",
+    "price": "Price",
+    "count_bought": "Count Bought"
+  }
+}

@@ -24,6 +24,7 @@ class VendorAddFlowerPageController extends GetxController {
   final TextEditingController categoryTextController = TextEditingController();
   RxList<VendorViewModel> vendorUser = RxList();
   final RxList<String> categoryChips = <String>[].obs;
+  RxList<FlowerListViewModel> flowerList = RxList();
   File? imageFile;
   String base64Image = "";
   final Rx<Color> selectedColor = const Color(0xff04927c).obs;
@@ -43,12 +44,28 @@ class VendorAddFlowerPageController extends GetxController {
     super.onInit();
     Future.delayed(const Duration(seconds: 2), () {
       getProfileUser();
+      getFlowerList();
     });
     Future.delayed(const Duration(seconds: 1), () {
       userEmail().then((userEmail) {
         vendorUserEmail = userEmail;
       });
     });
+  }
+
+  Future<void> getFlowerList() async {
+    getFilteredSuggestions.clear();
+    final result = await _repository.getFlowerList(vendorUserEmail);
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      flowerList.addAll(result.right);
+      for (final item in result.right) {
+        for (final categoryItem in item.category) {
+          getFilteredSuggestions.add(categoryItem.toString());
+        }
+      }
+    }
   }
 
   Future<void> getProfileUser() async {
@@ -64,7 +81,19 @@ class VendorAddFlowerPageController extends GetxController {
     return _prefs.getString('userEmail') ?? 'test@gmail.com';
   }
 
+  RxList<String> suggestions = <String>[].obs;
 
+  void updateSuggestions(String text) {
+    if (text == ''){
+      suggestions.clear();
+    }else{
+      List<String> filteredList = getFilteredSuggestions
+          .where((suggestion) => suggestion.startsWith(text))
+          .toList();
+      suggestions.value = filteredList;
+    }
+  }
+  List<String> getFilteredSuggestions = [];
 
   void addChip() {
     final text = categoryTextController.text.trim();

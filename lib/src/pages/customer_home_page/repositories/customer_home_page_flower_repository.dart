@@ -72,7 +72,8 @@ class CustomerHomePageFlowerRepository {
       AddCartOrderDto dto) async {
     final url = Uri.http(BaseUrl.baseUrl, 'orderList');
     final jsonDto = dto.toJson();
-    final responseOrException = await httpClient.post(url,
+    final httpClient1 = http.Client();
+    final responseOrException = await httpClient1.post(url,
         body: json.encode(jsonDto), headers: customHeaders);
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {
@@ -124,7 +125,8 @@ class CustomerHomePageFlowerRepository {
       EditFlowerDto dto, int flowerId) async {
     final url = Uri.http(BaseUrl.baseUrl, 'flowerList/$flowerId');
     final jsonDto = dto.toJson();
-    final responseOrException = await httpClient.put(url,
+    final httpClient2 = http.Client();
+    final responseOrException = await httpClient2.put(url,
         body: json.encode(jsonDto), headers: customHeaders);
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {

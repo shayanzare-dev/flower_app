@@ -34,12 +34,12 @@ class RoutePages {
   static final List<GetPage> pages = [
     GetPage(
         name: RouteNames.loadingPageFlower,
-        page: () =>  LoadingPage(),
+        page: () =>  const LoadingPage(),
         binding: LoadingPageBindings(),
         children: [
           GetPage(
             name: RouteNames.loginPageFlower,
-            page: () => const LoginPageFlower(),
+            page: () => LoginPageFlower(),
             binding: LoginPageFlowerBindings(),
             children: [
               GetPage(

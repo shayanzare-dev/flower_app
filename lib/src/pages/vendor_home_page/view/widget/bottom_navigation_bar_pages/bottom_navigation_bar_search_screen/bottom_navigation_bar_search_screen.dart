@@ -1,6 +1,7 @@
 import 'package:flower_app/src/pages/vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_search_screen/widget/search_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../../../../generated/locales.g.dart';
 import '../../../../controller/vendor_home_page_flower_controller.dart';
 import '../../loading_widget.dart';
 import '../bottom_navigation_bar_home_screen/widget/flower_item.dart';
@@ -29,7 +30,7 @@ class SearchScreen extends GetView<VendorHomePageFlowerController> {
                     controller.clearFilteredFlowerList();
                   },
                 ),
-                labelText: 'Search or for filter press search icon',
+                labelText: LocaleKeys.home_search_search.tr,
                 prefixIcon:  const SearchAlertDialog()),
           ),
           const SizedBox(height: 16),

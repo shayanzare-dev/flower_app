@@ -11,7 +11,7 @@ class VendorRangeSliderPrice extends GetView<VendorHomePageFlowerController> {
       () => RangeSlider(
         values: controller.values,
         min: 0,
-        max: 1000,
+        max: controller.maxPrice,
         onChanged: (values) {
           controller.setValues( rangeValues: values);
 
