@@ -39,6 +39,7 @@ class VendorHistoryPageController extends GetxController {
 
   Future<void> getOrderListVendorHistory() async {
     showLoading();
+    boughtFlowerList.clear();
     boughtOrderList.clear();
     final result = await _repository.getVendorUserOrdersHistory();
     if (result.isLeft) {

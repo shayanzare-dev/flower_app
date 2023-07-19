@@ -43,6 +43,7 @@ class CustomerHistoryPageController extends GetxController {
   Future<void> getOrderList() async {
     showLoading();
     boughtOrderList.clear();
+    boughtFlowerList.clear();
     final result = await _repository.getCustomerUserOrders(customerUserEmail);
     if (result.isLeft) {
       Get.snackbar('Login', 'user not found');

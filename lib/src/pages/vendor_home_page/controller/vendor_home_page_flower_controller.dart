@@ -73,6 +73,7 @@ class VendorHomePageFlowerController extends GetxController {
       getFlowerList();
       getOrderListVendorHistory();
     });
+
     super.onInit();
   }
 
@@ -208,6 +209,7 @@ class VendorHomePageFlowerController extends GetxController {
 
   Future<void> getProfileUser() async {
     showLoading();
+    vendorUser.clear();
     final result = await _repository.getVendorUser(vendorUserEmail);
     if (result.isLeft) {
       Get.snackbar('Login', 'user not found');
@@ -494,6 +496,7 @@ class VendorHomePageFlowerController extends GetxController {
   //History Screen
   Future<void> getOrderListVendorHistory() async {
     showLoading();
+    boughtFlowerList.clear();
     boughtOrderList.clear();
     final result = await _repository.getVendorUserOrdersHistory();
     if (result.isLeft) {
