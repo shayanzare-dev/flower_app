@@ -33,79 +33,79 @@ import 'route_names.dart';
 class RoutePages {
   static final List<GetPage> pages = [
     GetPage(
-        name: RouteNames.loadingPageFlower,
-        page: () =>  const LoadingPage(),
-        binding: LoadingPageBindings(),
+      name: RouteNames.loadingPageFlower,
+      page: () => const LoadingPage(),
+      binding: LoadingPageBindings(),
+    ),
+    GetPage(
+      name: RouteNames.loginPageFlower,
+      page: () => LoginPageFlower(),
+      binding: LoginPageFlowerBindings(),
+      children: [
+
+      ],
+    ),
+    GetPage(
+        name: RouteNames.vendorHomePageFlower,
+        page: () => VendorHomePageFlower(),
+        binding: VendorHomePageFlowerBindings(),
         children: [
           GetPage(
-            name: RouteNames.loginPageFlower,
-            page: () => LoginPageFlower(),
-            binding: LoginPageFlowerBindings(),
-            children: [
-              GetPage(
-                name: RouteNames.registerPageFlower,
-                page: () => const RegisterPageFlower(),
-                binding: RegisterPageFlowerBindings(),
-              ),
-              GetPage(
-                  name: RouteNames.vendorHomePageFlower,
-                  page: () => VendorHomePageFlower(),
-                  binding: VendorHomePageFlowerBindings(),
-                  children: [
-                    GetPage(
-                      name: RouteNames.editFlowerPage,
-                      page: () => const EditFlowerPage(),
-                      binding: EditFlowerPageBindings(),
-                    ),
-                    GetPage(
-                      name: RouteNames.addFlowerPage,
-                      page: () => const VendorAddFlowerPage(),
-                      binding: VendorAddFlowerPageBindings(),
-                    ),
-                    GetPage(
-                      name: RouteNames.vendorHistoryPage,
-                      page: () => const VendorHistoryPage(),
-                      binding: VendorHistoryPageBindings(),
-                    ),
-                    GetPage(
-                      name: RouteNames.vendorSearchPage,
-                      page: () => const VendorSearchPage(),
-                      binding: VendorSearchPageBindings(),
-                    ),
-                    GetPage(
-                      name: RouteNames.vendorProfilePage,
-                      page: () => VendorProfilePage(),
-                      binding: VendorProfilePageBindings(),
-                    ),
-                  ]),
-              GetPage(
-                  name: RouteNames.customerHomePageFlower,
-                  page: () => CustomerHomePageFlower(),
-                  binding: CustomerHomePageFlowerBindings(),
-                  children: [
-                    GetPage(
-                      name: RouteNames.customerCartPage,
-                      page: () => const CustomerCartFlowerPage(),
-                      binding: CustomerCartPageBindings(),
-                    ),
-                    GetPage(
-                      name: RouteNames.customerHistoryPage,
-                      page: () => const CustomerHistoryPage(),
-                      binding: CustomerHistoryPageBindings(),
-                    ),
-                    GetPage(
-                      name: RouteNames.customerProfilePage,
-                      page: () => CustomerProfilePage(),
-                      binding: CustomerProfilePageBindings(),
-                    ),
-                    GetPage(
-                      name: RouteNames.customerSearchPage,
-                      page: () => const CustomerSearchPage(),
-                      binding: CustomerSearchPageBindings(),
-                    ),
-                  ]),
-            ],
+            name: RouteNames.editFlowerPage,
+            page: () => const EditFlowerPage(),
+            binding: EditFlowerPageBindings(),
+          ),
+          GetPage(
+            name: RouteNames.addFlowerPage,
+            page: () => const VendorAddFlowerPage(),
+            binding: VendorAddFlowerPageBindings(),
+          ),
+          GetPage(
+            name: RouteNames.vendorHistoryPage,
+            page: () => const VendorHistoryPage(),
+            binding: VendorHistoryPageBindings(),
+          ),
+          GetPage(
+            name: RouteNames.vendorSearchPage,
+            page: () => const VendorSearchPage(),
+            binding: VendorSearchPageBindings(),
+          ),
+          GetPage(
+            name: RouteNames.vendorProfilePage,
+            page: () => VendorProfilePage(),
+            binding: VendorProfilePageBindings(),
           ),
         ]),
+    GetPage(
+        name: RouteNames.customerHomePageFlower,
+        page: () => CustomerHomePageFlower(),
+        binding: CustomerHomePageFlowerBindings(),
+        children: [
+          GetPage(
+            name: RouteNames.customerCartPage,
+            page: () => const CustomerCartFlowerPage(),
+            binding: CustomerCartPageBindings(),
+          ),
+          GetPage(
+            name: RouteNames.customerHistoryPage,
+            page: () => const CustomerHistoryPage(),
+            binding: CustomerHistoryPageBindings(),
+          ),
+          GetPage(
+            name: RouteNames.customerProfilePage,
+            page: () => CustomerProfilePage(),
+            binding: CustomerProfilePageBindings(),
+          ),
+          GetPage(
+            name: RouteNames.customerSearchPage,
+            page: () => const CustomerSearchPage(),
+            binding: CustomerSearchPageBindings(),
+          ),
+        ]),
+    GetPage(
+      name: RouteNames.registerPageFlower,
+      page: () => const RegisterPageFlower(),
+      binding: RegisterPageFlowerBindings(),
+    ),
   ];
 }

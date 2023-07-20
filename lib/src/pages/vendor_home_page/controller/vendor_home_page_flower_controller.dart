@@ -48,7 +48,7 @@ class VendorHomePageFlowerController extends GetxController {
   String vendorUserEmail = '';
   List<String> dropDownButtonList = ['select a item'];
   Rx<String> selectedItemDropDown = Rx<String>('select a item');
-  Rx<RangeValues> valuesRange = Rx<RangeValues>(RangeValues(0, 1000));
+  Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
 
   RxList<BoughtFlowersViewModel> boughtFlowerList = RxList();
   RxList<CartOrderViewModel> boughtOrderList = RxList();
@@ -224,7 +224,7 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   List<int> priceList = [];
-  double maxPrice = 0.0;
+  double maxPrice = 2.0;
 
   void maxPrices() {
     priceList.sort();
@@ -254,7 +254,9 @@ class VendorHomePageFlowerController extends GetxController {
         }
       }
     }
-    maxPrices();
+    if (flowerList.isNotEmpty){
+      maxPrices();
+    }
     hideLoading();
   }
 
@@ -528,6 +530,6 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   void goToLoginPage() {
-    Get.toNamed(RouteNames.loadingPageFlower + RouteNames.loginPageFlower);
+    Get.toNamed(RouteNames.loginPageFlower);
   }
 }

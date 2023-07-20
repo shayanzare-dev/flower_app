@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../../../../generated/locales.g.dart';
 import '../../controller/register_page_flower_controller.dart';
 
@@ -39,19 +42,14 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
             children: [
               Stack(
                 children: [
-                  Container(
-                    alignment: AlignmentDirectional.center,
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      color: Colors.cyan,
-                      borderRadius: BorderRadius.circular(1000),
-                      border: Border.all(width: 3, color: Colors.white),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      size: 50,
-                      color: Colors.white,
+                  Obx(
+                    () => SizedBox(
+                      width: 150,
+                      height: 150,
+                      child: CircleAvatar(
+                        backgroundImage:MemoryImage(controller.imageBytes1.value),
+                        radius: 50.0,
+                      ),
                     ),
                   ),
                   PositionedDirectional(
@@ -73,6 +71,30 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                           width: 35,
                           height: 35,
                           child: const Icon(Icons.camera_alt,
+                              size: 20, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  PositionedDirectional(
+                    bottom: 9,
+                    end: 9,
+                    child: Material(
+                      color: Colors.lightBlueAccent[100],
+                      borderRadius: BorderRadius.circular(100),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(100),
+                        onTap: () {
+                          controller.imageBytes1.value = controller.imageBytes2.value;
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border:
+                                  Border.all(width: 4, color: Colors.white)),
+                          width: 35,
+                          height: 35,
+                          child: const Icon(Icons.clear,
                               size: 20, color: Colors.white),
                         ),
                       ),
@@ -101,7 +123,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.firstNameController,
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               icon: const Icon(Icons.person, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
@@ -138,7 +160,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.lastNameController,
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               icon: const Icon(Icons.person, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
@@ -175,7 +197,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.emailController,
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               icon: const Icon(Icons.mail, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
@@ -232,7 +254,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                         color: Colors.white,
                       )),
                   border: InputBorder.none,
-                  label:  Padding(
+                  label: Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: Text(
                       LocaleKeys.register_password.tr,
@@ -286,7 +308,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                         color: Colors.white,
                       )),
                   border: InputBorder.none,
-                  label:  Padding(
+                  label: Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: Text(
                       LocaleKeys.register_confirmPassword.tr,
@@ -317,7 +339,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
             Expanded(
               child: Obx(
                 () => RadioListTile(
-                  title:  Text(
+                  title: Text(
                     LocaleKeys.register_vendor.tr,
                     style: const TextStyle(
                         fontSize: 18,
@@ -335,7 +357,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
             Expanded(
               child: Obx(
                 () => RadioListTile(
-                  title:  Text(
+                  title: Text(
                     LocaleKeys.register_customer.tr,
                     style: const TextStyle(
                         fontSize: 18,
@@ -369,7 +391,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                     borderRadius: BorderRadius.circular(20)),
                 height: 45,
                 width: 100,
-                child:  Row(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

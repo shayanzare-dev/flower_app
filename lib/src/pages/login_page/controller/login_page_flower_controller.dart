@@ -58,13 +58,13 @@ class LoginPageFlowerController extends GetxController {
             user: 2);
     resultOrExceptionUserValidate2.fold((left) {
       saveLoginStatus(rememberMe.value, 2, emailController.text);
-      Get.offAndToNamed(RouteNames.loadingPageFlower +
-          RouteNames.loginPageFlower +
-          RouteNames.customerHomePageFlower);
+      Get.offAndToNamed(RouteNames.customerHomePageFlower);
       loginFormKey.currentState?.reset();
       hideLoading();
       return;
-    }, (right) {});
+    }, (right) {
+      hideLoading();
+    });
     final Either<String, String> resultOrExceptionVendorValidate1 =
         await _repository.checkVendorValidate(
             passWord: passWordController.text,
@@ -72,9 +72,7 @@ class LoginPageFlowerController extends GetxController {
             user: 1);
     resultOrExceptionVendorValidate1.fold((left) {
       saveLoginStatus(rememberMe.value, 1, emailController.text);
-      Get.offAndToNamed(RouteNames.loadingPageFlower +
-          RouteNames.loginPageFlower +
-          RouteNames.vendorHomePageFlower);
+      Get.offAndToNamed(RouteNames.vendorHomePageFlower);
       hideLoading();
       loginFormKey.currentState?.reset();
       return;
@@ -101,8 +99,6 @@ class LoginPageFlowerController extends GetxController {
   }
 
   void goToRegisterPage() {
-    Get.toNamed(RouteNames.loadingPageFlower +
-        RouteNames.loginPageFlower +
-        RouteNames.registerPageFlower);
+    Get.offAndToNamed(RouteNames.registerPageFlower);
   }
 }

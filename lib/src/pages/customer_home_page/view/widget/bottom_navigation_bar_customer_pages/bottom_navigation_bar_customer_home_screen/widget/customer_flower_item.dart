@@ -66,7 +66,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                       children: [
                         Text(
                           LocaleKeys.customer_home_item_name.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                       children: [
                         Text(LocaleKeys.customer_home_item_description.tr,
                             style:
-                                TextStyle(color: Colors.white, fontSize: 16)),
+                                const TextStyle(color: Colors.white, fontSize: 16)),
                         Text(
                           flowerItem.shortDescription,
                           style: const TextStyle(
@@ -104,7 +104,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         Row(
                           children: [
                             Text(LocaleKeys.customer_home_item_vendor_name.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 16)),
                             Text(flowerItem.vendorUser.firstName,
                                 style: const TextStyle(
@@ -144,7 +144,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         Row(
                           children: [
                             Text(LocaleKeys.customer_home_item_color.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 16)),
                             Container(
                               decoration: BoxDecoration(
@@ -158,8 +158,8 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         ),
                         Row(children: [
                           Text(
-                            LocaleKeys.customer_home_item_color.tr,
-                            style: TextStyle(
+                            LocaleKeys.customer_home_item_count.tr,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         Row(children: [
                           Text(
                             LocaleKeys.customer_home_item_price.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
@@ -223,7 +223,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                                     ? Text(
                                         LocaleKeys
                                             .customer_home_item_out_of_stock.tr,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.bold,

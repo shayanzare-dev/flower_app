@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../flower_app.dart';
 
-class LoadingPageController extends GetxController{
+class LoadingPageController extends GetxController {
   final SharedPreferences _prefs = Get.find<SharedPreferences>();
   var isLoading = false.obs;
 
@@ -16,18 +16,15 @@ class LoadingPageController extends GetxController{
         showLoading();
         userType().then((userType) {
           if (userType == 1) {
-            Get.toNamed(
-                RouteNames.loadingPageFlower+ RouteNames.loginPageFlower + RouteNames.vendorHomePageFlower);
+            Get.offAndToNamed(RouteNames.vendorHomePageFlower);
             hideLoading();
           } else if (userType == 2) {
-            Get.toNamed(
-                RouteNames.loadingPageFlower+ RouteNames.loginPageFlower + RouteNames.customerHomePageFlower);
+            Get.offAndToNamed(RouteNames.customerHomePageFlower);
             hideLoading();
           }
         });
-      }else{
-        Get.toNamed(
-            RouteNames.loadingPageFlower+RouteNames.loginPageFlower);
+      } else {
+        Get.offAndToNamed(RouteNames.loginPageFlower);
         hideLoading();
       }
     });
@@ -41,12 +38,11 @@ class LoadingPageController extends GetxController{
     return _prefs.getBool('isLoggedIn') ?? false;
   }
 
-
   void showLoading() {
     isLoading.value = true;
   }
+
   void hideLoading() {
     isLoading.value = false;
   }
-
 }
