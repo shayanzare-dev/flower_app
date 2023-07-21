@@ -17,7 +17,7 @@ class SearchAlertDialog extends GetView<VendorHomePageFlowerController> {
             title:  Text(LocaleKeys.home_search_search_filter.tr),
             content:   SizedBox(
               height: 380,
-              width: 220,
+              width: 240,
               child: Column(
                 children: [
                   MyDropdownButton(),

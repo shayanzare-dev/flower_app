@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../../../../../../generated/locales.g.dart';
 import '../../../../controller/vendor_home_page_flower_controller.dart';
 import '../../loading_widget.dart';
@@ -27,9 +28,9 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             _colorFlower(context),
             const FlowerChipList(),
             _myButton(context),
-            SizedBox(
+            const SizedBox(
               height: 30,
-              child: const Stack(
+              child: Stack(
                 children: <Widget>[
                   Center(
                     child: LoadingWidget(),
@@ -40,9 +41,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
           ],
         ),
       ),
-
     );
-
   }
 
   Widget _inputFlowerName() {
@@ -59,14 +58,14 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.flowerNameController,
-            decoration:  InputDecoration(
-              icon: Icon(Icons.local_florist, color: Colors.white),
+            decoration: InputDecoration(
+              icon: const Icon(Icons.local_florist, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
                   LocaleKeys.vendor_home_add_flower_name.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -74,7 +73,9 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerName( value: value!,);
+              return controller.validateFlowerName(
+                value: value!,
+              );
             },
           ),
         ),
@@ -96,14 +97,14 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.flowerDescriptionController,
-            decoration:  InputDecoration(
-              icon: Icon(Icons.filter_vintage, color: Colors.white),
+            decoration: InputDecoration(
+              icon: const Icon(Icons.filter_vintage, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
                   LocaleKeys.vendor_home_add_flower_description.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -111,7 +112,9 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerDescription( value: value!,);
+              return controller.validateFlowerDescription(
+                value: value!,
+              );
             },
           ),
         ),
@@ -122,7 +125,65 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
   Widget _imageFlower() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
+      child: Center(
+        child: Container(
+          width: 380,
+          height: 250,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Obx(
+            () => Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.memory(
+                      controller.imageBytes1.value,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () => controller.getImage(
+                            imageSource: ImageSource.gallery,
+                          ),
+                          icon: const Icon(Icons.photo_library),
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 16),
+                        IconButton(
+                          onPressed: () => controller.getImage(
+                            imageSource: ImageSource.camera,
+                          ),
+                          icon: const Icon(Icons.camera_alt),
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 16),
+                        IconButton(
+                          onPressed: () {
+                            controller.imageBytes1.value = controller.imageBytes2.value;
+                            controller.defaultImage();
+                          },
+                          icon: const Icon(Icons.delete),
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+
+      /*Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
@@ -192,7 +253,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             ],
           )
         ],
-      ),
+      )*/
     );
   }
 
@@ -223,15 +284,15 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
                             borderRadius: BorderRadius.circular(40),
                             border: Border.all(width: 3, color: Colors.white),
                           ),
-                          child:  Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(LocaleKeys.vendor_home_add_flower_color.tr,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
-                              Icon(
+                              const Icon(
                                 Icons.palette,
                                 size: 30,
                                 color: Colors.white,
@@ -287,14 +348,14 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.flowerPriceController,
-            decoration:  InputDecoration(
-              icon: Icon(Icons.money_off, color: Colors.white),
+            decoration: InputDecoration(
+              icon: const Icon(Icons.money_off, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
                   LocaleKeys.vendor_home_add_flower_price.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -302,7 +363,9 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerPrice( value: value!,);
+              return controller.validateFlowerPrice(
+                value: value!,
+              );
             },
           ),
         ),
@@ -324,14 +387,14 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.flowerCountController,
-            decoration:  InputDecoration(
-              icon: Icon(Icons.onetwothree, color: Colors.white),
+            decoration: InputDecoration(
+              icon: const Icon(Icons.onetwothree, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
                   LocaleKeys.vendor_home_add_flower_count.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -339,7 +402,9 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerCount( value: value!,);
+              return controller.validateFlowerCount(
+                value: value!,
+              );
             },
           ),
         ),
@@ -352,20 +417,21 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select a color'),
+          title: const Text('Select a color'),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: controller.selectedColor.value,
               onColorChanged: (value) {
-                controller.changeColor( color: value,);
+                controller.changeColor(
+                  color: value,
+                );
               },
-
               pickerAreaHeightPercent: 0.8,
             ),
           ),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -384,17 +450,18 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
         children: [
           ElevatedButton(
             onPressed: () {
+              controller.imageBytes1.value = controller.imageBytes2.value;
               controller.onSubmitAddFlower();
             },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+            ),
             child: Text(
               LocaleKeys.vendor_home_add_flower_add_btn.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
             ),
           ),
         ],
@@ -402,4 +469,3 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
     );
   }
 }
-

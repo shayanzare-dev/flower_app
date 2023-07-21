@@ -51,35 +51,35 @@ class LoginPageFlowerController extends GetxController {
       return;
     }
     showLoading();
-    final Either<String, String> resultOrExceptionUserValidate2 =
+    final Either<String, String> resultOrExceptionUserValidate =
         await _repository.checkUserValidate(
             passWord: passWordController.text,
             email: emailController.text,
             user: 2);
-    resultOrExceptionUserValidate2.fold((left) {
+    resultOrExceptionUserValidate.fold((left) {
       saveLoginStatus(rememberMe.value, 2, emailController.text);
       Get.offAndToNamed(RouteNames.customerHomePageFlower);
       loginFormKey.currentState?.reset();
       hideLoading();
       return;
-    }, (right) {
-      hideLoading();
+    }, (right) async {
+      final Either<String, String> resultOrExceptionVendorValidate =
+          await _repository.checkVendorValidate(
+          passWord: passWordController.text,
+          email: emailController.text,
+          user: 1);
+      resultOrExceptionVendorValidate.fold((left) {
+        saveLoginStatus(rememberMe.value, 1, emailController.text);
+        Get.offAndToNamed(RouteNames.vendorHomePageFlower);
+        hideLoading();
+        loginFormKey.currentState?.reset();
+        return;
+      }, (right) {
+        Get.snackbar('login', 'Your email or password is incorrect');
+        hideLoading();
+      });
     });
-    final Either<String, String> resultOrExceptionVendorValidate1 =
-        await _repository.checkVendorValidate(
-            passWord: passWordController.text,
-            email: emailController.text,
-            user: 1);
-    resultOrExceptionVendorValidate1.fold((left) {
-      saveLoginStatus(rememberMe.value, 1, emailController.text);
-      Get.offAndToNamed(RouteNames.vendorHomePageFlower);
-      hideLoading();
-      loginFormKey.currentState?.reset();
-      return;
-    }, (right) {
-      hideLoading();
-    });
-    return;
+
   }
 
   String? validateEmail(String value) {

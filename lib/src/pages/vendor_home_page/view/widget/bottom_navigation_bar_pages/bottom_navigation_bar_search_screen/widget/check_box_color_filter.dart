@@ -11,7 +11,7 @@ class CheckBoxColorFilter extends GetView<VendorHomePageFlowerController> {
     return GetBuilder<VendorHomePageFlowerController>(
       builder: (_) => SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.2,
+        height: MediaQuery.of(context).size.height * 0.15,
         child: Obx(
           () => GridView.builder(
             shrinkWrap: true,

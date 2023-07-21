@@ -86,6 +86,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                         borderRadius: BorderRadius.circular(100),
                         onTap: () {
                           controller.imageBytes1.value = controller.imageBytes2.value;
+                          controller.defaultImage();
                         },
                         child: Container(
                           decoration: BoxDecoration(
