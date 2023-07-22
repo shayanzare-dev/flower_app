@@ -9,9 +9,9 @@ import 'flower_chip_list.dart';
 
 
 class EditFlowerPageForm extends GetView<EditFlowerPageController> {
-  EditFlowerPageForm({super.key});
+  const EditFlowerPageForm({super.key});
 
-  final vendorHomePageFlowerController = Get.put(VendorHomePageFlowerController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -113,77 +113,65 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
   Widget _imageFlower() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  Material(
-                    color: Colors.lightBlueAccent[100],
-                    borderRadius: BorderRadius.circular(40),
-                    child: InkWell(
-                      onTap: () {
-                        controller.getImage(ImageSource.gallery);
-                      },
-                      borderRadius: BorderRadius.circular(40),
-                      child: Container(
-                          alignment: AlignmentDirectional.center,
-                          height: 80,
-                          width: 380,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(width: 3, color: Colors.white),
+      child: Center(
+        child: Container(
+          width: 380,
+          height: 250,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Obx(
+                () => Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.memory(
+                      controller.imageBytes1.value,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () => controller.getImage(
+                            imageSource:  ImageSource.gallery,
                           ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text('Add Image Flower',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              Icon(
-                                Icons.image,
-                                size: 30,
-                                color: Colors.white,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  PositionedDirectional(
-                    bottom: 20,
-                    start: 15,
-                    child: Material(
-                      color: Colors.lightBlueAccent[100],
-                      borderRadius: BorderRadius.circular(100),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(100),
-                        onTap: () {
-                          controller.getImage(ImageSource.camera);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              border:
-                                  Border.all(width: 4, color: Colors.white)),
-                          width: 40,
-                          height: 40,
-                          child: const Icon(Icons.camera_alt,
-                              size: 25, color: Colors.white),
+                          icon: const Icon(Icons.photo_library),
+                          color: Colors.white,
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                        IconButton(
+                          onPressed: () => controller.getImage(
+                            imageSource: ImageSource.camera,
+                          ),
+                          icon: const Icon(Icons.camera_alt),
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 16),
+                        IconButton(
+                          onPressed: () {
+                            controller.imageBytes1.value = controller.imageBytes2.value;
+                            controller.defaultImage();
+                          },
+                          icon: const Icon(Icons.delete),
+                          color: Colors.red,
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
-          )
-        ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
+
+
     );
   }
 
@@ -394,9 +382,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
                   ],
                 )),
             onTap: () {
-
                controller.editFlower();
-               vendorHomePageFlowerController.refresh();
             },
           ),
         ],

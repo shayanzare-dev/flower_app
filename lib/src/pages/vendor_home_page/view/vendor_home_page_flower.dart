@@ -28,10 +28,12 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
                     () =>  controller.isLoading.value
                         ? const CircularProgressIndicator()
                         : IconButton(
-                            icon: const Icon(Icons.refresh),
-                            onPressed: () {
-                              controller.refresh();
-                            },
+                            icon:  const Icon(Icons.refresh),
+                            onPressed: controller
+                                .isButtonEnabled.value
+                                ? () =>
+                              controller.refresh()
+                                : null,
                           ),
                   ),
                 ],

@@ -23,6 +23,7 @@ class AddChipTextField extends StatelessWidget {
             onPressed: controller.addChip,
           ),
         ),
+        onChanged: (text) => controller.updateSuggestions(text),
         onSubmitted: (_) => controller.addChip(),
       ),
     );

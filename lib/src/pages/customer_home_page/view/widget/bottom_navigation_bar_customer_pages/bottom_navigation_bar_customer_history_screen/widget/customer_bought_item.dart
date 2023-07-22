@@ -42,7 +42,7 @@ class CustomerBoughtItem extends GetView<CustomerHomePageFlowerController> {
                 ),
               ),
               child: Container(
-                height: 300,
+                height: 350,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
                   gradient: LinearGradient(
@@ -71,12 +71,14 @@ class CustomerBoughtItem extends GetView<CustomerHomePageFlowerController> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            boughtFlower.flowerListViewModel.name,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Text(
+                              boughtFlower.flowerListViewModel.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
@@ -85,23 +87,18 @@ class CustomerBoughtItem extends GetView<CustomerHomePageFlowerController> {
                       Row(
                         children: [
                           Text(LocaleKeys.customer_home_history_vendor_name.tr,
-                              style:
-                                  const TextStyle(color: Colors.white, fontSize: 20)),
-                          Text(
-                            boughtFlower
-                                .flowerListViewModel.vendorUser.firstName,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                            ),
-                          ),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 20)),
                           const SizedBox(width: 5.0),
-                          Text(
-                            boughtFlower
-                                .flowerListViewModel.vendorUser.lastName,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
+                          Expanded(
+                            child: Text(
+                              '${boughtFlower.flowerListViewModel.vendorUser
+                                      .firstName} ${boughtFlower
+                                      .flowerListViewModel.vendorUser.lastName}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                              ),
                             ),
                           ),
                         ],
@@ -110,8 +107,8 @@ class CustomerBoughtItem extends GetView<CustomerHomePageFlowerController> {
                       Row(
                         children: [
                           Text(LocaleKeys.customer_home_history_bought_date.tr,
-                              style:
-                                  const TextStyle(color: Colors.white, fontSize: 16)),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16)),
                           Text(boughtFlower.dateTime,
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 16)),

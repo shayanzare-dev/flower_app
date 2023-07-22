@@ -42,11 +42,12 @@ class CustomerHomePageFlowerController extends GetxController {
   List<String> dropDownButtonList = ['select a item'];
   Rx<String> selectedItemDropDown = Rx<String>('select a item');
   List<String> savedSelections = [];
-  final RxList<GridItem> items = RxList<GridItem>([]);
-  Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1000));
+  final RxList<GridItem> colorItems = RxList<GridItem>([]);
+  Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
   int totalPrice = 0;
-
-  var isLoading = false.obs;
+  RxBool isLoading = false.obs;
+  RxBool isLoadingPlusCart = false.obs;
+  RxBool isLoadingMinusCart = false.obs;
 
   void showLoading() {
     isLoading.value = true;
@@ -73,6 +74,7 @@ class CustomerHomePageFlowerController extends GetxController {
 
   @override
   Future<void> refresh() async {
+    disableButton();
     customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
     Future.delayed(const Duration(seconds: 1), () {
       getCustomerUser();
@@ -119,7 +121,7 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   List<int> priceList = [];
-  double maxPrice = 0.0;
+  double maxPrice = 2.0;
 
   void maxPrices() {
     priceList.sort();
@@ -129,7 +131,7 @@ class CustomerHomePageFlowerController extends GetxController {
 
   Future<void> getFlowerList() async {
     showLoading();
-    items.clear();
+    colorItems.clear();
     dropDownButtonList.clear();
     customerFlowerList.clear();
     dropDownButtonList = ['select a item'];
@@ -141,14 +143,18 @@ class CustomerHomePageFlowerController extends GetxController {
       customerFlowerList.addAll(result.right);
       for (final item in result.right) {
         flowerBuyCount[item.id] = 0;
-        items.add(GridItem(color: Color(item.color)));
+        colorItems.add(GridItem(color: Color(item.color)));
         priceList.add(item.price);
         for (final categoryItem in item.category) {
-          dropDownButtonList.add(categoryItem.toString());
+          if (!dropDownButtonList.contains(categoryItem.toString())) {
+            dropDownButtonList.add(categoryItem.toString());
+          }
         }
       }
     }
-    maxPrices();
+    if (customerFlowerList.isNotEmpty) {
+      maxPrices();
+    }
     hideLoading();
   }
 
@@ -273,8 +279,18 @@ class CustomerHomePageFlowerController extends GetxController {
     cartOrderList.refresh();
   }
 
+  RxBool isButtonEnabled = true.obs;
+  void disableButton() {
+    isButtonEnabled.value = false;
+    Timer(Duration(seconds: 2), () {
+      isButtonEnabled.value = true;
+    });
+  }
+
   void editFlowerCountBuyCartPlus(
       {required BoughtFlowersViewModel boughtFlowers}) {
+    disableButton();
+    isLoadingPlusCart.value = true;
     final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     if (boughtFlowerListCart[index].buyCount <
         boughtFlowerListCart[index].flowerListViewModel.countInStock) {
@@ -288,14 +304,18 @@ class CustomerHomePageFlowerController extends GetxController {
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id);
+      isLoadingPlusCart.value = false;
       refresh();
     } else {
       Get.snackbar('Edit Flower', 'cant plus count buy');
     }
+
   }
 
   void editFlowerCountBuyCartMinus(
       {required BoughtFlowersViewModel boughtFlowers}) {
+    disableButton();
+    isLoadingMinusCart.value = true;
     final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     if (boughtFlowerListCart[index].buyCount > 1) {
       boughtFlowerListCart[index].buyCount =
@@ -308,9 +328,12 @@ class CustomerHomePageFlowerController extends GetxController {
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id);
+      isLoadingMinusCart.value = false;
+      refresh();
     } else {
       Get.snackbar('Edit Flower', 'cant Minus count buy');
     }
+
   }
 
   void deleteAlertDialogSelect({
@@ -359,6 +382,7 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   Future<void> onSubmitPurchaseCartOrder() async {
+    disableButton();
     showLoading();
     if (boughtFlowerListCart.isEmpty) {
       Get.snackbar('Add cart', 'Your cart  is empty');
@@ -387,7 +411,7 @@ class CustomerHomePageFlowerController extends GetxController {
 
   void minusCountInStockFlower() async {
     for (final item in boughtFlowerListCart) {
-       await editCountFlowerBuy(
+      await editCountFlowerBuy(
           flowerItem: item.flowerListViewModel, countBuy: item.buyCount);
     }
     refresh();
@@ -433,14 +457,14 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   void colorToggleSelection({required int colorIndex}) {
-    items[colorIndex].isSelected = !items[colorIndex].isSelected;
+    colorItems[colorIndex].isSelected = !colorItems[colorIndex].isSelected;
     List<String> selections =
-        items.map((item) => item.isSelected.toString()).toList();
+        colorItems.map((item) => item.isSelected.toString()).toList();
     _prefs.setStringList('selections', selections);
     savedSelections = _prefs.getStringList('selections') ?? [];
     for (int i = 0; i < savedSelections.length; i++) {
-      items[i].isSelected = savedSelections[i] == 'true';
-      items.refresh();
+      colorItems[i].isSelected = savedSelections[i] == 'true';
+      colorItems.refresh();
     }
   }
 
@@ -448,38 +472,71 @@ class CustomerHomePageFlowerController extends GetxController {
     valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
     selectedItemDropDown.value = 'select a item';
     for (int i = 0; i < savedSelections.length; i++) {
-      items[i].isSelected = false;
+      colorItems[i].isSelected = false;
     }
     List<String> selections =
-        items.map((item) => item.isSelected.toString()).toList();
+        colorItems.map((item) => item.isSelected.toString()).toList();
     _prefs.setStringList('selections', selections);
     savedSelections = _prefs.getStringList('selections') ?? [];
-    items.refresh();
+    colorItems.refresh();
     Navigator.of(context).pop();
   }
 
   Future<void> getSearchFilterFlowerList(
       {required BuildContext context}) async {
-    showLoading();
     filteredFlowerList.clear();
     Navigator.of(context).pop();
-
-    if (selectedItemDropDown.value != 'select a item') {
-      final categoryResult = await _repository.searchFilterCategory(
-        category: selectedItemDropDown.value,
-      );
-      if (categoryResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
-      } else if (categoryResult.isRight) {
-        filteredFlowerList.addAll(categoryResult.right);
-        for (final items in filteredFlowerList) {
-          filteredFlowerList.removeWhere((item) => item.id == items.id);
-          filteredFlowerList.addAll(categoryResult.right);
-        }
-        hideLoading();
+    showLoading();
+    List<int> colorFilter = [];
+    for (int i = 0; i < savedSelections.length; i++) {
+      colorItems[i].isSelected = savedSelections[i] == 'true';
+      if (colorItems[i].isSelected) {
+        colorFilter.add(colorItems[i].color.value);
       }
     }
-    if (valuesRange.value.start != 0 || valuesRange.value.end != maxPrice) {
+    String colorFilters = colorFilter.map((color) => 'color=$color').join('&');
+
+    if (selectedItemDropDown.value != 'select a item' && colorFilters != '') {
+      final searchFiltersResult = await _repository.searchFilters(
+        category: selectedItemDropDown.value,
+        colors: colorFilters,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+      );
+      if (searchFiltersResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
+      }
+    } else if (selectedItemDropDown.value != 'select a item') {
+      final searchFiltersResult = await _repository.searchFilterCategoryPrice(
+        category: selectedItemDropDown.value,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+      );
+      if (searchFiltersResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
+      }
+    } else if (colorFilters != '') {
+      final searchFiltersResult = await _repository.searchFilterColorPrice(
+        colors: colorFilters,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+      );
+      if (searchFiltersResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
+      }
+    } else {
       final priceResult = await _repository.searchFilterPriceRange(
         min: valuesRange.value.start.toString(),
         max: valuesRange.value.end.toString(),
@@ -487,40 +544,11 @@ class CustomerHomePageFlowerController extends GetxController {
       if (priceResult.isLeft) {
         Get.snackbar('Login', 'user not found');
       } else if (priceResult.isRight) {
-        if (filteredFlowerList.isEmpty) {
-          filteredFlowerList.addAll(priceResult.right);
-        } else {
-          filteredFlowerList.removeWhere((item) => item.id == item.id);
-          filteredFlowerList.addAll(priceResult.right);
-        }
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(priceResult.right);
         hideLoading();
       }
     }
-    List<int> colorFilter = [];
-    for (int i = 0; i < savedSelections.length; i++) {
-      items[i].isSelected = savedSelections[i] == 'true';
-      if (items[i].isSelected) {
-        colorFilter.add(items[i].color.value);
-      }
-    }
-    String colorFilters =
-        colorFilter.map((color) => 'color_like=$color').join('&');
-    if (colorFilters != '') {
-      final colorResult = await _repository.searchFilterColor(
-        colors: colorFilters,
-      );
-      if (colorResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
-      } else if (colorResult.isRight) {
-        filteredFlowerList.addAll(colorResult.right);
-        for (final items in filteredFlowerList) {
-          filteredFlowerList.removeWhere((item) => item.id == items.id);
-          filteredFlowerList.addAll(colorResult.right);
-        }
-        hideLoading();
-      }
-    }
-
     hideLoading();
   }
 

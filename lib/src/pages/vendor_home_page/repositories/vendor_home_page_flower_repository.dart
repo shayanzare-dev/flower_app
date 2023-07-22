@@ -176,7 +176,7 @@ class VendorHomePageFlowerRepository {
         required String category,
         required String email}) async {
     final url = Uri.parse(
-        "http://10.0.2.2:3000/flowerList?price_gte=$min&price_lte=$max&category=$category&vendorUser.email=$email");
+        "http://10.0.2.2:3000/flowerList?price_gte=$min&pri ce_lte=$max&category_like=$category&vendorUser.email=$email");
     final responseOrException = await httpClient.get(url);
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {
@@ -216,7 +216,7 @@ class VendorHomePageFlowerRepository {
       required String category,
       required String email}) async {
     final url = Uri.parse(
-        "http://10.0.2.2:3000/flowerList?price_gte=$min&price_lte=$max&category=$category&vendorUser.email=$email&$colors");
+        "http://10.0.2.2:3000/flowerList?price_gte=$min&price_lte=$max&category_like=$category&vendorUser.email=$email&$colors");
     final responseOrException = await httpClient.get(url);
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {

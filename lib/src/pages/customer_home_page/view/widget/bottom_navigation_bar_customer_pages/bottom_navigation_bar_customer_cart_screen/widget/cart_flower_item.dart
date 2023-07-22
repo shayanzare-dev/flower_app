@@ -44,7 +44,40 @@ class CartFlowerItem extends GetView<CustomerHomePageFlowerController> {
   Widget _myButtonPurchase() {
     return Row(
       children: [
-        InkWell(
+        GestureDetector(
+          child: Container(
+              decoration: BoxDecoration(
+                  color: const Color(0xff8ab178),
+                  borderRadius: BorderRadius.circular(20)),
+              height: 45,
+              width: 120,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Purchase',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  Obx(
+                    () => controller.isLoading.value
+                        ? const CircularProgressIndicator()
+                        : IconButton(
+                            icon:
+                                const Icon(Icons.payment, color: Colors.white),
+                            onPressed: controller.isButtonEnabled.value
+                                ? () => controller.onSubmitPurchaseCartOrder()
+                                : null,
+                          ),
+                  ),
+                ],
+              )),
+        ),
+
+        /*InkWell(
+          onTap: controller
+              .isButtonEnabled.value
+              ? () =>
+            controller.onSubmitPurchaseCartOrder()
+              : null,
           child: Container(
               decoration: BoxDecoration(
                   color: const Color(0xff8ab178),
@@ -62,10 +95,7 @@ class CartFlowerItem extends GetView<CustomerHomePageFlowerController> {
                           fontWeight: FontWeight.bold)),
                 ],
               )),
-          onTap: () {
-            controller.onSubmitPurchaseCartOrder();
-          },
-        ),
+        ),*/
       ],
     );
   }

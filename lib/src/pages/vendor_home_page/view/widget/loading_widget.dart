@@ -11,7 +11,7 @@ class LoadingWidget extends GetView<VendorHomePageFlowerController> {
     return Obx(() {
       return controller.isLoading.value
           ? Container(
-              color: Colors.green.withOpacity(0.5),
+              color: Colors.green.withOpacity(1),
               child: const Center(
                 child: LinearProgressIndicator(),
               ),

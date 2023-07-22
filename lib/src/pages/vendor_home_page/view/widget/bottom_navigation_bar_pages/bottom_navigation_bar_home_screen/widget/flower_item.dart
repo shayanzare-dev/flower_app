@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../../../../../generated/locales.g.dart';
 import '../../../../../controller/vendor_home_page_flower_controller.dart';
 import '../../../../../models/flower_list_view_model.dart';
-import 'dart:convert';
 import 'delete_alert_dialog.dart';
 import 'flower_chip_list.dart';
 
@@ -20,7 +22,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
             onTap: () {
-              controller.goToEditFlowerPage( flowerItem: flowerItem);
+              controller.goToEditFlowerPage(flowerItem: flowerItem);
             },
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -43,7 +45,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                 ),
               ),
               child: Container(
-                height: 300,
+                height: 350,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
                   gradient: LinearGradient(
@@ -64,20 +66,22 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                     children: [
                       Row(
                         children: [
-                           Text(
+                          Text(
                             LocaleKeys.vendor_home_item_name.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            flowerItem.name,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Text(
+                              flowerItem.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
@@ -85,14 +89,16 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                       const SizedBox(height: 8.0),
                       Row(
                         children: [
-                           Text(LocaleKeys.vendor_home_item_description.tr,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
-                          Text(
-                            flowerItem.shortDescription,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
+                          Text(LocaleKeys.vendor_home_item_description.tr,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16)),
+                          Expanded(
+                            child: Text(
+                              flowerItem.shortDescription,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
                         ],
@@ -103,8 +109,8 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                         children: [
                           Row(
                             children: [
-                               Text(LocaleKeys.vendor_home_item_color.tr,
-                                  style: TextStyle(
+                              Text(LocaleKeys.vendor_home_item_color.tr,
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 16)),
                               Container(
                                 decoration: BoxDecoration(
@@ -128,9 +134,9 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                             Text(
+                            Text(
                               LocaleKeys.vendor_home_item_price.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
@@ -147,18 +153,25 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                           ]),
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  controller.editCountFlowerMinus( flowerItem: flowerItem,);
-                                },
-                                icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.white,
-                                ),
+                              Obx(
+                                () => controller
+                                        .isLoadingEditCountFlowerMinus.value
+                                    ? const CircularProgressIndicator()
+                                    : IconButton(
+                                        onPressed: () {
+                                          controller.editCountFlowerMinus(
+                                            flowerItem: flowerItem,
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.remove,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
-                               Text(
+                              Text(
                                 LocaleKeys.vendor_home_item_count.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
@@ -172,14 +185,21 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  controller.editCountFlowerPlus(flowerItem: flowerItem,);
-                                },
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                ),
+                              Obx(
+                                () => controller
+                                        .isLoadingEditCountFlowerPlus.value
+                                    ? const CircularProgressIndicator()
+                                    : IconButton(
+                                        onPressed: () {
+                                          controller.editCountFlowerPlus(
+                                            flowerItem: flowerItem,
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
                             ],
                           ),

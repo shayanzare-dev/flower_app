@@ -4,7 +4,7 @@ import '../../controller/edit_flower_page_controller.dart';
 import 'add_chip.dart';
 import 'chip_item.dart';
 
-class FlowerChipList extends StatelessWidget {
+class FlowerChipList extends GetView<EditFlowerPageController> {
 
   const FlowerChipList({Key? key, }) : super(key: key);
 
@@ -24,6 +24,24 @@ class FlowerChipList extends StatelessWidget {
                 child: Column(
                   children: [
                     const AddChipTextField(),
+                    Expanded(
+                      child: Obx(
+                            () => ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.suggestions.length,
+                          itemBuilder: (context, index) {
+                            final suggestion = controller.suggestions[index];
+                            return ListTile(
+                              title: Text(suggestion),
+                              onTap: () {
+                                controller.categoryTextController.text =
+                                    suggestion;
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: GetBuilder<EditFlowerPageController>(
                         builder: (controller) => Obx(

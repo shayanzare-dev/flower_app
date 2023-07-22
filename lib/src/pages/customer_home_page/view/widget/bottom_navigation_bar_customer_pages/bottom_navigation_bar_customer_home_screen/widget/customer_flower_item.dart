@@ -43,7 +43,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
               ),
             ),
             child: Container(
-              height: 300,
+              height: 350,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0),
                 gradient: LinearGradient(
@@ -72,12 +72,14 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
-                          flowerItem.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            flowerItem.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -88,11 +90,13 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         Text(LocaleKeys.customer_home_item_description.tr,
                             style:
                                 const TextStyle(color: Colors.white, fontSize: 16)),
-                        Text(
-                          flowerItem.shortDescription,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
+                        Expanded(
+                          child: Text(
+                            flowerItem.shortDescription,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
                       ],

@@ -23,11 +23,17 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
               Row(
                 children: [
                    Text(LocaleKeys.customer_page_refresh.tr),
-                  IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () {
-                      controller.refresh();
-                    },
+                  Obx(
+                        () =>  controller.isLoading.value
+                        ? const CircularProgressIndicator()
+                        : IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed:controller
+                          .isButtonEnabled.value
+                          ? () =>
+                          controller.refresh()
+                          : null,
+                    ),
                   ),
                 ],
               ),

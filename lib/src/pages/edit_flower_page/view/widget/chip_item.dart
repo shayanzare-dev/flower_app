@@ -15,7 +15,7 @@ class ChipItem extends StatelessWidget {
         backgroundColor: const Color(0xffb6d1ab),
         label: Text(controller.categoryChips[index]),
         deleteIcon: const Icon(Icons.cancel, color: Colors.white),
-        onDeleted: () => controller.removeChip(index),
+        onDeleted: () => controller.removeChip( index: index),
       ),
     );
   }

@@ -183,77 +183,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
         ),
       ),
 
-      /*Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  Material(
-                    color: Colors.lightBlueAccent[100],
-                    borderRadius: BorderRadius.circular(40),
-                    child: InkWell(
-                      onTap: () {
-                        controller.getImage( imageSource: ImageSource.gallery,);
-                      },
-                      borderRadius: BorderRadius.circular(40),
-                      child: Container(
-                          alignment: AlignmentDirectional.center,
-                          height: 80,
-                          width: 380,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(width: 3, color: Colors.white),
-                          ),
-                          child:  Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(LocaleKeys.vendor_home_add_flower_image.tr,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              Icon(
-                                Icons.image,
-                                size: 30,
-                                color: Colors.white,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  PositionedDirectional(
-                    bottom: 20,
-                    start: 15,
-                    child: Material(
-                      color: Colors.lightBlueAccent[100],
-                      borderRadius: BorderRadius.circular(100),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(100),
-                        onTap: () {
-                          controller.getImage( imageSource: ImageSource.camera,);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              border:
-                                  Border.all(width: 4, color: Colors.white)),
-                          width: 40,
-                          height: 40,
-                          child: const Icon(Icons.camera_alt,
-                              size: 25, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          )
-        ],
-      )*/
+
     );
   }
 

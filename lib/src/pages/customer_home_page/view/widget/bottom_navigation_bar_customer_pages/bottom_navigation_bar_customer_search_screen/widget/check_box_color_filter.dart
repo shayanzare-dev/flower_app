@@ -16,13 +16,13 @@ class CheckBoxColorFilter extends GetView<CustomerHomePageFlowerController> {
         child: Obx(
           () => GridView.builder(
             shrinkWrap: true,
-            itemCount: controller.items.length,
+            itemCount: controller.colorItems.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 6,
               childAspectRatio: 1,
             ),
             itemBuilder: (BuildContext context, int index) {
-              GridItem item = controller.items[index];
+              GridItem item = controller.colorItems[index];
               return InkWell(
                 onTap: () {
                   controller.colorToggleSelection(colorIndex: index);

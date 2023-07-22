@@ -43,7 +43,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                 ),
               ),
               child: Container(
-                height: 300,
+                height: 350,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
                   gradient: LinearGradient(
@@ -66,18 +66,20 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                         children: [
                           Text(
                             LocaleKeys.customer_home_item_name.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            boughtFlower.flowerListViewModel.name,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Text(
+                              boughtFlower.flowerListViewModel.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
@@ -86,13 +88,15 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                       Row(
                         children: [
                           Text(LocaleKeys.customer_home_item_description.tr,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
-                          Text(
-                            boughtFlower.flowerListViewModel.shortDescription,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16)),
+                          Expanded(
+                            child: Text(
+                              boughtFlower.flowerListViewModel.shortDescription,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
                         ],
@@ -104,7 +108,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                           Row(
                             children: [
                               Text(LocaleKeys.customer_home_item_vendor_name.tr,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 16)),
                               Text(
                                   boughtFlower
@@ -152,7 +156,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                           Row(
                             children: [
                               Text(LocaleKeys.customer_home_item_color.tr,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 16)),
                               Container(
                                 decoration: BoxDecoration(
@@ -168,7 +172,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                           Row(children: [
                             Text(
                               LocaleKeys.customer_home_item_count.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
@@ -201,7 +205,7 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                           Row(children: [
                             Text(
                               LocaleKeys.customer_home_item_price.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
@@ -218,15 +222,21 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                           ]),
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  controller.editFlowerCountBuyCartMinus(
-                                      boughtFlowers: boughtFlower);
-                                },
-                                icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.white,
-                                ),
+                              Obx(
+                                () => controller.isLoadingMinusCart.value
+                                    ? const CircularProgressIndicator()
+                                    : IconButton(
+                                        onPressed: controller
+                                                .isButtonEnabled.value
+                                            ? () => controller
+                                                .editFlowerCountBuyCartMinus(
+                                                    boughtFlowers: boughtFlower)
+                                            : null,
+                                        icon: const Icon(
+                                          Icons.remove,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
                               Text(
                                 "${LocaleKeys.customer_home_item_count_buy.tr} : ${boughtFlower.buyCount}",
@@ -236,15 +246,21 @@ class BoughtItem extends GetView<CustomerHomePageFlowerController> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  controller.editFlowerCountBuyCartPlus(
-                                      boughtFlowers: boughtFlower);
-                                },
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                ),
+                              Obx(
+                                () => controller.isLoadingPlusCart.value
+                                    ? const CircularProgressIndicator()
+                                    : IconButton(
+                                        onPressed: controller
+                                                .isButtonEnabled.value
+                                            ? () => controller
+                                                .editFlowerCountBuyCartPlus(
+                                                    boughtFlowers: boughtFlower)
+                                            : null,
+                                        icon: const Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
                             ],
                           ),
