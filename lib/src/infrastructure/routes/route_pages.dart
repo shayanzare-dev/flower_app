@@ -41,9 +41,6 @@ class RoutePages {
       name: RouteNames.loginPageFlower,
       page: () => LoginPageFlower(),
       binding: LoginPageFlowerBindings(),
-      children: [
-
-      ],
     ),
     GetPage(
         name: RouteNames.vendorHomePageFlower,

@@ -630,6 +630,6 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   void goToLoginPage() {
-    Get.toNamed(RouteNames.loginPageFlower);
+    Get.toNamed(RouteNames.loadingPageFlower);
   }
 }

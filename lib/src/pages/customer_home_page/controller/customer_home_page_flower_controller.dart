@@ -331,7 +331,9 @@ class CustomerHomePageFlowerController extends GetxController {
       isLoadingMinusCart.value = false;
       refresh();
     } else {
-      Get.snackbar('Edit Flower', 'cant Minus count buy');
+      isLoadingMinusCart.value = false;
+      deleteFlowerItemForCartOrder(flowerItem: boughtFlowers.flowerListViewModel, boughtFlowers: boughtFlowers);
+      Get.snackbar('Cart', 'your item is deleted');
     }
 
   }
