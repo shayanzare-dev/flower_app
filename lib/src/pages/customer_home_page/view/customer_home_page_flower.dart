@@ -24,7 +24,45 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
             actions: [
               Row(
                 children: [
-                  Text(LocaleKeys.customer_page_refresh.tr),
+                  IconButton(
+                    icon: Stack(children: [
+                      const Icon(Icons.shopping_cart),
+                      Obx(() {
+                        int cartCount = controller.cartCount.value;
+                        if (cartCount == 0) {
+                          return const SizedBox.shrink();
+                        } else {
+                          return Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(2.0),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 16,
+                                minHeight: 16,
+                              ),
+                              child: Text(
+                                '$cartCount',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10.0,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        }
+                      }),
+                    ]),
+                    onPressed: () {
+                      Get.toNamed(RouteNames.customerHomePageFlower +
+                          RouteNames.customerCartPage);
+                    },
+                  ),
                   Obx(
                     () => controller.isLoading.value
                         ? const CircularProgressIndicator()
@@ -164,9 +202,9 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
             ],
           ),
         ),
-        body:CustomerHomeScreen(),
+        body: const CustomerHomeScreen(),
 
-      /*  Obx(() => CustomerHomePageFlowerController.widgetOptionsNavBar
+        /*  Obx(() => CustomerHomePageFlowerController.widgetOptionsNavBar
             .elementAt(controller.selectedIndex.value)),
         bottomNavigationBar: Obx(
           () => BottomNavigationBar(

@@ -14,49 +14,58 @@ class CustomerSearchPage extends GetView<CustomerSearchPageController> {
       appBar: AppBar(
           title: const Text('Cart Flower page'),
           backgroundColor: const Color(0xff04927c)),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: controller.searchController,
-              onChanged: (value) {
-                controller.getSearchFlowerList(search: value);
-              },
-              decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    icon: const Icon(
-                      Icons.clear,
-                      color: Colors.green,
-                    ),
-                    onPressed: () {
-                      controller.clearFilteredFlowerList();
-                    },
+      body: Column(
+        children: [
+          TextField(
+            controller: controller.searchController,
+            onChanged: (value) {
+              controller.getSearchFlowerList(search: value);
+            },
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: const Icon(
+                    Icons.clear,
+                    color: Colors.green,
                   ),
-                  labelText: 'Search or for filter press search icon',
-                  prefixIcon: const SearchAlertDialog()),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Obx(() {
-                return ListView.builder(
-                  itemCount: controller.filteredFlowerList.length,
-                  itemBuilder: (final context, final index) => CustomerFlowerItem(
-                      flowerItem: controller.filteredFlowerList[index]),
-                );
-              }),
-            ),
-            const Stack(
-              children: <Widget>[
-                Center(
-                  child: LoadingWidget(),
+                  onPressed: () {
+                    controller.clearSearchFilterFlowersTextField();
+                  },
                 ),
-              ],
-            )
+                labelText: 'Search or for filter press search icon',
+                prefixIcon: const SearchAlertDialog()),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: Obx(() {
+              return _filteredFlowerList();
+            }),
+          ),
+          const Stack(
+            children: <Widget>[
+              Center(
+                child: LoadingWidget(),
+              ),
+            ],
+          )
 
-          ],
-        ),
+        ],
       ),
+    );
+  }
+  Widget _filteredFlowerList() {
+    if (controller.filteredFlowerList.isEmpty) {
+      return const Center(
+        child: Text('List Is Empty',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Color(0xff04927c))),
+      );
+    }
+    return ListView.builder(
+      itemCount: controller.filteredFlowerList.length,
+      itemBuilder: (final context, final index) => CustomerFlowerItem(
+          flowerItem: controller.filteredFlowerList[index]),
     );
   }
 }

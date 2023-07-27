@@ -17,7 +17,7 @@ class SearchAlertDialog extends GetView<CustomerSearchPageController> {
           builder: (BuildContext context) => AlertDialog(
             title: const Text('Search Filter'),
             content: const SizedBox(
-              height: 350,
+              height: 300,
               width: 200,
               child: Column(
                 children: [

@@ -20,7 +20,11 @@ class HomeScreen extends GetView<VendorHomePageFlowerController> {
   Widget _flowerList() {
     if (controller.flowerList.isEmpty) {
       return const Center(
-        child: Text('list is empty'),
+        child: Text('List Is Empty',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Color(0xff04927c))),
       );
     }
     return const FlowerList();

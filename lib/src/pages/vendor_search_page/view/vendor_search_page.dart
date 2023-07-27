@@ -30,7 +30,7 @@ class VendorSearchPage extends GetView<VendorSearchPageController> {
                       color: Colors.green,
                     ),
                     onPressed: () {
-                      controller.clearFilteredFlowerList();
+                      controller.clearSearchFilterFlowersTextField();
                     },
                   ),
                   labelText: 'Search or for filter press search icon',
@@ -39,11 +39,7 @@ class VendorSearchPage extends GetView<VendorSearchPageController> {
             const SizedBox(height: 16),
             Expanded(
               child: Obx(() {
-                return ListView.builder(
-                  itemCount: controller.filteredFlowerList.length,
-                  itemBuilder: (final context, final index) => FlowerItem(
-                      flowerItem: controller.filteredFlowerList[index]),
-                );
+                return _filteredFlowerList();
               }),
             ),
             const Stack(
@@ -56,6 +52,23 @@ class VendorSearchPage extends GetView<VendorSearchPageController> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _filteredFlowerList() {
+    if (controller.filteredFlowerList.isEmpty) {
+      return const Center(
+        child: Text('List Is Empty',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Color(0xff04927c))),
+      );
+    }
+    return ListView.builder(
+      itemCount: controller.filteredFlowerList.length,
+      itemBuilder: (final context, final index) => FlowerItem(
+          flowerItem: controller.filteredFlowerList[index]),
     );
   }
 }

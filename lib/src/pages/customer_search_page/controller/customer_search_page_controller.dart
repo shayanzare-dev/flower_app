@@ -8,7 +8,7 @@ import '../repositories/customer_search_page_repository.dart';
 
 class CustomerSearchPageController extends GetxController{
   final CustomerSearchPageRepository _repository = CustomerSearchPageRepository();
-  final SharedPreferences _prefs = Get.find<SharedPreferences>();
+   SharedPreferences _prefs = Get.find<SharedPreferences>();
   String customerUserEmail = '';
   final selectedIndex = RxInt(0);
   RxList<FlowerListViewModel> filteredFlowerList = RxList();
@@ -33,36 +33,26 @@ class CustomerSearchPageController extends GetxController{
 
   @override
   void onInit() {
-    Future.delayed(const Duration(seconds: 2), () {
-      getFlowerList();
-    });
     super.onInit();
+    _prefs = Get.find<SharedPreferences>();
+    customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
+    getFlowerList();
+    getColorList();
+    getCategoryList();
   }
-
 
   Future<void> getFlowerList() async {
     showLoading();
-    colorItems.clear();
-    dropDownButtonList.clear();
     customerFlowerList.clear();
-    dropDownButtonList = ['select a item'];
-    selectedItemDropDown = Rx<String>('select a item');
     final result = await _repository.getFlowerList();
     if (result.isLeft) {
-      Get.snackbar('Flower List', 'Flowers not found');
+      Get.snackbar('Login', 'user not found');
     } else if (result.isRight) {
       customerFlowerList.addAll(result.right);
       for (final item in result.right) {
-        flowerBuyCount[item.id] = 0;
-        colorItems.add(GridItem(color: Color(item.color)));
         String inputString = item.price;
         int intValue = int.parse(inputString.replaceAll(',', ''));
         priceList.add(intValue);
-        for (final categoryItem in item.category) {
-          if (!dropDownButtonList.contains(categoryItem.toString())) {
-            dropDownButtonList.add(categoryItem.toString());
-          }
-        }
       }
     }
     if (customerFlowerList.isNotEmpty) {
@@ -70,6 +60,37 @@ class CustomerSearchPageController extends GetxController{
     }
     hideLoading();
   }
+
+  Future<void> getColorList() async {
+    showLoading();
+    colorItems.clear();
+    final result = await _repository.getColorList();
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      for (final item in result.right) {
+        colorItems.add(GridItem(color: Color(item.color)));
+      }
+    }
+    hideLoading();
+  }
+
+  Future<void> getCategoryList() async {
+    dropDownButtonList.clear();
+    dropDownButtonList = ['select a item'];
+    selectedItemDropDown = Rx<String>('select a item');
+    final result = await _repository.getCategoryList();
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      for (final item in result.right) {
+        for (final categoryItem in item.category) {
+          dropDownButtonList.add(categoryItem);
+        }
+      }
+    }
+  }
+
   List<int> priceList = [];
   double maxPrice = 2.0;
 
@@ -86,25 +107,11 @@ class CustomerSearchPageController extends GetxController{
     valuesRange.value = rangeValues;
   }
 
-  void clearFilteredFlowerList() {
+  void clearSearchFilterFlowers({required BuildContext context}) {
     filteredFlowerList.clear();
     searchController.clear();
-  }
-
-  void colorToggleSelection({required int colorIndex}) {
-    colorItems[colorIndex].isSelected = !colorItems[colorIndex].isSelected;
-    List<String> selections =
-    colorItems.map((item) => item.isSelected.toString()).toList();
-    _prefs.setStringList('selections', selections);
-    savedSelections = _prefs.getStringList('selections') ?? [];
-    for (int i = 0; i < savedSelections.length; i++) {
-      colorItems[i].isSelected = savedSelections[i] == 'true';
-      colorItems.refresh();
-    }
-  }
-
-  void clearSearchFilterFlowers({required BuildContext context}) {
     valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
+    filteredFlowerList.clear();
     selectedItemDropDown.value = 'select a item';
     for (int i = 0; i < savedSelections.length; i++) {
       colorItems[i].isSelected = false;
@@ -115,6 +122,22 @@ class CustomerSearchPageController extends GetxController{
     savedSelections = _prefs.getStringList('selections') ?? [];
     colorItems.refresh();
     Navigator.of(context).pop();
+  }
+
+  void clearSearchFilterFlowersTextField() {
+    filteredFlowerList.clear();
+    searchController.clear();
+    valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
+    filteredFlowerList.clear();
+    selectedItemDropDown.value = 'select a item';
+    for (int i = 0; i < savedSelections.length; i++) {
+      colorItems[i].isSelected = false;
+    }
+    List<String> selections =
+    colorItems.map((item) => item.isSelected.toString()).toList();
+    _prefs.setStringList('selections', selections);
+    savedSelections = _prefs.getStringList('selections') ?? [];
+    colorItems.refresh();
   }
 
   Future<void> getSearchFilterFlowerList(
@@ -189,18 +212,87 @@ class CustomerSearchPageController extends GetxController{
 
   Future<void> getSearchFlowerList({required String search}) async {
     showLoading();
-    if (search != '') {
-      final result = await _repository.search(search);
-      if (result.isLeft) {
+    List<int> colorFilter = [];
+    for (int i = 0; i < savedSelections.length; i++) {
+      colorItems[i].isSelected = savedSelections[i] == 'true';
+      if (colorItems[i].isSelected) {
+        colorFilter.add(colorItems[i].color.value);
+      }
+    }
+    String colorFilters = colorFilter.map((color) => 'color=$color').join('&');
+
+    if (selectedItemDropDown.value != 'select a item' && colorFilters != '') {
+      final searchFiltersResult = await _repository.searchTextFieldWithFilters(
+        category: selectedItemDropDown.value,
+        colors: colorFilters,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+        search: search,
+      );
+      if (searchFiltersResult.isLeft) {
         Get.snackbar('Login', 'user not found');
-      } else if (result.isRight) {
-        filteredFlowerList.addAll(result.right);
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
+      }
+    } else if (selectedItemDropDown.value != 'select a item') {
+      final searchFiltersResult =
+      await _repository.searchTextFieldCategoryPrice(
+        category: selectedItemDropDown.value,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+        search: search,
+      );
+      if (searchFiltersResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
+      }
+    } else if (colorFilters != '') {
+      final searchFiltersResult = await _repository.searchTextFieldColorPrice(
+        colors: colorFilters,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+        search: search,
+      );
+      if (searchFiltersResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
       }
     } else {
-      filteredFlowerList.clear();
+      if (search != '') {
+        final result = await _repository.textFieldSearchWithPriceRange(
+            min: valuesRange.value.start.toString(),
+            max: valuesRange.value.end.toString(),
+            search: search);
+        if (result.isLeft) {
+          Get.snackbar('Login', 'user not found');
+        } else if (result.isRight) {
+          filteredFlowerList.clear();
+          filteredFlowerList.addAll(result.right);
+        }
+      } else {
+        filteredFlowerList.clear();
+      }
     }
     hideLoading();
   }
 
-
+  void colorToggleSelection({required int colorIndex}) {
+    colorItems[colorIndex].isSelected = !colorItems[colorIndex].isSelected;
+    List<String> selections =
+    colorItems.map((item) => item.isSelected.toString()).toList();
+    _prefs.setStringList('selections', selections);
+    savedSelections = _prefs.getStringList('selections') ?? [];
+    for (int i = 0; i < savedSelections.length; i++) {
+      colorItems[i].isSelected = savedSelections[i] == 'true';
+      colorItems.refresh();
+    }
+  }
 }

@@ -15,12 +15,24 @@ class CustomerHistoryPage extends GetView<CustomerHistoryPageController> {
           backgroundColor: const Color(0xff04927c)),
       body: Padding(
         padding: const EdgeInsets.all(5),
-        child: RefreshIndicator(
-          onRefresh: controller.getOrderList,
-          child: const CustomerBoughtList(),
+        child: Obx(() =>  RefreshIndicator(
+            onRefresh: controller.getOrderList,
+            child:_boughtFlowerList(),
+          ),
         ),
       ),
-      bottomNavigationBar: const LoadingWidget(),
     );
+  }
+  Widget _boughtFlowerList() {
+    if (controller.boughtFlowerList.isEmpty) {
+      return const Center(
+        child: Text('List Is Empty',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Color(0xff04927c))),
+      );
+    }
+    return const CustomerBoughtList();
   }
 }

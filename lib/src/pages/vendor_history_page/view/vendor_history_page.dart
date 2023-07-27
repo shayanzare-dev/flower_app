@@ -15,12 +15,27 @@ class VendorHistoryPage extends GetView<VendorHistoryPageController> {
           backgroundColor: const Color(0xff04927c)),
       body: Padding(
         padding: const EdgeInsets.all(5),
-        child: RefreshIndicator(
-          onRefresh: controller.getOrderListVendorHistory,
-          child:const VendorBoughtList(),
+        child: Obx(() =>  RefreshIndicator(
+            onRefresh: controller.getOrderListVendorHistory,
+            child: _boughtFlowerList(),
+          ),
         ),
       ),
-      bottomNavigationBar: const LoadingWidget(),
     );
+
+
   }
+  Widget _boughtFlowerList() {
+    if (controller.boughtFlowerList.isEmpty) {
+      return const Center(
+        child: Text('List Is Empty',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Color(0xff04927c))),
+      );
+    }
+    return const VendorBoughtList();
+  }
+
 }
