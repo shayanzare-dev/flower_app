@@ -61,9 +61,6 @@ class VendorHomePageFlowerController extends GetxController {
   RxBool isLoadingEditCountFlowerMinus = false.obs;
   RxBool isLoadingEditCountFlowerPlus = false.obs;
 
-
-
-
   void showLoading() {
     isLoading.value = true;
   }
@@ -73,20 +70,16 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   @override
-  void onInit() {
+  Future<void> onInit()  async {
     _prefs = Get.find<SharedPreferences>();
+    vendorUserEmail =  _prefs.getString('userEmail') ?? 'test@gmail.com';
 
-    Future.delayed(const Duration(seconds: 1), () {
-      vendorUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
-    });
-    Future.delayed(const Duration(seconds: 2), () {
-      getCategoryList();
-      getProfileUser();
-      getFlowerList();
-      getOrderListVendorHistory();
-
-    });
-
+    getCategoryList();
+    getProfileUser();
+    getFlowerList();
+    getOrderListVendorHistory();
+    imageBytes1.value = imageBytes2.value;
+    flowerPriceController.addListener(_onPriceChanged);
     super.onInit();
   }
 
@@ -94,6 +87,7 @@ class VendorHomePageFlowerController extends GetxController {
   void dispose() {
     categoryTextController.dispose();
     searchController.dispose();
+    flowerPriceController.dispose();
     super.dispose();
   }
 
@@ -113,7 +107,9 @@ class VendorHomePageFlowerController extends GetxController {
     });
     hideLoading();
   }
+
   RxBool isButtonEnabled = true.obs;
+
   void disableButton() {
     isButtonEnabled.value = false;
     Timer(Duration(seconds: 2), () {
@@ -209,6 +205,17 @@ class VendorHomePageFlowerController extends GetxController {
       {required FlowerListViewModel flowerItem}) async {
     final result = await _repository.deleteFlowerItem(flowerItem.id);
     if (result.right == 'success') {
+      //getFlowerList();
+      deleteColorFlowerItem(flowerItem: flowerItem);
+      Get.snackbar('done', result.right);
+    } else {
+      Get.snackbar('error', result.left);
+    }
+  }
+  Future<void> deleteColorFlowerItem(
+      {required FlowerListViewModel flowerItem}) async {
+    final result = await _repository.deleteColorListItem(colorId: flowerItem.id);
+    if (result.right == 'success') {
       getFlowerList();
       Get.snackbar('done', result.right);
     } else {
@@ -269,7 +276,9 @@ class VendorHomePageFlowerController extends GetxController {
     } else if (result.isRight) {
       flowerList.addAll(result.right);
       for (final item in result.right) {
-        priceList.add(item.price);
+        String inputString = item.price;
+        int intValue = int.parse(inputString.replaceAll(',', ''));
+        priceList.add(intValue);
         colorItems.add(GridItem(color: Color(item.color)));
         for (final categoryItem in item.category) {
           if (!dropDownButtonList.contains(categoryItem.toString())) {
@@ -285,6 +294,17 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   //Add Screen
+  final RxInt integerPart = 0.obs;
+  final RegExp _priceRegex = RegExp(r'^(\d{1,3}(,\d{3})*)$');
+
+  void _onPriceChanged() {
+    final match = _priceRegex.firstMatch(flowerPriceController.text);
+    if (match != null) {
+      final integerPartString = match.group(1)?.replaceAll(',', '') ?? '0';
+      integerPart.value = int.parse(integerPartString);
+    }
+  }
+
 
   RxList<String> suggestions = <String>[].obs;
 
@@ -406,7 +426,7 @@ class VendorHomePageFlowerController extends GetxController {
     }
     showLoading();
     final AddFlowerDto dto = AddFlowerDto(
-        price: int.parse(flowerPriceController.text),
+        price: flowerPriceController.text,
         shortDescription: flowerDescriptionController.text,
         countInStock: int.parse(flowerCountController.text),
         category: categoryChips,
@@ -441,29 +461,33 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   String? validateFlowerName({required String value}) {
-    if (value.isEmpty || value.length < 2) {
-      return "flower name must be of 2 characters";
+    if (value.isEmpty || value.length < 2 || value.length > 15) {
+      return "flower name must be between 2 and 15 characters";
     }
     return null;
   }
 
   String? validateFlowerDescription({required String value}) {
-    if (value.isEmpty || value.length < 10) {
-      return "flower description must be of 10 characters";
+    if (value.isEmpty || value.length < 10  || value.length >25) {
+      return "flower description must be between 10 and 25 characters";
     }
     return null;
   }
 
   String? validateFlowerPrice({required String value}) {
-    if (value.isEmpty || value.length < 2) {
-      return "flower price must be of 2 characters";
+    final RegExp integerRegex = RegExp(r'^\d{1,3}(,\d{3})*$');
+    bool isValid = integerRegex.hasMatch(value);
+    if (value.isEmpty ||  value.length > 8 || !isValid) {
+      return "flower price must be valid number";
     }
     return null;
   }
 
   String? validateFlowerCount({required String value}) {
-    if (value.isEmpty) {
-      return "flower count is required ";
+    RegExp integerRegex = RegExp(r'^\d+$');
+    bool isValid = integerRegex.hasMatch(value);
+    if (value.isEmpty  ||  value.length > 3 || !isValid) {
+      return "flower count must be valid number ";
     }
     return null;
   }
@@ -608,10 +632,10 @@ class VendorHomePageFlowerController extends GetxController {
       Get.snackbar('Login', 'user not found');
     } else if (result.isRight) {
       boughtOrderList.addAll(result.right);
-      for (final item in result.right) {
+      for (final item in boughtOrderList) {
         for (final items in item.boughtFlowers) {
           if (items.flowerListViewModel.vendorUser.email == vendorUserEmail) {
-            boughtFlowerList.addAll(item.boughtFlowers);
+            boughtFlowerList.add(items);
           }
         }
       }
@@ -630,6 +654,6 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   void goToLoginPage() {
-    Get.toNamed(RouteNames.loadingPageFlower);
+    Get.offAllNamed(RouteNames.loadingPageFlower);
   }
 }

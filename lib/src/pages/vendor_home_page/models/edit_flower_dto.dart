@@ -2,8 +2,8 @@ import 'package:flower_app/src/pages/vendor_home_page/models/vendor_view_model.d
 
 
 class EditFlowerDto {
-  final int price, countInStock, color, id;
-  final String name, image, shortDescription;
+  final int  countInStock, color, id;
+  final String name, image, shortDescription ,price;
   final List category;
   final VendorViewModel vendorUser;
 

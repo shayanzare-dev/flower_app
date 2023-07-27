@@ -36,6 +36,7 @@ class FlowerChipList extends GetView<EditFlowerPageController> {
                               onTap: () {
                                 controller.categoryTextController.text =
                                     suggestion;
+                                controller.addChip();
                               },
                             );
                           },

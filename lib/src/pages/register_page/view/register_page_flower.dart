@@ -2,7 +2,6 @@ import 'package:flower_app/src/pages/register_page/view/widget/loading_widget.da
 import 'package:flower_app/src/pages/register_page/view/widget/my_custom_register.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../generated/locales.g.dart';
 
 class RegisterPageFlower extends StatelessWidget {

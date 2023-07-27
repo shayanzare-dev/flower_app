@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:either_dart/either.dart';
 import 'package:flower_app/flower_app.dart';
+import 'package:flower_app/src/pages/edit_flower_page/models/edit_color_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,7 +42,12 @@ class EditFlowerPageController extends GetxController {
     selectedColor = selectedColors.obs;
     categoryChips = editFlowerItem.category.obs;
     base64Image = editFlowerItem.image;
-    imageBytes1 = editFlowerItem.image == '' ? imageBytes2 : Rx<Uint8List>(base64Decode(editFlowerItem.image));
+    if (editFlowerItem.image == ''){
+      imageBytes1.value = imageBytes2.value;
+    }else{
+      imageBytes1= Rx<Uint8List>(base64Decode(editFlowerItem.image));
+    }
+    flowerPriceController.addListener(_onPriceChanged);
   }
   @override
   void dispose() {
@@ -51,6 +57,17 @@ class EditFlowerPageController extends GetxController {
   void changeColor(Color color) {
     selectedColor.value = color;
     selectedColors = color;
+  }
+
+  final RxInt integerPart = 0.obs;
+  final RegExp _priceRegex = RegExp(r'^(\d{1,3}(,\d{3})*)$');
+
+  void _onPriceChanged() {
+    final match = _priceRegex.firstMatch(flowerPriceController.text);
+    if (match != null) {
+      final integerPartString = match.group(1)?.replaceAll(',', '') ?? '0';
+      integerPart.value = int.parse(integerPartString);
+    }
   }
 
   RxList<String> suggestions = <String>[].obs;
@@ -170,7 +187,7 @@ class EditFlowerPageController extends GetxController {
   Future<void> editFlower() async {
     final EditFlowerDto dto = EditFlowerDto(
         id: editFlowerItem.id,
-        price: int.parse(flowerPriceController.text) ,
+        price: flowerPriceController.text ,
         shortDescription: flowerDescriptionController.text,
         countInStock: int.parse(flowerCountController.text),
         category: categoryChips,
@@ -192,11 +209,23 @@ class EditFlowerPageController extends GetxController {
             (String error) => Get.snackbar('Register',
             'Your registration is not successfully code error:$error'),
             (FlowerListViewModel addRecord) {
+              editColorList(colorId: editFlowerItem.id, color: selectedColors.value);
           Get.offAndToNamed(RouteNames.vendorHomePageFlower);
           Get.snackbar('Edit Flower', 'Your Flower is edited successfully');
 
         });
     return;
+  }
+
+  Future<void> editColorList({required int colorId,required int color }) async {
+    EditColorDto dto = EditColorDto(id: colorId, color: color);
+    final result =
+    await _repository.editColorList(dto, colorId);
+    if (result.isLeft) {
+      Get.snackbar('', 'user not found');
+    } else if (result.isRight) {
+      Get.snackbar('edit category', 'success');
+    }
   }
 
   String? validateFlowerName(String value) {

@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:either_dart/either.dart';
 import 'package:flower_app/src/pages/shared/user_type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../../flower_app.dart';
 import '../models/register_user_dto.dart';
 import '../models/register_vendor_dto.dart';
@@ -112,9 +110,14 @@ class RegisterPageFlowerController extends GetxController {
                 (String addRecord) {
               hideLoading();
               Get.snackbar('Register', 'Your registration is successfully');
+
+              List<String> loginEmailPass = [];
+              loginEmailPass.add(emailController.text);
+              loginEmailPass.add(passWordConfirmController.text);
+              //Get.back(result: loginEmailPass );
+              Get.offAndToNamed(RouteNames.loginPageFlower,
+                  arguments: loginEmailPass);
               registerFormKey.currentState?.reset();
-              Get.offAndToNamed(
-                  RouteNames.loadingPageFlower + RouteNames.loginPageFlower);
             });
             return;
           });

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../../../generated/locales.g.dart';
 import '../../controller/vendor_add_flower_page_controller.dart';
 
 class AddChipTextField extends StatelessWidget {
@@ -12,7 +12,7 @@ class AddChipTextField extends StatelessWidget {
       builder: (controller) => TextField(
         controller: controller.categoryTextController,
         decoration: InputDecoration(
-          hintText: 'Add a Category',
+          hintText: LocaleKeys.vendor_home_add_flower_category.tr,
           hintStyle: const TextStyle(
               color: Color(0xff04927c),
               fontSize: 20,

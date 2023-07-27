@@ -31,6 +31,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
         ),
       );
 
+
   Widget _iconUser() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30),
@@ -76,36 +77,55 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                       ),
                     ),
                   ),
-                  PositionedDirectional(
-                    bottom: 9,
-                    end: 9,
-                    child: Material(
-                      color: Colors.lightBlueAccent[100],
-                      borderRadius: BorderRadius.circular(100),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(100),
-                        onTap: () {
-                          controller.imageBytes1.value = controller.imageBytes2.value;
-                          controller.defaultImage();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              border:
-                                  Border.all(width: 4, color: Colors.white)),
-                          width: 35,
-                          height: 35,
-                          child: const Icon(Icons.clear,
-                              size: 20, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
+                  Obx(() =>  _removeImage()),
                 ],
               ),
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Widget _removeImage(){
+    if (controller.imageBytes1.value != controller.imageBytes2.value){
+      return  PositionedDirectional(
+        bottom: 9,
+        end: 9,
+        child: Material(
+          color: Colors.lightBlueAccent[100],
+          borderRadius: BorderRadius.circular(100),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(100),
+            onTap: () {
+              controller.imageBytes1.value = controller.imageBytes2.value;
+              controller.defaultImage();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  border:
+                  Border.all(width: 4, color: Colors.white)),
+              width: 35,
+              height: 35,
+              child: const Icon(Icons.clear,
+                  size: 20, color: Colors.white),
+            ),
+          ),
+        ),
+      );
+    }
+    return PositionedDirectional(
+      bottom: 9,
+      end: 9,
+      child: Material(
+        color: Colors.lightBlueAccent[100],
+        borderRadius: BorderRadius.circular(100),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(100),
+          onTap: () {
+          },
+        ),
       ),
     );
   }

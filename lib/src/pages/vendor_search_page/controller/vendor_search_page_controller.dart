@@ -6,7 +6,7 @@ import '../../vendor_home_page/models/flower_list_view_model.dart';
 import '../repositories/vendor_search_page_repository.dart';
 
 class VendorSearchPageController extends GetxController{
-  final SharedPreferences _prefs = Get.find<SharedPreferences>();
+  SharedPreferences _prefs = Get.find<SharedPreferences>();
   final VendorSearchPageRepository _repository =
   VendorSearchPageRepository();
   List<String> savedSelections = [];
@@ -28,17 +28,64 @@ class VendorSearchPageController extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    Future.delayed(const Duration(seconds: 2), () {
-      getFlowerList();
-    });
-    Future.delayed(const Duration(seconds: 1), () {
-      userEmail().then((userEmail) {
-        vendorUserEmail = userEmail;
-      });
-    });
+    _prefs = Get.find<SharedPreferences>();
+    vendorUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
+    getFlowerList();
+    getColorList();
+    getCategoryList();
   }
+
+  Future<void> getFlowerList() async {
+    showLoading();
+    flowerList.clear();
+    final result = await _repository.getFlowerList(vendorUserEmail);
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      flowerList.addAll(result.right);
+      for (final item in result.right) {
+        String inputString = item.price;
+        int intValue = int.parse(inputString.replaceAll(',', ''));
+        priceList.add(intValue);
+      }
+    }
+    if (flowerList.isNotEmpty) {
+      maxPrices();
+    }
+    hideLoading();
+  }
+
+  Future<void> getColorList() async {
+    showLoading();
+    colorItems.clear();
+    final result = await _repository.getColorList();
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      for (final item in result.right) {
+        colorItems.add(GridItem(color: Color(item.color)));
+      }
+    }
+    hideLoading();
+  }
+  Future<void> getCategoryList() async {
+    dropDownButtonList.clear();
+    dropDownButtonList = ['select a item'];
+    selectedItemDropDown = Rx<String>('select a item');
+    final result = await _repository.getCategoryList();
+    if (result.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (result.isRight) {
+      for (final item in result.right) {
+        for (final categoryItem in item.category) {
+          dropDownButtonList.add(categoryItem);
+        }
+      }
+    }
+  }
+
   List<int> priceList = [];
-  double maxPrice = 0.0;
+  double maxPrice = 2.0;
 
   void maxPrices() {
     priceList.sort();
@@ -46,39 +93,15 @@ class VendorSearchPageController extends GetxController{
     valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
   }
 
-  Future<void> getFlowerList() async {
-    flowerList.clear();
-    colorItems.clear();
-    dropDownButtonList.clear();
-    dropDownButtonList = ['select a item'];
-    selectedItemDropDown = Rx<String>('select a item');
-    final result = await _repository.getFlowerList(vendorUserEmail);
-    if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
-    } else if (result.isRight) {
-      flowerList.addAll(result.right);
-      for (final item in result.right) {
-        priceList.add(item.price);
-        colorItems.add(GridItem(color: Color(item.color)));
-        for (final categoryItem in item.category) {
-          dropDownButtonList.add(categoryItem.toString());
-        }
-      }
-    }
-    maxPrices();
-  }
-
-  Future<String> userEmail() async {
-    return _prefs.getString('userEmail') ?? 'test@gmail.com';
-  }
-
   RangeValues get values => valuesRange.value;
+
   void setValues({required RangeValues rangeValues}) {
     valuesRange.value = rangeValues;
   }
 
   void clearSearchFilterFlowers({required BuildContext context}) {
     valuesRange = Rx<RangeValues>(RangeValues(0, maxPrice));
+    filteredFlowerList.clear();
     selectedItemDropDown.value = 'select a item';
     for (int i = 0; i < savedSelections.length; i++) {
       colorItems[i].isSelected = false;
@@ -96,23 +119,59 @@ class VendorSearchPageController extends GetxController{
     filteredFlowerList.clear();
     Navigator.of(context).pop();
     showLoading();
-    if (selectedItemDropDown.value != 'select a item') {
-      final categoryResult = await _repository.searchFilterCategory(
-        category: selectedItemDropDown.value,
-        email: vendorUserEmail,
-      );
-      if (categoryResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
-      } else if (categoryResult.isRight) {
-        filteredFlowerList.addAll(categoryResult.right);
-        for (final items in filteredFlowerList) {
-          filteredFlowerList.removeWhere((item) => item.id == items.id);
-          filteredFlowerList.addAll(categoryResult.right);
-        }
-        hideLoading();
+    List<int> colorFilter = [];
+    for (int i = 0; i < savedSelections.length; i++) {
+      colorItems[i].isSelected = savedSelections[i] == 'true';
+      if (colorItems[i].isSelected) {
+        colorFilter.add(colorItems[i].color.value);
       }
     }
-    if (valuesRange.value.start != 0 || valuesRange.value.end != maxPrice) {
+    String colorFilters = colorFilter.map((color) => 'color=$color').join('&');
+
+    if (selectedItemDropDown.value != 'select a item' && colorFilters != '') {
+      final searchFiltersResult = await _repository.searchFilters(
+        category: selectedItemDropDown.value,
+        email: vendorUserEmail,
+        colors: colorFilters,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+      );
+      if (searchFiltersResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
+      }
+    } else if (selectedItemDropDown.value != 'select a item') {
+      final searchFiltersResult = await _repository.searchFilterCategoryPrice(
+        category: selectedItemDropDown.value,
+        email: vendorUserEmail,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+      );
+      if (searchFiltersResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
+      }
+    } else if (colorFilters != '') {
+      final searchFiltersResult = await _repository.searchFilterColorPrice(
+        email: vendorUserEmail,
+        colors: colorFilters,
+        min: valuesRange.value.start.toString(),
+        max: valuesRange.value.end.toString(),
+      );
+      if (searchFiltersResult.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (searchFiltersResult.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(searchFiltersResult.right);
+        hideLoading();
+      }
+    } else {
       final priceResult = await _repository.searchFilterPriceRange(
         email: vendorUserEmail,
         min: valuesRange.value.start.toString(),
@@ -121,39 +180,8 @@ class VendorSearchPageController extends GetxController{
       if (priceResult.isLeft) {
         Get.snackbar('Login', 'user not found');
       } else if (priceResult.isRight) {
-        if (filteredFlowerList.isEmpty) {
-          filteredFlowerList.addAll(priceResult.right);
-        } else {
-          filteredFlowerList.removeWhere((item) => item.id == item.id);
-          filteredFlowerList.addAll(priceResult.right);
-        }
-        hideLoading();
-      }
-    }
-
-
-    List<int> colorFilter = [];
-    for (int i = 0; i < savedSelections.length; i++) {
-      colorItems[i].isSelected = savedSelections[i] == 'true';
-      if (colorItems[i].isSelected) {
-        colorFilter.add(colorItems[i].color.value);
-      }
-    }
-    String colorFilters =
-    colorFilter.map((color) => 'color_like=$color').join('&');
-    if (colorFilters != '') {
-      final colorResult = await _repository.searchFilterColor(
-        email: vendorUserEmail,
-        colors: colorFilters,
-      );
-      if (colorResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
-      } else if (colorResult.isRight) {
-        filteredFlowerList.addAll(colorResult.right);
-        for (final items in filteredFlowerList) {
-          filteredFlowerList.removeWhere((item) => item.id == items.id);
-          filteredFlowerList.addAll(colorResult.right);
-        }
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(priceResult.right);
         hideLoading();
       }
     }
@@ -167,6 +195,7 @@ class VendorSearchPageController extends GetxController{
       if (result.isLeft) {
         Get.snackbar('Login', 'user not found');
       } else if (result.isRight) {
+        filteredFlowerList.clear();
         filteredFlowerList.addAll(result.right);
       }
     } else {
@@ -176,7 +205,8 @@ class VendorSearchPageController extends GetxController{
   }
 
   void colorToggleSelection({required int colorToggleIndex}) {
-    colorItems[colorToggleIndex].isSelected = !colorItems[colorToggleIndex].isSelected;
+    colorItems[colorToggleIndex].isSelected =
+    !colorItems[colorToggleIndex].isSelected;
     List<String> selections =
     colorItems.map((item) => item.isSelected.toString()).toList();
     _prefs.setStringList('selections', selections);

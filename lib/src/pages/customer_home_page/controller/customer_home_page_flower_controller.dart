@@ -60,15 +60,12 @@ class CustomerHomePageFlowerController extends GetxController {
   @override
   void onInit() {
     _prefs = Get.find<SharedPreferences>();
-    Future.delayed(const Duration(seconds: 1), () {
-      customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
-      getCustomerUser();
-      getFlowerList();
-      getOrderList();
-    });
-    Future.delayed(const Duration(seconds: 2), () {
-      getOrderCart();
-    });
+    customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
+    getCustomerUser();
+    getFlowerList();
+    getOrderList();
+    getOrderCart();
+
     super.onInit();
   }
 
@@ -144,7 +141,9 @@ class CustomerHomePageFlowerController extends GetxController {
       for (final item in result.right) {
         flowerBuyCount[item.id] = 0;
         colorItems.add(GridItem(color: Color(item.color)));
-        priceList.add(item.price);
+        String inputString = item.price;
+        int intValue = int.parse(inputString.replaceAll(',', ''));
+        priceList.add(intValue);
         for (final categoryItem in item.category) {
           if (!dropDownButtonList.contains(categoryItem.toString())) {
             dropDownButtonList.add(categoryItem.toString());
@@ -185,7 +184,9 @@ class CustomerHomePageFlowerController extends GetxController {
       DateTime dateTimeNow = DateTime.now();
       DateFormat dateFormat = DateFormat('yyyy-MM-dd');
       String dateTime = dateFormat.format(dateTimeNow);
-      int sumBuyPrice = buyCount! * flowerItem.price;
+      String inputStringPrice = flowerItem.price;
+      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
+      int sumBuyPrice = buyCount! * intFlowerItemPrice;
       BoughtFlowersViewModel boughtFlowers = BoughtFlowersViewModel(
           flowerListViewModel: flowerItem,
           buyCount: buyCount,
@@ -280,6 +281,7 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   RxBool isButtonEnabled = true.obs;
+
   void disableButton() {
     isButtonEnabled.value = false;
     Timer(Duration(seconds: 2), () {
@@ -296,11 +298,13 @@ class CustomerHomePageFlowerController extends GetxController {
         boughtFlowerListCart[index].flowerListViewModel.countInStock) {
       boughtFlowerListCart[index].buyCount =
           boughtFlowerListCart[index].buyCount + 1;
-      boughtFlowerListCart[index].sumBuyPrice =
-          boughtFlowerListCart[index].sumBuyPrice +
-              boughtFlowerListCart[index].flowerListViewModel.price;
-      cartOrderList[0].totalPrice = cartOrderList[0].totalPrice +
+      String inputStringPrice =
           boughtFlowerListCart[index].flowerListViewModel.price;
+      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
+      boughtFlowerListCart[index].sumBuyPrice =
+          boughtFlowerListCart[index].sumBuyPrice + intFlowerItemPrice;
+      cartOrderList[0].totalPrice =
+          cartOrderList[0].totalPrice + intFlowerItemPrice;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id);
@@ -309,7 +313,6 @@ class CustomerHomePageFlowerController extends GetxController {
     } else {
       Get.snackbar('Edit Flower', 'cant plus count buy');
     }
-
   }
 
   void editFlowerCountBuyCartMinus(
@@ -320,11 +323,14 @@ class CustomerHomePageFlowerController extends GetxController {
     if (boughtFlowerListCart[index].buyCount > 1) {
       boughtFlowerListCart[index].buyCount =
           boughtFlowerListCart[index].buyCount - 1;
+      String inputStringPrice =
+          boughtFlowerListCart[index].flowerListViewModel.price;
+      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
       boughtFlowerListCart[index].sumBuyPrice =
           boughtFlowerListCart[index].sumBuyPrice -
-              boughtFlowerListCart[index].flowerListViewModel.price;
+              intFlowerItemPrice;
       cartOrderList[0].totalPrice = cartOrderList[0].totalPrice -
-          boughtFlowerListCart[index].flowerListViewModel.price;
+          intFlowerItemPrice;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id);
@@ -332,10 +338,11 @@ class CustomerHomePageFlowerController extends GetxController {
       refresh();
     } else {
       isLoadingMinusCart.value = false;
-      deleteFlowerItemForCartOrder(flowerItem: boughtFlowers.flowerListViewModel, boughtFlowers: boughtFlowers);
+      deleteFlowerItemForCartOrder(
+          flowerItem: boughtFlowers.flowerListViewModel,
+          boughtFlowers: boughtFlowers);
       Get.snackbar('Cart', 'your item is deleted');
     }
-
   }
 
   void deleteAlertDialogSelect({
@@ -589,6 +596,6 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   void goToLoginPage() {
-    Get.toNamed(RouteNames.loadingPageFlower + RouteNames.loginPageFlower);
+    Get.offAllNamed(RouteNames.loadingPageFlower + RouteNames.loginPageFlower);
   }
 }

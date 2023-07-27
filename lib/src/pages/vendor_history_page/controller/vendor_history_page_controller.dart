@@ -6,16 +6,18 @@ import '../../customer_home_page/models/cart_order_view_model.dart';
 import '../repositories/vendor_history_page_repository.dart';
 
 class VendorHistoryPageController extends GetxController {
-  final SharedPreferences _prefs = Get.find<SharedPreferences>();
+  SharedPreferences _prefs = Get.find<SharedPreferences>();
   RxList<BoughtFlowersViewModel> boughtFlowerList = RxList();
   RxList<CartOrderViewModel> boughtOrderList = RxList();
   final VendorHistoryPageRepository _repository = VendorHistoryPageRepository();
   String vendorUserEmail = '';
 
   var isLoading = false.obs;
+
   void showLoading() {
     isLoading.value = true;
   }
+
   void hideLoading() {
     isLoading.value = false;
   }
@@ -23,14 +25,9 @@ class VendorHistoryPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    Future.delayed(const Duration(seconds: 2), () {
-      getOrderListVendorHistory();
-    });
-    Future.delayed(const Duration(seconds: 1), () {
-      userEmail().then((userEmail) {
-        vendorUserEmail = userEmail;
-      });
-    });
+    _prefs = Get.find<SharedPreferences>();
+    vendorUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
+    getOrderListVendorHistory();
   }
 
   Future<String> userEmail() async {
@@ -46,10 +43,10 @@ class VendorHistoryPageController extends GetxController {
       Get.snackbar('Login', 'user not found');
     } else if (result.isRight) {
       boughtOrderList.addAll(result.right);
-      for (final item in result.right) {
+      for (final item in boughtOrderList) {
         for (final items in item.boughtFlowers) {
           if (items.flowerListViewModel.vendorUser.email == vendorUserEmail) {
-            boughtFlowerList.addAll(item.boughtFlowers);
+            boughtFlowerList.add(items);
           }
         }
       }

@@ -1,7 +1,10 @@
+import 'package:flower_app/src/pages/vendor_add_flower_page/view/widget/inputPriceSeparator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../../generated/locales.g.dart';
 import '../view/widget/loading_widget.dart';
 import '../controller/vendor_add_flower_page_controller.dart';
 import '../view/widget/flower_chip_list.dart';
@@ -62,14 +65,14 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.flowerNameController,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.local_florist, color: Colors.white),
+            decoration: InputDecoration(
+              icon: const Icon(Icons.local_florist, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
-                  'Flower name',
-                  style: TextStyle(
+                  LocaleKeys.vendor_home_add_flower_name.tr,
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -101,14 +104,14 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.flowerDescriptionController,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.filter_vintage, color: Colors.white),
+            decoration: InputDecoration(
+              icon: const Icon(Icons.filter_vintage, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
-                  'Flower description',
-                  style: TextStyle(
+                  LocaleKeys.vendor_home_add_flower_description.tr,
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -129,82 +132,72 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
   Widget _imageFlower() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  Material(
-                    color: Colors.lightBlueAccent[100],
-                    borderRadius: BorderRadius.circular(40),
-                    child: InkWell(
-                      onTap: () {
-                        controller.getImage(
-                          imageSource: ImageSource.gallery,
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(40),
-                      child: Container(
-                          alignment: AlignmentDirectional.center,
-                          height: 80,
-                          width: 380,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(width: 3, color: Colors.white),
+      child: Center(
+        child: Container(
+          width: 380,
+          height: 250,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Obx(
+                () => Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.memory(
+                      controller.imageBytes1.value,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () => controller.getImage(
+                            imageSource: ImageSource.gallery,
                           ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text('Add Image Flower',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              Icon(
-                                Icons.image,
-                                size: 30,
-                                color: Colors.white,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  PositionedDirectional(
-                    bottom: 20,
-                    start: 15,
-                    child: Material(
-                      color: Colors.lightBlueAccent[100],
-                      borderRadius: BorderRadius.circular(100),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(100),
-                        onTap: () {
-                          controller.getImage(
-                            imageSource: ImageSource.camera,
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              border:
-                                  Border.all(width: 4, color: Colors.white)),
-                          width: 40,
-                          height: 40,
-                          child: const Icon(Icons.camera_alt,
-                              size: 25, color: Colors.white),
+                          icon: const Icon(Icons.photo_library),
+                          color: Colors.white,
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                        IconButton(
+                          onPressed: () => controller.getImage(
+                            imageSource: ImageSource.camera,
+                          ),
+                          icon: const Icon(Icons.camera_alt),
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 16),
+                        Obx(() => _removeImage()),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
-          )
-        ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  Widget _removeImage() {
+    if (controller.imageBytes1.value != controller.imageBytes2.value) {
+      return IconButton(
+        onPressed: () {
+          controller.imageBytes1.value = controller.imageBytes2.value;
+          controller.defaultImage();
+        },
+        icon: const Icon(Icons.delete),
+        color: Colors.red,
+      );
+    } else {
+      return const Row();
+    }
   }
 
   Widget _colorFlower(BuildContext context) {
@@ -234,15 +227,15 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
                             borderRadius: BorderRadius.circular(40),
                             border: Border.all(width: 3, color: Colors.white),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text('Add Flower color',
-                                  style: TextStyle(
+                              Text(LocaleKeys.vendor_home_add_flower_color.tr,
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
-                              Icon(
+                              const Icon(
                                 Icons.palette,
                                 size: 30,
                                 color: Colors.white,
@@ -252,7 +245,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
                     ),
                   ),
                   Obx(
-                    () => PositionedDirectional(
+                        () => PositionedDirectional(
                       bottom: 20,
                       start: 15,
                       child: Material(
@@ -267,7 +260,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100),
                                 border:
-                                    Border.all(width: 4, color: Colors.white)),
+                                Border.all(width: 4, color: Colors.white)),
                             width: 40,
                             height: 40,
                           ),
@@ -294,18 +287,22 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20),
           child: TextFormField(
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              ThousandsSeparatorInputFormatter(),
+            ],
             keyboardType: TextInputType.number,
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.flowerPriceController,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.money_off, color: Colors.white),
+            decoration: InputDecoration(
+              icon: const Icon(Icons.money_off, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
-                  'Flower Price',
-                  style: TextStyle(
+                  LocaleKeys.vendor_home_add_flower_price.tr,
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -337,14 +334,14 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.flowerCountController,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.onetwothree, color: Colors.white),
+            decoration: InputDecoration(
+              icon: const Icon(Icons.onetwothree, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: Text(
-                  'Flower Count',
-                  style: TextStyle(
+                  LocaleKeys.vendor_home_add_flower_count.tr,
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
@@ -367,7 +364,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select a color'),
+          title: const Text('Select a color'),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: controller.selectedColor.value,
@@ -381,7 +378,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
           ),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -400,15 +397,15 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
         children: [
           ElevatedButton(
             onPressed: () {
+              controller.imageBytes1.value = controller.imageBytes2.value;
               controller.onSubmitAddFlower();
-              controller.goToHomeVendorPage();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
             ),
-            child: const Text(
-              'Add Flower',
-              style: TextStyle(
+            child: Text(
+              LocaleKeys.vendor_home_add_flower_add_btn.tr,
+              style: const TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),

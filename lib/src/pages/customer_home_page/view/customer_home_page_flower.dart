@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../flower_app.dart';
 import '../../../../generated/locales.g.dart';
 import '../controller/customer_home_page_flower_controller.dart';
+import 'widget/bottom_navigation_bar_customer_pages/bottom_navigation_bar_customer_home_screen/bottom_navigation_bar_customer_home_screen.dart';
 
 class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
   CustomerHomePageFlower({Key? key}) : super(key: key);
@@ -10,7 +12,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    key: _scaffoldKey,
+        key: _scaffoldKey,
         appBar: AppBar(
             leading: IconButton(
               onPressed: () {
@@ -22,29 +24,27 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
             actions: [
               Row(
                 children: [
-                   Text(LocaleKeys.customer_page_refresh.tr),
+                  Text(LocaleKeys.customer_page_refresh.tr),
                   Obx(
-                        () =>  controller.isLoading.value
+                    () => controller.isLoading.value
                         ? const CircularProgressIndicator()
                         : IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed:controller
-                          .isButtonEnabled.value
-                          ? () =>
-                          controller.refresh()
-                          : null,
-                    ),
+                            icon: const Icon(Icons.refresh),
+                            onPressed: controller.isButtonEnabled.value
+                                ? () => controller.refresh()
+                                : null,
+                          ),
                   ),
                 ],
               ),
             ],
-            title:  Text(LocaleKeys.customer_page_title.tr),
+            title: Text(LocaleKeys.customer_page_title.tr),
             backgroundColor: const Color(0xff04927c)),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-               DrawerHeader(
+              DrawerHeader(
                 decoration: const BoxDecoration(
                   color: Color(0xff04927c),
                 ),
@@ -58,7 +58,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
               ),
               ListTile(
                 leading: const Icon(Icons.home),
-                title:  Text(LocaleKeys.customer_page_home.tr),
+                title: Text(LocaleKeys.customer_page_home.tr),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -97,43 +97,44 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                     }
                   }),
                 ]),
-                title:  Text(LocaleKeys.customer_page_cart.tr),
+                title: Text(LocaleKeys.customer_page_cart.tr),
                 onTap: () {
-                  Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerCartPage);
-
+                  Get.toNamed(RouteNames.customerHomePageFlower +
+                      RouteNames.customerCartPage);
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.search),
-                title:  Text(LocaleKeys.customer_page_search.tr),
+                title: Text(LocaleKeys.customer_page_search.tr),
                 onTap: () {
-                  Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerSearchPage);
-
+                  Get.toNamed(RouteNames.customerHomePageFlower +
+                      RouteNames.customerSearchPage);
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.history),
-                title:  Text(LocaleKeys.customer_page_history.tr),
+                title: Text(LocaleKeys.customer_page_history.tr),
                 onTap: () {
-                  Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerHistoryPage);
-
+                  Get.toNamed(RouteNames.customerHomePageFlower +
+                      RouteNames.customerHistoryPage);
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.person),
-                title:  Text(LocaleKeys.customer_page_profile.tr),
+                title: Text(LocaleKeys.customer_page_profile.tr),
                 onTap: () {
-                  Get.toNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower+RouteNames.customerHomePageFlower+RouteNames.customerProfilePage);
-
+                  Get.toNamed(RouteNames.customerHomePageFlower +
+                      RouteNames.customerProfilePage);
                 },
               ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.output_rounded),
-                title:  Text(LocaleKeys.profile_sign_out_btn.tr),
+                title: Text(LocaleKeys.profile_sign_out_btn.tr),
                 onTap: () {
                   controller.clearLoginStatus();
-                  Get.offAndToNamed(RouteNames.loadingPageFlower+RouteNames.loginPageFlower);
+                  Get.offAndToNamed(RouteNames.loadingPageFlower +
+                      RouteNames.loginPageFlower);
                 },
               ),
               const Divider(),
@@ -155,7 +156,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
               ),
               ListTile(
                 leading: const Icon(Icons.help),
-                title:  Text(LocaleKeys.customer_page_about.tr),
+                title: Text(LocaleKeys.customer_page_about.tr),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -163,7 +164,9 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
             ],
           ),
         ),
-        body: Obx(() => CustomerHomePageFlowerController.widgetOptionsNavBar
+        body:CustomerHomeScreen(),
+
+      /*  Obx(() => CustomerHomePageFlowerController.widgetOptionsNavBar
             .elementAt(controller.selectedIndex.value)),
         bottomNavigationBar: Obx(
           () => BottomNavigationBar(
@@ -175,7 +178,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
               controller.onItemTappedNavBar(navBarIndex: value);
             },
             items: <BottomNavigationBarItem>[
-               BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: const Icon(Icons.home),
                 label: LocaleKeys.customer_page_home.tr,
               ),
@@ -215,20 +218,20 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 ]),
                 label: LocaleKeys.customer_page_cart.tr,
               ),
-               BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: const Icon(Icons.search),
                 label: LocaleKeys.customer_page_search.tr,
               ),
-               BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: const Icon(Icons.history),
                 label: LocaleKeys.customer_page_history.tr,
               ),
-               BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: const Icon(Icons.person),
                 label: LocaleKeys.customer_page_profile.tr,
               ),
             ],
           ),
-        ),
+        ),*/
       );
 }

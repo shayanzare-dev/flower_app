@@ -11,6 +11,9 @@ class VendorProfilePage extends GetView<VendorProfilePageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: const Text('Search Flower page'),
+          backgroundColor: const Color(0xff04927c)),
       body: SizedBox(
         width: 400,
         child: DecoratedBox(

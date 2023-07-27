@@ -1,5 +1,7 @@
 import 'package:flower_app/src/pages/vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_add_screen/widget/flower_chip_list.dart';
+import 'package:flower_app/src/pages/vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_add_screen/widget/inputPriceSeparator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -165,14 +167,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
                           color: Colors.white,
                         ),
                         const SizedBox(height: 16),
-                        IconButton(
-                          onPressed: () {
-                            controller.imageBytes1.value = controller.imageBytes2.value;
-                            controller.defaultImage();
-                          },
-                          icon: const Icon(Icons.delete),
-                          color: Colors.red,
-                        ),
+                        Obx(() => _removeImage()),
                       ],
                     ),
                   ),
@@ -182,9 +177,22 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
           ),
         ),
       ),
-
-
     );
+  }
+
+  Widget _removeImage() {
+    if (controller.imageBytes1.value != controller.imageBytes2.value) {
+      return IconButton(
+        onPressed: () {
+          controller.imageBytes1.value = controller.imageBytes2.value;
+          controller.defaultImage();
+        },
+        icon: const Icon(Icons.delete),
+        color: Colors.red,
+      );
+    } else {
+      return const Row();
+    }
   }
 
   Widget _colorFlower(BuildContext context) {
@@ -274,6 +282,11 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20),
           child: TextFormField(
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              ThousandsSeparatorInputFormatter(),
+              // Add comma separator after every 3 digits
+            ],
             keyboardType: TextInputType.number,
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),

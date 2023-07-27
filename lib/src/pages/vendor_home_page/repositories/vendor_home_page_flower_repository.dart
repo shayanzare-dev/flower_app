@@ -132,6 +132,18 @@ class VendorHomePageFlowerRepository {
     }
   }
 
+  Future<Either<String, String>> deleteColorListItem(
+      {required final int colorId}) async {
+    final url = Uri.http(BaseUrl.baseUrl, 'colorList/$colorId');
+    final responseOrException = await httpClient.delete(url);
+    if (responseOrException.statusCode >= 200 &&
+        responseOrException.statusCode <= 400) {
+      return const Right('success');
+    } else {
+      return const Left('error');
+    }
+  }
+
   Future<Either<String, FlowerListViewModel>> editFlower(
       EditFlowerDto dto, int flowerId) async {
     final url = Uri.http(BaseUrl.baseUrl, 'flowerList/$flowerId');
@@ -152,9 +164,9 @@ class VendorHomePageFlowerRepository {
 
   Future<Either<String, List<FlowerListViewModel>>> searchFilterColorPrice(
       {required String colors,
-        required String min,
-        required String max,
-        required String email}) async {
+      required String min,
+      required String max,
+      required String email}) async {
     final url = Uri.parse(
         "http://10.0.2.2:3000/flowerList?price_gte=$min&price_lte=$max&vendorUser.email=$email&$colors");
     final responseOrException = await httpClient.get(url);
@@ -171,10 +183,10 @@ class VendorHomePageFlowerRepository {
   }
 
   Future<Either<String, List<FlowerListViewModel>>> searchFilterCategoryPrice(
-      {        required String min,
-        required String max,
-        required String category,
-        required String email}) async {
+      {required String min,
+      required String max,
+      required String category,
+      required String email}) async {
     final url = Uri.parse(
         "http://10.0.2.2:3000/flowerList?price_gte=$min&pri ce_lte=$max&category_like=$category&vendorUser.email=$email");
     final responseOrException = await httpClient.get(url);
@@ -192,8 +204,8 @@ class VendorHomePageFlowerRepository {
 
   Future<Either<String, List<FlowerListViewModel>>> searchFilterCategoryColor(
       {required String colors,
-        required String category,
-        required String email}) async {
+      required String category,
+      required String email}) async {
     final url = Uri.parse(
         "http://10.0.2.2:3000/flowerList?category=$category&vendorUser.email=$email&$colors");
     final responseOrException = await httpClient.get(url);
@@ -280,7 +292,6 @@ class VendorHomePageFlowerRepository {
       return const Left('error');
     }
   }
-
 
   Future<Either<String, List<FlowerListViewModel>>> search(
       String search, String email) async {

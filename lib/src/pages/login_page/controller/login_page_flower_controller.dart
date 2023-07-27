@@ -17,7 +17,11 @@ class LoginPageFlowerController extends GetxController {
 
   @override
   void onInit() {
-    refresh();
+    if (Get.arguments != null) {
+      List<String> loginEmailPass = Get.arguments;
+      emailController.text = loginEmailPass[0];
+      passWordController.text = loginEmailPass[1];
+    }
     super.onInit();
   }
 
@@ -36,9 +40,10 @@ class LoginPageFlowerController extends GetxController {
   }
 
   void saveLoginStatus(bool isLoggedIn, int userType, String userEmail) async {
+    await _prefs.setString('userEmail', userEmail);
     await _prefs.setBool('isLoggedIn', isLoggedIn);
     await _prefs.setInt('userType', userType);
-    await _prefs.setString('userEmail', userEmail);
+
   }
 
   void clearLoginStatus() async {
@@ -65,9 +70,9 @@ class LoginPageFlowerController extends GetxController {
     }, (right) async {
       final Either<String, String> resultOrExceptionVendorValidate =
           await _repository.checkVendorValidate(
-          passWord: passWordController.text,
-          email: emailController.text,
-          user: 1);
+              passWord: passWordController.text,
+              email: emailController.text,
+              user: 1);
       resultOrExceptionVendorValidate.fold((left) {
         saveLoginStatus(rememberMe.value, 1, emailController.text);
         Get.offAndToNamed(RouteNames.vendorHomePageFlower);
@@ -79,7 +84,6 @@ class LoginPageFlowerController extends GetxController {
         hideLoading();
       });
     });
-
   }
 
   String? validateEmail(String value) {

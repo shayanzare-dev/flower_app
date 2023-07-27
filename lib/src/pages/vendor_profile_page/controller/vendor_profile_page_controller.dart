@@ -40,7 +40,7 @@ class VendorProfilePageController extends GetxController{
   }
 
   void goToLoginPage() {
-    Get.offAndToNamed(RouteNames.loginPageFlower);
+    Get.offAllNamed(RouteNames.loginPageFlower);
   }
 
 }

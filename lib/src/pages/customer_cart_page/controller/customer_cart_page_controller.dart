@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,6 +26,8 @@ class CustomerCartPageController extends GetxController{
   String customerUserEmail = '';
   int totalPrice = 0;
   var isLoading = false.obs;
+  RxBool isLoadingPlusCart = false.obs;
+  RxBool isLoadingMinusCart = false.obs;
 
   void showLoading() {
     isLoading.value = true;
@@ -32,6 +36,7 @@ class CustomerCartPageController extends GetxController{
   void hideLoading() {
     isLoading.value = false;
   }
+
 
   @override
   void onInit() {
@@ -72,13 +77,14 @@ class CustomerCartPageController extends GetxController{
       }
     }
   }
-
   void incrementCartCount() {
     cartCount.value++;
   }
+
   void decrementCartCount() {
     cartCount.value--;
   }
+
   void addFlowerToBoughtFlowers({required FlowerListViewModel flowerItem}) {
     int? buyCount = flowerBuyCount[flowerItem.id];
     if (buyCount == 0) {
@@ -88,7 +94,9 @@ class CustomerCartPageController extends GetxController{
       DateTime dateTimeNow = DateTime.now();
       DateFormat dateFormat = DateFormat('yyyy-MM-dd');
       String dateTime = dateFormat.format(dateTimeNow);
-      int sumBuyPrice = buyCount! * flowerItem.price;
+      String inputStringPrice = flowerItem.price;
+      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
+      int sumBuyPrice = buyCount! * intFlowerItemPrice;
       BoughtFlowersViewModel boughtFlowers = BoughtFlowersViewModel(
           flowerListViewModel: flowerItem,
           buyCount: buyCount,
@@ -182,21 +190,35 @@ class CustomerCartPageController extends GetxController{
     cartOrderList.refresh();
   }
 
+  RxBool isButtonEnabled = true.obs;
+
+  void disableButton() {
+    isButtonEnabled.value = false;
+    Timer(const Duration(seconds: 2), () {
+      isButtonEnabled.value = true;
+    });
+  }
+
   void editFlowerCountBuyCartPlus(
       {required BoughtFlowersViewModel boughtFlowers}) {
+    disableButton();
+    isLoadingPlusCart.value = true;
     final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     if (boughtFlowerListCart[index].buyCount <
         boughtFlowerListCart[index].flowerListViewModel.countInStock) {
       boughtFlowerListCart[index].buyCount =
           boughtFlowerListCart[index].buyCount + 1;
-      boughtFlowerListCart[index].sumBuyPrice =
-          boughtFlowerListCart[index].sumBuyPrice +
-              boughtFlowerListCart[index].flowerListViewModel.price;
-      cartOrderList[0].totalPrice = cartOrderList[0].totalPrice +
+      String inputStringPrice =
           boughtFlowerListCart[index].flowerListViewModel.price;
+      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
+      boughtFlowerListCart[index].sumBuyPrice =
+          boughtFlowerListCart[index].sumBuyPrice + intFlowerItemPrice;
+      cartOrderList[0].totalPrice =
+          cartOrderList[0].totalPrice + intFlowerItemPrice;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id);
+      isLoadingPlusCart.value = false;
       refresh();
     } else {
       Get.snackbar('Edit Flower', 'cant plus count buy');
@@ -205,20 +227,31 @@ class CustomerCartPageController extends GetxController{
 
   void editFlowerCountBuyCartMinus(
       {required BoughtFlowersViewModel boughtFlowers}) {
+    disableButton();
+    isLoadingMinusCart.value = true;
     final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     if (boughtFlowerListCart[index].buyCount > 1) {
       boughtFlowerListCart[index].buyCount =
           boughtFlowerListCart[index].buyCount - 1;
+      String inputStringPrice =
+          boughtFlowerListCart[index].flowerListViewModel.price;
+      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
       boughtFlowerListCart[index].sumBuyPrice =
           boughtFlowerListCart[index].sumBuyPrice -
-              boughtFlowerListCart[index].flowerListViewModel.price;
+              intFlowerItemPrice;
       cartOrderList[0].totalPrice = cartOrderList[0].totalPrice -
-          boughtFlowerListCart[index].flowerListViewModel.price;
+          intFlowerItemPrice;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id);
+      isLoadingMinusCart.value = false;
+      refresh();
     } else {
-      Get.snackbar('Edit Flower', 'cant Minus count buy');
+      isLoadingMinusCart.value = false;
+      deleteFlowerItemForCartOrder(
+          flowerItem: boughtFlowers.flowerListViewModel,
+          boughtFlowers: boughtFlowers);
+      Get.snackbar('Cart', 'your item is deleted');
     }
   }
 
@@ -268,6 +301,7 @@ class CustomerCartPageController extends GetxController{
   }
 
   Future<void> onSubmitPurchaseCartOrder() async {
+    disableButton();
     showLoading();
     if (boughtFlowerListCart.isEmpty) {
       Get.snackbar('Add cart', 'Your cart  is empty');

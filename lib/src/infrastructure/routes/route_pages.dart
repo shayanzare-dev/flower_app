@@ -2,7 +2,6 @@ import 'package:flower_app/src/pages/login_page/commons/login_page_flower_bindin
 import 'package:flower_app/src/pages/login_page/view/login_page_flower.dart';
 import 'package:flower_app/src/pages/register_page/view/register_page_flower.dart';
 import 'package:get/get.dart';
-
 import '../../pages/customer_cart_page/commons/customer_cart_page_bindings.dart';
 import '../../pages/customer_cart_page/view/customer_cart_page.dart';
 import '../../pages/customer_history_page/commons/customer_history_page_bindings.dart';
