@@ -124,7 +124,9 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                           ),
                           Row(
                             children: [
-                              DeleteAlertDialog(flowerItem: flowerItem),
+                              Obx(
+                                () => _deleteAlertDialog(),
+                              ),
                             ],
                           ),
                         ],
@@ -155,7 +157,8 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                             children: [
                               Obx(
                                 () => controller
-                                        .isLoadingEditCountFlowerMinus.value
+                                        .isLoadingCountMinus[flowerItem.id]!
+                                        .value
                                     ? const CircularProgressIndicator()
                                     : IconButton(
                                         onPressed: () {
@@ -187,7 +190,8 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                               ),
                               Obx(
                                 () => controller
-                                        .isLoadingEditCountFlowerPlus.value
+                                        .isLoadingCountPlus[flowerItem.id]!
+                                        .value
                                     ? const CircularProgressIndicator()
                                     : IconButton(
                                         onPressed: () {
@@ -216,4 +220,11 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
               ),
             )),
       );
+
+  Widget _deleteAlertDialog() {
+    if (controller.isLoadingDeleteBtn.value) {
+      return const CircularProgressIndicator();
+    }
+    return DeleteAlertDialog(flowerItem: flowerItem);
+  }
 }

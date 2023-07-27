@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../../../generated/locales.g.dart';
 import '../../../../controller/vendor_home_page_flower_controller.dart';
-import '../../loading_widget.dart';
+
 import '../bottom_navigation_bar_home_screen/widget/flower_item.dart';
 
 class SearchScreen extends GetView<VendorHomePageFlowerController> {
@@ -43,13 +43,7 @@ class SearchScreen extends GetView<VendorHomePageFlowerController> {
               );
             }),
           ),
-          const Stack(
-            children: <Widget>[
-              Center(
-                child: LoadingWidget(),
-              ),
-            ],
-          )
+
         ],
       ),
     );

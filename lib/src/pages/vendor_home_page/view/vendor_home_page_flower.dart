@@ -26,14 +26,12 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
               children: [
                 Text(LocaleKeys.vendor_page_refresh.tr),
                 Obx(
-                  () => controller.isLoading.value
-                      ? const CircularProgressIndicator()
-                      : IconButton(
-                          icon: const Icon(Icons.refresh),
-                          onPressed: controller.isButtonEnabled.value
-                              ? () => controller.refresh()
-                              : null,
-                        ),
+                  () =>  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: controller.isButtonEnabled.value
+                        ? () => controller.refresh()
+                        : null,
+                  ),
                 ),
               ],
             ),

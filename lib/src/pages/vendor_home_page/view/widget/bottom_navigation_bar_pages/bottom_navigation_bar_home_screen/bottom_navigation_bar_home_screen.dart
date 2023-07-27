@@ -18,7 +18,9 @@ class HomeScreen extends GetView<VendorHomePageFlowerController> {
   }
 
   Widget _flowerList() {
-    if (controller.flowerList.isEmpty) {
+    if (controller.isLoadingFlowerList.value) {
+     return const Center(child: CircularProgressIndicator());
+    } else if (controller.flowerList.isEmpty) {
       return const Center(
         child: Text('List Is Empty',
             style: TextStyle(

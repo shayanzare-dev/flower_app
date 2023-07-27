@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../../../../generated/locales.g.dart';
 import '../../../../controller/vendor_home_page_flower_controller.dart';
-import '../../loading_widget.dart';
+
 
 class AddScreen extends GetView<VendorHomePageFlowerController> {
   const AddScreen({super.key});
@@ -32,13 +32,7 @@ class AddScreen extends GetView<VendorHomePageFlowerController> {
             _myButton(context),
             const SizedBox(
               height: 30,
-              child: Stack(
-                children: <Widget>[
-                  Center(
-                    child: LoadingWidget(),
-                  ),
-                ],
-              ),
+
             )
           ],
         ),

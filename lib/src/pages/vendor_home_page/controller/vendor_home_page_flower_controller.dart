@@ -54,20 +54,16 @@ class VendorHomePageFlowerController extends GetxController {
   List<String> dropDownButtonList = ['select a item'];
   Rx<String> selectedItemDropDown = Rx<String>('select a item');
   Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
-
   RxList<BoughtFlowersViewModel> boughtFlowerList = RxList();
   RxList<CartOrderViewModel> boughtOrderList = RxList();
-  RxBool isLoading = false.obs;
-  RxBool isLoadingEditCountFlowerMinus = false.obs;
-  RxBool isLoadingEditCountFlowerPlus = false.obs;
 
-  void showLoading() {
-    isLoading.value = true;
-  }
+  RxMap<int,RxBool> isLoadingCountMinus = RxMap<int,RxBool>();
+  RxMap<int,RxBool> isLoadingCountPlus = RxMap<int,RxBool>();
+  RxBool isLoadingFlowerList = false.obs;
+  RxBool isLoadingDeleteBtn = false.obs;
+  RxBool isButtonEnabled = true.obs;
 
-  void hideLoading() {
-    isLoading.value = false;
-  }
+
 
   @override
   Future<void> onInit()  async {
@@ -93,29 +89,17 @@ class VendorHomePageFlowerController extends GetxController {
 
   @override
   Future<void> refresh() async {
-    showLoading();
-    disableButton();
     _prefs = Get.find<SharedPreferences>();
-    Future.delayed(const Duration(seconds: 1), () {
-      vendorUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
-    });
-    Future.delayed(const Duration(seconds: 2), () {
-      getCategoryList();
-      getProfileUser();
-      getFlowerList();
-      getOrderListVendorHistory();
-    });
-    hideLoading();
+    vendorUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
+    getCategoryList();
+    getProfileUser();
+    getFlowerList();
+    getOrderListVendorHistory();
   }
 
-  RxBool isButtonEnabled = true.obs;
 
-  void disableButton() {
-    isButtonEnabled.value = false;
-    Timer(Duration(seconds: 2), () {
-      isButtonEnabled.value = true;
-    });
-  }
+
+
 
   //Home Screen
   static List<Widget> widgetOptionsNavBar = <Widget>[
@@ -132,7 +116,9 @@ class VendorHomePageFlowerController extends GetxController {
 
   Future<void> editCountFlowerPlus(
       {required FlowerListViewModel flowerItem}) async {
-    isLoadingEditCountFlowerPlus.value = true;
+    isLoadingCountPlus[flowerItem.id]= true.obs;
+    final int index = flowerList.indexOf(flowerItem);
+    flowerList[index] = flowerItem.copyWith(countInStock:flowerList[index].countInStock + 1 );
     final EditFlowerDto dto = EditFlowerDto(
         id: flowerItem.id,
         price: flowerItem.price,
@@ -156,17 +142,17 @@ class VendorHomePageFlowerController extends GetxController {
         (String error) => Get.snackbar('Register',
             'Your registration is not successfully code error:$error'),
         (FlowerListViewModel addRecord) {
-      getFlowerList();
-      isLoadingEditCountFlowerPlus.value = false;
-      Get.snackbar('edit Flower', 'Your Add Flower is successfully');
+          isLoadingCountPlus[flowerItem.id]= false.obs;
     });
     return;
   }
 
   Future<void> editCountFlowerMinus(
       {required FlowerListViewModel flowerItem}) async {
-    isLoadingEditCountFlowerMinus.value = true;
+    isLoadingCountMinus[flowerItem.id] = true.obs;
     if (flowerItem.countInStock > 0) {
+      final int index = flowerList.indexOf(flowerItem);
+      flowerList[index] = flowerItem.copyWith(countInStock:flowerList[index].countInStock - 1 );
       final EditFlowerDto dto = EditFlowerDto(
           id: flowerItem.id,
           price: flowerItem.price,
@@ -190,10 +176,7 @@ class VendorHomePageFlowerController extends GetxController {
           (String error) => Get.snackbar('Register',
               'Your registration is not successfully code error:$error'),
           (FlowerListViewModel addRecord) {
-        getFlowerList();
-        isLoadingEditCountFlowerMinus.value = false;
-        Future.delayed(const Duration(seconds: 3), () {});
-        Get.snackbar('edit Flower', 'Your Add Flower is successfully');
+            isLoadingCountMinus[flowerItem.id] = false.obs;
       });
     } else {
       Get.snackbar('edit Flower', 'can not minus count in stock');
@@ -203,21 +186,22 @@ class VendorHomePageFlowerController extends GetxController {
 
   Future<void> deleteFlowerItem(
       {required FlowerListViewModel flowerItem}) async {
+    isLoadingDeleteBtn= true.obs;
+    flowerList.refresh();
     final result = await _repository.deleteFlowerItem(flowerItem.id);
     if (result.right == 'success') {
-      //getFlowerList();
       deleteColorFlowerItem(flowerItem: flowerItem);
-      Get.snackbar('done', result.right);
     } else {
       Get.snackbar('error', result.left);
     }
+    isLoadingDeleteBtn= false.obs;
   }
+
   Future<void> deleteColorFlowerItem(
       {required FlowerListViewModel flowerItem}) async {
     final result = await _repository.deleteColorListItem(colorId: flowerItem.id);
     if (result.right == 'success') {
       getFlowerList();
-      Get.snackbar('done', result.right);
     } else {
       Get.snackbar('error', result.left);
     }
@@ -239,7 +223,7 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   Future<void> getProfileUser() async {
-    showLoading();
+
     vendorUser.clear();
     final result = await _repository.getVendorUser(vendorUserEmail);
     if (result.isLeft) {
@@ -247,12 +231,9 @@ class VendorHomePageFlowerController extends GetxController {
     } else if (result.isRight) {
       vendorUser.addAll(result.right);
     }
-    hideLoading();
+
   }
 
-  Future<String> userEmail() async {
-    return _prefs.getString('userEmail') ?? 'test@gmail.com';
-  }
 
   List<int> priceList = [];
   double maxPrice = 2.0;
@@ -264,7 +245,8 @@ class VendorHomePageFlowerController extends GetxController {
   }
 
   Future<void> getFlowerList() async {
-    showLoading();
+    isLoadingFlowerList = true.obs;
+    isButtonEnabled.value = false;
     flowerList.clear();
     colorItems.clear();
     dropDownButtonList.clear();
@@ -276,6 +258,8 @@ class VendorHomePageFlowerController extends GetxController {
     } else if (result.isRight) {
       flowerList.addAll(result.right);
       for (final item in result.right) {
+        isLoadingCountMinus[item.id]= false.obs;
+        isLoadingCountPlus[item.id]= false.obs;
         String inputString = item.price;
         int intValue = int.parse(inputString.replaceAll(',', ''));
         priceList.add(intValue);
@@ -290,7 +274,8 @@ class VendorHomePageFlowerController extends GetxController {
     if (flowerList.isNotEmpty) {
       maxPrices();
     }
-    hideLoading();
+    isButtonEnabled.value = true;
+    isLoadingFlowerList = false.obs;
   }
 
   //Add Screen
@@ -424,7 +409,7 @@ class VendorHomePageFlowerController extends GetxController {
       Get.snackbar('Add Flower', 'Your must be enter required field');
       return;
     }
-    showLoading();
+
     final AddFlowerDto dto = AddFlowerDto(
         price: flowerPriceController.text,
         shortDescription: flowerDescriptionController.text,
@@ -444,7 +429,7 @@ class VendorHomePageFlowerController extends GetxController {
     final Either<String, FlowerListViewModel> resultOrException =
         (await _repository.addFlower(dto));
     resultOrException.fold((String error) {
-      hideLoading();
+
       return Get.snackbar('Register',
           'Your registration is not successfully code error:$error');
     }, (FlowerListViewModel addRecord) async {
@@ -454,7 +439,7 @@ class VendorHomePageFlowerController extends GetxController {
       onItemTappedNavBar(index: 0);
       defaultImage();
       refresh();
-      hideLoading();
+
     });
 
     return;
@@ -518,7 +503,7 @@ class VendorHomePageFlowerController extends GetxController {
       {required BuildContext context}) async {
     filteredFlowerList.clear();
     Navigator.of(context).pop();
-    showLoading();
+
     List<int> colorFilter = [];
     for (int i = 0; i < savedSelections.length; i++) {
       colorItems[i].isSelected = savedSelections[i] == 'true';
@@ -541,7 +526,7 @@ class VendorHomePageFlowerController extends GetxController {
       } else if (searchFiltersResult.isRight) {
         filteredFlowerList.clear();
         filteredFlowerList.addAll(searchFiltersResult.right);
-        hideLoading();
+
       }
     } else if (selectedItemDropDown.value != 'select a item') {
       final searchFiltersResult = await _repository.searchFilterCategoryPrice(
@@ -555,7 +540,7 @@ class VendorHomePageFlowerController extends GetxController {
       } else if (searchFiltersResult.isRight) {
         filteredFlowerList.clear();
         filteredFlowerList.addAll(searchFiltersResult.right);
-        hideLoading();
+
       }
     } else if (colorFilters != '') {
       final searchFiltersResult = await _repository.searchFilterColorPrice(
@@ -569,7 +554,7 @@ class VendorHomePageFlowerController extends GetxController {
       } else if (searchFiltersResult.isRight) {
         filteredFlowerList.clear();
         filteredFlowerList.addAll(searchFiltersResult.right);
-        hideLoading();
+
       }
     } else {
       final priceResult = await _repository.searchFilterPriceRange(
@@ -582,14 +567,14 @@ class VendorHomePageFlowerController extends GetxController {
       } else if (priceResult.isRight) {
         filteredFlowerList.clear();
         filteredFlowerList.addAll(priceResult.right);
-        hideLoading();
+
       }
     }
-    hideLoading();
+
   }
 
   Future<void> getSearchFlowerList({required String search}) async {
-    showLoading();
+
     if (search != '') {
       final result = await _repository.search(search, vendorUserEmail);
       if (result.isLeft) {
@@ -601,7 +586,7 @@ class VendorHomePageFlowerController extends GetxController {
     } else {
       filteredFlowerList.clear();
     }
-    hideLoading();
+
   }
 
   void colorToggleSelection({required int colorToggleIndex}) {
@@ -624,7 +609,7 @@ class VendorHomePageFlowerController extends GetxController {
 
   //History Screen
   Future<void> getOrderListVendorHistory() async {
-    showLoading();
+
     boughtFlowerList.clear();
     boughtOrderList.clear();
     final result = await _repository.getVendorUserOrdersHistory();
@@ -640,7 +625,7 @@ class VendorHomePageFlowerController extends GetxController {
         }
       }
     }
-    hideLoading();
+
   }
 
   void goToEditFlowerPage({required FlowerListViewModel flowerItem}) {
