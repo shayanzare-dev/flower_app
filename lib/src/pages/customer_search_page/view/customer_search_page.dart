@@ -12,7 +12,7 @@ class CustomerSearchPage extends GetView<CustomerSearchPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Cart Flower page'),
+          title: const Text('Search Flower page'),
           backgroundColor: const Color(0xff04927c)),
       body: Column(
         children: [
@@ -40,12 +40,15 @@ class CustomerSearchPage extends GetView<CustomerSearchPageController> {
               return _filteredFlowerList();
             }),
           ),
-          const Stack(
-            children: <Widget>[
-              Center(
-                child: LoadingWidget(),
-              ),
-            ],
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Stack(
+              children: <Widget>[
+                Center(
+                  child: LoadingWidget(),
+                ),
+              ],
+            ),
           )
 
         ],

@@ -64,14 +64,12 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                     },
                   ),
                   Obx(
-                    () => controller.isLoading.value
-                        ? const CircularProgressIndicator()
-                        : IconButton(
-                            icon: const Icon(Icons.refresh),
-                            onPressed: controller.isButtonEnabled.value
-                                ? () => controller.refresh()
-                                : null,
-                          ),
+                    () => IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: controller.isButtonEnabled.value
+                          ? () => controller.refresh()
+                          : null,
+                    ),
                   ),
                 ],
               ),
@@ -98,7 +96,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 leading: const Icon(Icons.home),
                 title: Text(LocaleKeys.customer_page_home.tr),
                 onTap: () {
-                  Navigator.pop(context);
+                  Get.offAllNamed(RouteNames.customerHomePageFlower);
                 },
               ),
               ListTile(
@@ -137,7 +135,7 @@ class CustomerHomePageFlower extends GetView<CustomerHomePageFlowerController> {
                 ]),
                 title: Text(LocaleKeys.customer_page_cart.tr),
                 onTap: () {
-                  Get.toNamed(RouteNames.customerHomePageFlower +
+                  Get.offAllNamed(RouteNames.customerHomePageFlower +
                       RouteNames.customerCartPage);
                 },
               ),

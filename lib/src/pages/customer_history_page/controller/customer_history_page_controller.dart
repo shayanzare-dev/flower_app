@@ -8,31 +8,26 @@ import '../repositories/customer_history_page_repository.dart';
 class CustomerHistoryPageController extends GetxController {
   final CustomerHistoryPageRepository _repository =
       CustomerHistoryPageRepository();
-  final SharedPreferences _prefs = Get.find<SharedPreferences>();
+  SharedPreferences _prefs = Get.find<SharedPreferences>();
   String customerUserEmail = '';
   RxList<BoughtFlowersViewModel> boughtFlowerList = RxList();
   RxList<CartOrderViewModel> boughtOrderList = RxList();
 
-  var isLoading = false.obs;
+  RxBool isLoadingHistoryPage = false.obs;
 
   void showLoading() {
-    isLoading.value = true;
+    isLoadingHistoryPage.value = true;
   }
 
   void hideLoading() {
-    isLoading.value = false;
+    isLoadingHistoryPage.value = false;
   }
 
   @override
   void onInit() {
-    Future.delayed(const Duration(seconds: 2), () {
-      getOrderList();
-    });
-    Future.delayed(const Duration(seconds: 1), () {
-      userEmail().then((userEmail) {
-        customerUserEmail = userEmail;
-      });
-    });
+    _prefs = Get.find<SharedPreferences>();
+    customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
+    getOrderList();
     super.onInit();
   }
 

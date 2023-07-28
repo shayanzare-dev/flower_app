@@ -12,14 +12,14 @@ class VendorHistoryPageController extends GetxController {
   final VendorHistoryPageRepository _repository = VendorHistoryPageRepository();
   String vendorUserEmail = '';
 
-  var isLoading = false.obs;
+  RxBool isLoadingHistoryPage = false.obs;
 
   void showLoading() {
-    isLoading.value = true;
+    isLoadingHistoryPage.value = true;
   }
 
   void hideLoading() {
-    isLoading.value = false;
+    isLoadingHistoryPage.value = false;
   }
 
   @override

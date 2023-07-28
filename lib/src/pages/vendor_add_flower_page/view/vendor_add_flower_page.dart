@@ -5,7 +5,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../generated/locales.g.dart';
-import '../view/widget/loading_widget.dart';
+
 import '../controller/vendor_add_flower_page_controller.dart';
 import '../view/widget/flower_chip_list.dart';
 
@@ -32,18 +32,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
               _inputFlowerCount(),
               _colorFlower(context),
               const FlowerChipList(),
-              _myButton(context),
-              SizedBox(
-                height: 30,
-                child: const Stack(
-                  children: <Widget>[
-                    Center(
-                      child: LoadingWidget(),
-                    ),
-                  ],
-                ),
-              )
-
+              _myAddFlowerBtn(context),
             ],
           ),
         ),
@@ -140,45 +129,48 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Obx(
-                () => Stack(
-              children: [
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.memory(
-                      controller.imageBytes1.value,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () => controller.getImage(
-                            imageSource: ImageSource.gallery,
-                          ),
-                          icon: const Icon(Icons.photo_library),
-                          color: Colors.white,
+                () =>
+                Stack(
+                  children: [
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.memory(
+                          controller.imageBytes1.value,
+                          fit: BoxFit.cover,
                         ),
-                        const SizedBox(height: 16),
-                        IconButton(
-                          onPressed: () => controller.getImage(
-                            imageSource: ImageSource.camera,
-                          ),
-                          icon: const Icon(Icons.camera_alt),
-                          color: Colors.white,
-                        ),
-                        const SizedBox(height: 16),
-                        Obx(() => _removeImage()),
-                      ],
+                      ),
                     ),
-                  ),
+                    Positioned.fill(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () =>
+                                  controller.getImage(
+                                    imageSource: ImageSource.gallery,
+                                  ),
+                              icon: const Icon(Icons.photo_library),
+                              color: Colors.white,
+                            ),
+                            const SizedBox(height: 16),
+                            IconButton(
+                              onPressed: () =>
+                                  controller.getImage(
+                                    imageSource: ImageSource.camera,
+                                  ),
+                              icon: const Icon(Icons.camera_alt),
+                              color: Colors.white,
+                            ),
+                            const SizedBox(height: 16),
+                            Obx(() => _removeImage()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
           ),
         ),
       ),
@@ -245,28 +237,29 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
                     ),
                   ),
                   Obx(
-                        () => PositionedDirectional(
-                      bottom: 20,
-                      start: 15,
-                      child: Material(
-                        color: controller.selectedColor.value,
-                        borderRadius: BorderRadius.circular(100),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(100),
-                          onTap: () {
-                            // controller.getImage(ImageSource.gallery);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                border:
-                                Border.all(width: 4, color: Colors.white)),
-                            width: 40,
-                            height: 40,
+                        () =>
+                        PositionedDirectional(
+                          bottom: 20,
+                          start: 15,
+                          child: Material(
+                            color: controller.selectedColor.value,
+                            borderRadius: BorderRadius.circular(100),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(100),
+                              onTap: () {
+                                // controller.getImage(ImageSource.gallery);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border:
+                                    Border.all(width: 4, color: Colors.white)),
+                                width: 40,
+                                height: 40,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -389,30 +382,44 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
     );
   }
 
-  Widget _myButton(BuildContext context) {
+  Widget _myAddFlowerBtn(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child:Obx(() =>  _addFlowerBtnLoading()),
+    );
+  }
+
+  Widget _addFlowerBtnLoading() {
+    if (controller.isLoadingAddFlowerBtn.value) {
+      return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              controller.imageBytes1.value = controller.imageBytes2.value;
-              controller.onSubmitAddFlower();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-            ),
-            child: Text(
-              LocaleKeys.vendor_home_add_flower_add_btn.tr,
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
+          CircularProgressIndicator(),
+        ],
+      );
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            controller.imageBytes1.value = controller.imageBytes2.value;
+            controller.onSubmitAddFlower();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+          ),
+          child: Text(
+            LocaleKeys.vendor_home_add_flower_add_btn.tr,
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
+
+

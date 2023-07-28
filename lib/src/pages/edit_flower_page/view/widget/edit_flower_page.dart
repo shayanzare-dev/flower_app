@@ -30,7 +30,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
             _inputFlowerCount(),
             _colorFlower(context),
             const FlowerChipList(),
-            _myButton(context),
+            _myEditFlowerBtn(context),
           ],
         ),
       ),
@@ -368,38 +368,51 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
     );
   }
 
-  Widget _myButton(BuildContext context) {
+  Widget _myEditFlowerBtn(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          InkWell(
-            child: Container(
-                decoration: BoxDecoration(
-                    color: const Color(0xff159947),
-                    borderRadius: BorderRadius.circular(20)),
-                height: 45,
-                width: 100,
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Edit Flower',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                )),
-            onTap: () {
-               controller.editFlower();
-            },
-          ),
-        ],
-      ),
+      child: Obx(() =>  _editFlowerBtnLoading()),
     );
   }
+
+  Widget _editFlowerBtnLoading(){
+    if(controller.isLoadingEditFlowerBtn.value){
+      return const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+        ],
+      );
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          child: Container(
+              decoration: BoxDecoration(
+                  color: const Color(0xff159947),
+                  borderRadius: BorderRadius.circular(20)),
+              height: 45,
+              width: 100,
+              child: const Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Edit Flower',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                ],
+              )),
+          onTap: () {
+            controller.editFlower();
+          },
+        ),
+      ],
+    );
+  }
+
 }
 
 

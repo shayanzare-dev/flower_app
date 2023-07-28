@@ -25,14 +25,14 @@ class RegisterPageFlowerController extends GetxController {
   String passCheckConfirm = '';
   String passCheck = '';
   RxInt selectedTypeUser = 1.obs;
-  var isLoading = false.obs;
+  RxBool isLoadingRegisterBtn = false.obs;
 
   void showLoading() {
-    isLoading.value = true;
+    isLoadingRegisterBtn.value = true;
   }
 
   void hideLoading() {
-    isLoading.value = false;
+    isLoadingRegisterBtn.value = false;
   }
 
   void selectedTypeUserValue(int value) {
@@ -109,12 +109,9 @@ class RegisterPageFlowerController extends GetxController {
                     'Your registration is not successfully code error:$error'),
                 (String addRecord) {
               hideLoading();
-              Get.snackbar('Register', 'Your registration is successfully');
-
               List<String> loginEmailPass = [];
               loginEmailPass.add(emailController.text);
               loginEmailPass.add(passWordConfirmController.text);
-              //Get.back(result: loginEmailPass );
               Get.offAndToNamed(RouteNames.loginPageFlower,
                   arguments: loginEmailPass);
               registerFormKey.currentState?.reset();
@@ -151,11 +148,13 @@ class RegisterPageFlowerController extends GetxController {
                 (String error) => Get.snackbar('Register',
                     'Your registration is not successfully code error:$error'),
                 (String addRecord) {
-              Get.snackbar('Register', 'Your registration is successfully');
               hideLoading();
+              List<String> loginEmailPass = [];
+              loginEmailPass.add(emailController.text);
+              loginEmailPass.add(passWordConfirmController.text);
+              Get.offAndToNamed(RouteNames.loginPageFlower,
+                  arguments: loginEmailPass);
               registerFormKey.currentState?.reset();
-              Get.offAndToNamed(
-                  RouteNames.loadingPageFlower + RouteNames.loginPageFlower);
             });
             return;
           });
@@ -166,15 +165,15 @@ class RegisterPageFlowerController extends GetxController {
   }
 
   String? validateFirstName(String value) {
-    if (value.isEmpty || value.length < 3) {
-      return "first name must be of 3 characters";
+    if (value.isEmpty || value.length < 3 || value.length > 15) {
+      return "first name must be between 3 and 15 characters";
     }
     return null;
   }
 
   String? validateLastName(String value) {
-    if (value.isEmpty || value.length < 3) {
-      return "last name must be of 3 characters";
+    if (value.isEmpty || value.length < 3|| value.length > 20) {
+      return "last name must be between 3 and 20 characters";
     }
     return null;
   }
@@ -182,14 +181,14 @@ class RegisterPageFlowerController extends GetxController {
   String? validateEmail(String value) {
     RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     bool isValid = emailRegex.hasMatch(value);
-    if (value.isEmpty || value.length < 5 || !isValid) {
+    if (value.isEmpty || value.length < 5 || !isValid || value.length > 20) {
       return "email must be valid";
     }
     return null;
   }
 
   String? validatePassword(String value) {
-    if (value.isEmpty || value.length < 6) {
+    if (value.isEmpty || value.length < 6 || value.length > 15) {
       return "Password must be of 6 characters";
     }
     return null;
@@ -199,7 +198,7 @@ class RegisterPageFlowerController extends GetxController {
     if (passCheck != passCheckConfirm) {
       return "Passwords is not  match";
     }
-    if (value.isEmpty || value.length < 6) {
+    if (value.isEmpty || value.length < 6 || value.length > 15) {
       return "Password must be of 6 characters";
     }
     return null;

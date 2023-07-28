@@ -88,8 +88,8 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                     Row(
                       children: [
                         Text(LocaleKeys.customer_home_item_description.tr,
-                            style:
-                                const TextStyle(color: Colors.white, fontSize: 16)),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16)),
                         Expanded(
                           child: Text(
                             flowerItem.shortDescription,
@@ -180,9 +180,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                         ]),
                         Row(
                           children: [
-                            AddToCartBtn(
-                              flowerItem: flowerItem,
-                            ),
+                            Obx(() =>  _addToCartBtnLoading(flowerItem: flowerItem)),
                           ],
                         ),
                       ],
@@ -267,111 +265,13 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
               ),
             ),
           ),
-
-          /*DecoratedBox(
-              decoration: const BoxDecoration(
-                color: Color(0xff9ae4ec),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      ),
-                    ),
-                    constraints: const BoxConstraints.expand(
-                      height: 200,
-                    ),
-                    child: StringToImagePost(base64String: flowerItem.image),
-                  ),
-                  Row(
-                    children: [
-                      const Text('Flower Name : '),
-                      Text(flowerItem.name),
-                    ],
-                  ),
-                  const Row(
-                    children: [
-                      Text('Flower Description '),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(flowerItem.shortDescription),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('Flower Color :'),
-                      Container(
-                        height: 20,
-                        width: 20,
-                        color: Color(flowerItem.color),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('Flower Price :'),
-                      Text(flowerItem.price.toString()),
-                    ],
-                  ),
-                  Row(
-                    children: [
-
-                      Text('Count Flower: ${flowerItem.countInStock}'),
-
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('Vendor FullName : '),
-                      Text(flowerItem.vendorUser.firstName +
-                          flowerItem.vendorUser.lastName),
-                      SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: StringToImageProfile(
-                              base64String: flowerItem.vendorUser.image))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      _flowerChip(),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () {
-                             controller.editBuyCountFlowerMinus(flowerItem);
-                            },
-                          ),
-                          Obx(() => Text(
-                              'Count Buy Flower: ${controller.flowerBuyCount[flowerItem.id]}')),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {
-                                controller.editBuyCountFlowerPlus(flowerItem);
-                            },
-                          ),
-                        ],
-                      ),
-                      _myButtonAddToCart(),
-                    ],
-                  ),
-                ],
-              ),
-            )*/
         ),
       );
+
+  Widget _addToCartBtnLoading({required FlowerListViewModel flowerItem}) {
+    if (controller.isLoadingAddToCartBtn[flowerItem.id]!.value) {
+      return const CircularProgressIndicator();
+    }
+    return AddToCartBtn(flowerItem: flowerItem);
+  }
 }

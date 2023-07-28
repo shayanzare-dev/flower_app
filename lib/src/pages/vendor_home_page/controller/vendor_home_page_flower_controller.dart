@@ -56,11 +56,11 @@ class VendorHomePageFlowerController extends GetxController {
   Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
   RxList<BoughtFlowersViewModel> boughtFlowerList = RxList();
   RxList<CartOrderViewModel> boughtOrderList = RxList();
-
   RxMap<int,RxBool> isLoadingCountMinus = RxMap<int,RxBool>();
   RxMap<int,RxBool> isLoadingCountPlus = RxMap<int,RxBool>();
+  RxMap<int,RxBool> isLoadingDeleteBtn = RxMap<int,RxBool>();
+
   RxBool isLoadingFlowerList = false.obs;
-  RxBool isLoadingDeleteBtn = false.obs;
   RxBool isButtonEnabled = true.obs;
 
 
@@ -69,7 +69,6 @@ class VendorHomePageFlowerController extends GetxController {
   Future<void> onInit()  async {
     _prefs = Get.find<SharedPreferences>();
     vendorUserEmail =  _prefs.getString('userEmail') ?? 'test@gmail.com';
-
     getCategoryList();
     getProfileUser();
     getFlowerList();
@@ -96,7 +95,6 @@ class VendorHomePageFlowerController extends GetxController {
     getFlowerList();
     getOrderListVendorHistory();
   }
-
 
 
 
@@ -186,7 +184,7 @@ class VendorHomePageFlowerController extends GetxController {
 
   Future<void> deleteFlowerItem(
       {required FlowerListViewModel flowerItem}) async {
-    isLoadingDeleteBtn= true.obs;
+    isLoadingDeleteBtn[flowerItem.id] = true.obs;
     flowerList.refresh();
     final result = await _repository.deleteFlowerItem(flowerItem.id);
     if (result.right == 'success') {
@@ -194,7 +192,7 @@ class VendorHomePageFlowerController extends GetxController {
     } else {
       Get.snackbar('error', result.left);
     }
-    isLoadingDeleteBtn= false.obs;
+    isLoadingDeleteBtn[flowerItem.id]= false.obs;
   }
 
   Future<void> deleteColorFlowerItem(
@@ -260,6 +258,7 @@ class VendorHomePageFlowerController extends GetxController {
       for (final item in result.right) {
         isLoadingCountMinus[item.id]= false.obs;
         isLoadingCountPlus[item.id]= false.obs;
+        isLoadingDeleteBtn[item.id]= false.obs;
         String inputString = item.price;
         int intValue = int.parse(inputString.replaceAll(',', ''));
         priceList.add(intValue);

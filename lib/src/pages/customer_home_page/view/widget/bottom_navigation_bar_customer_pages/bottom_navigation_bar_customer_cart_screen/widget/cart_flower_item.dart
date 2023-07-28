@@ -58,7 +58,7 @@ class CartFlowerItem extends GetView<CustomerHomePageFlowerController> {
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold)),
                   Obx(
-                    () => controller.isLoading.value
+                    () => controller.isLoadingCustomerFlowerList.value
                         ? const CircularProgressIndicator()
                         : IconButton(
                             icon:

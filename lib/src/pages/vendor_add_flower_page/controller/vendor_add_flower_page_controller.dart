@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../flower_app.dart';
+import '../../vendor_home_page/controller/vendor_home_page_flower_controller.dart';
 import '../../vendor_home_page/models/vendor_view_model.dart';
 import '../models/add_category_dto.dart';
 import '../models/add_color_dto.dart';
@@ -36,12 +37,12 @@ class VendorAddFlowerPageController extends GetxController {
   Color selectedColors = const Color(0xff04927c);
   String vendorUserEmail = '';
 
-  var isLoading = false.obs;
+  RxBool isLoadingAddFlowerBtn = false.obs;
   void showLoading() {
-    isLoading.value = true;
+    isLoadingAddFlowerBtn.value = true;
   }
   void hideLoading() {
-    isLoading.value = false;
+    isLoadingAddFlowerBtn.value = false;
   }
 
   @override
@@ -102,17 +103,11 @@ class VendorAddFlowerPageController extends GetxController {
       categoryTextController.clear();
       if (categoryList.isEmpty) {
         addCategoryList();
-        Future.delayed(const Duration(seconds: 1), () {
-          getCategoryList();
-        });
       } else {
         if (text.isNotEmpty && !categoryList.first.category.contains(text)) {
           categoryList.first.category.add(text);
         }
         editCategoryList();
-        Future.delayed(const Duration(seconds: 1), () {
-          getCategoryList();
-        });
       }
     }
   }
@@ -125,7 +120,7 @@ class VendorAddFlowerPageController extends GetxController {
     if (result.isLeft) {
       Get.snackbar('', 'user not found');
     } else if (result.isRight) {
-      Get.snackbar('add category', 'success');
+      getCategoryList();
     }
   }
 
@@ -137,7 +132,7 @@ class VendorAddFlowerPageController extends GetxController {
     if (result.isLeft) {
       Get.snackbar('', 'user not found');
     } else if (result.isRight) {
-      Get.snackbar('edit category', 'success');
+      getCategoryList();
     }
   }
 
@@ -221,16 +216,15 @@ class VendorAddFlowerPageController extends GetxController {
       return Get.snackbar('Register',
           'Your registration is not successfully code error:$error');
     }, (FlowerListViewModel addRecord) async {
-      Get.snackbar('Add Flower', 'Your Add Flower is successfully');
+
       addColorList(color: selectedColors.value);
       categoryChips.clear();
       addFlowerFormKey.currentState?.reset();
       defaultImage();
-      refresh();
       Get.offAndToNamed(RouteNames.vendorHomePageFlower);
       hideLoading();
-    });
 
+    });
     return;
   }
 
@@ -238,9 +232,8 @@ class VendorAddFlowerPageController extends GetxController {
     AddColorDto dto = AddColorDto(color: color );
     final result = await _repository.addColorList(dto);
     if (result.isLeft) {
-      Get.snackbar('', 'user not found');
+      Get.snackbar('add color List', 'not successfully');
     } else if (result.isRight) {
-      Get.snackbar('add category', 'success');
     }
   }
 
@@ -276,7 +269,5 @@ class VendorAddFlowerPageController extends GetxController {
     return null;
   }
 
-  void goToHomeVendorPage() {
-    Get.offAndToNamed(RouteNames.vendorHomePageFlower);
-  }
+
 }

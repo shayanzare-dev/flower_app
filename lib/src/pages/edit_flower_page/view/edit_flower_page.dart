@@ -9,6 +9,6 @@ class EditFlowerPage extends StatelessWidget {
       appBar: AppBar(
           title: const Text('Edit Flower page'),
           backgroundColor: const Color(0xff04927c)),
-      body:  EditFlowerPageForm(),
+      body:  const EditFlowerPageForm(),
     );
 }

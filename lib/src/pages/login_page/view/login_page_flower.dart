@@ -1,4 +1,3 @@
-import 'package:flower_app/src/pages/login_page/view/widget/loading_widget.dart';
 import 'package:flower_app/src/pages/login_page/view/widget/my_custom_login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -67,6 +66,5 @@ class LoginPageFlower extends GetView<LoginPageFlowerController> {
       ),
     ),
         body: const MyCustomLogin(),
-        bottomNavigationBar: const LoadingWidget(),
       );
 }

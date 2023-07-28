@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../view/widget/loading_widget.dart';
 import '../controller/vendor_history_page_controller.dart';
 import 'widget/vendor_bought_list.dart';
 
@@ -26,6 +25,9 @@ class VendorHistoryPage extends GetView<VendorHistoryPageController> {
 
   }
   Widget _boughtFlowerList() {
+    if (controller.isLoadingHistoryPage.value) {
+      return const Center(child: CircularProgressIndicator());
+    } else
     if (controller.boughtFlowerList.isEmpty) {
       return const Center(
         child: Text('List Is Empty',

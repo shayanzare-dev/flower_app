@@ -1,4 +1,3 @@
-import 'package:flower_app/src/pages/register_page/view/widget/loading_widget.dart';
 import 'package:flower_app/src/pages/register_page/view/widget/my_custom_register.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +12,6 @@ class RegisterPageFlower extends StatelessWidget {
             title: Text(LocaleKeys.register_title.tr),
             backgroundColor: const Color(0xff04927c)),
         body: const MyCustomRegister(),
-        bottomNavigationBar: const LoadingWidget(),
+
       );
 }

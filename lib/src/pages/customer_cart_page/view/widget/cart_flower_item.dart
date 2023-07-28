@@ -44,6 +44,18 @@ class CartFlowerItem extends GetView<CustomerCartPageController> {
       );
 
   Widget _myButtonPurchase() {
+    return Obx(() =>  _purchaseBtnLoading());
+  }
+
+  Widget _purchaseBtnLoading(){
+    if(controller.isLoadingCartPurchaseBtn.value){
+      return const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+        ],
+      );
+    }
     return Row(
       children: [
         InkWell(
@@ -71,4 +83,6 @@ class CartFlowerItem extends GetView<CustomerCartPageController> {
       ],
     );
   }
+
+
 }

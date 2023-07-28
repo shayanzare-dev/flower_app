@@ -18,6 +18,9 @@ class CustomerHomeScreen extends GetView<CustomerHomePageFlowerController> {
   }
 
   Widget _customerFlowerList() {
+    if (controller.isLoadingCustomerFlowerList.value) {
+      return const Center(child: CircularProgressIndicator());
+    } else
     if (controller.customerFlowerList.isEmpty) {
       return const Center(
         child: Text('List Is Empty',

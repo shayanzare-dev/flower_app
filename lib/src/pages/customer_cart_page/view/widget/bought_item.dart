@@ -4,7 +4,6 @@ import 'package:flower_app/src/pages/customer_home_page/models/bought_flowers_vi
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 import '../../controller/customer_cart_page_controller.dart';
 import 'delete_alert_dialog.dart';
 
@@ -186,10 +185,8 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                           ]),
                           Row(
                             children: [
-                              DeleteAlertDialog(
-                                flowerItem: boughtFlower.flowerListViewModel,
-                                boughtFlowers: boughtFlower,
-                              ),
+                              Obx(() =>
+                                  _deleteCartBtn(boughtFlowers: boughtFlower)),
                             ],
                           ),
                         ],
@@ -218,16 +215,8 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                           ]),
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  controller
-                                      .editFlowerCountBuyCartMinus( boughtFlowers: boughtFlower);
-                                },
-                                icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              Obx(() => _editFlowerCountBuyCartMinusLoading(
+                                  boughtFlowers: boughtFlower)),
                               Text(
                                 'Count Buy: ${boughtFlower.buyCount}',
                                 style: const TextStyle(
@@ -236,15 +225,9 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  controller
-                                      .editFlowerCountBuyCartPlus(boughtFlowers: boughtFlower);
-                                },
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                ),
+                              Obx(
+                                () => _editFlowerCountBuyCartPlusLoading(
+                                    boughtFlowers: boughtFlower),
                               ),
                             ],
                           ),
@@ -254,71 +237,51 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                   ),
                 ),
               ),
-            )
-
-            /*Column(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-              ),
-              constraints: const BoxConstraints.expand(
-                height: 100,
-              ),
-              child: StringToImagePost(base64String: boughtFlower.flowerListViewModel.image),
-            ),
-            Row(
-              children: [
-                Text('Flower Name : '),
-                Text(boughtFlower.flowerListViewModel.name),
-              ],
-            ),
-            Row(
-              children: [
-                Text('Flower buy count : '),
-                Text(boughtFlower.flowerListViewModel.countInStock.toString()),
-              ],
-            ),
-            Row(
-              children: [
-                Text('Flower buy count : '),
-                Text(boughtFlower.buyCount.toString()),
-              ],
-            ),
-            Row(
-              children: [
-                Text('vendor Flower name : '),
-                Text(boughtFlower.flowerListViewModel.vendorUser.firstName),
-                Text(boughtFlower.flowerListViewModel.vendorUser.lastName),
-              ],
-            ),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        controller.editFlowerCountItemMinus(boughtFlower);
-                      },
-                    ),
-                    Text('Flower Buy count: ${boughtFlower.buyCount}'),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        controller.editFlowerCountItemPlus(boughtFlower);
-                      },
-                    ),
-                  ],
-                ),
-                DeleteAlertDialog(flowerItem: boughtFlower.flowerListViewModel, boughtFlowers: boughtFlower,),
-              ],
-            ),
-          ],
-        )*/
-            ),
+            )),
       );
+
+  Widget _editFlowerCountBuyCartPlusLoading(
+      {required BoughtFlowersViewModel boughtFlowers}) {
+    if (controller
+        .isLoadingPlusCart[boughtFlowers.flowerListViewModel.id]!.value) {
+      return const CircularProgressIndicator();
+    }
+    return IconButton(
+      onPressed: () {
+        controller.editFlowerCountBuyCartPlus(boughtFlowers: boughtFlower);
+      },
+      icon: const Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _editFlowerCountBuyCartMinusLoading(
+      {required BoughtFlowersViewModel boughtFlowers}) {
+    if (controller
+        .isLoadingMinusCart[boughtFlowers.flowerListViewModel.id]!.value) {
+      return const CircularProgressIndicator();
+    }
+    return IconButton(
+      onPressed: () {
+        controller.editFlowerCountBuyCartMinus(boughtFlowers: boughtFlower);
+      },
+      icon: const Icon(
+        Icons.remove,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _deleteCartBtn({required BoughtFlowersViewModel boughtFlowers}) {
+    if (controller
+        .isLoadingDeleteBtn[boughtFlowers.flowerListViewModel.id]!.value) {
+      return const CircularProgressIndicator();
+    }
+    return DeleteAlertDialog(
+      flowerItem: boughtFlower.flowerListViewModel,
+      boughtFlowers: boughtFlower,
+    );
+  }
 }

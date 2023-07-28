@@ -402,33 +402,45 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
   Widget _myButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Obx(() =>  _onSubmitRegister()),
+    );
+  }
+
+  Widget _onSubmitRegister(){
+    if(controller.isLoadingRegisterBtn.value){
+      return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          InkWell(
-            child: Container(
-                decoration: BoxDecoration(
-                    color: const Color(0xff159947),
-                    borderRadius: BorderRadius.circular(20)),
-                height: 45,
-                width: 100,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(LocaleKeys.register_register_button.tr,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                )),
-            onTap: () {
-              controller.onSubmitRegister();
-            },
-          ),
+          CircularProgressIndicator(),
         ],
-      ),
+      );
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          child: Container(
+              decoration: BoxDecoration(
+                  color: const Color(0xff159947),
+                  borderRadius: BorderRadius.circular(20)),
+              height: 45,
+              width: 100,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(LocaleKeys.register_register_button.tr,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                ],
+              )),
+          onTap: () {
+            controller.onSubmitRegister();
+          },
+        ),
+      ],
     );
   }
 }

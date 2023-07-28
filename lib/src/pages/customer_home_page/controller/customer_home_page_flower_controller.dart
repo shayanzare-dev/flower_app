@@ -45,16 +45,18 @@ class CustomerHomePageFlowerController extends GetxController {
   final RxList<GridItem> colorItems = RxList<GridItem>([]);
   Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
   int totalPrice = 0;
-  RxBool isLoading = false.obs;
+  RxBool isLoadingCustomerFlowerList = false.obs;
+  RxMap<int,RxBool> isLoadingAddToCartBtn = RxMap<int,RxBool>();
+
   RxBool isLoadingPlusCart = false.obs;
   RxBool isLoadingMinusCart = false.obs;
 
   void showLoading() {
-    isLoading.value = true;
+    isLoadingCustomerFlowerList.value = true;
   }
 
   void hideLoading() {
-    isLoading.value = false;
+    isLoadingCustomerFlowerList.value = false;
   }
 
   @override
@@ -64,23 +66,15 @@ class CustomerHomePageFlowerController extends GetxController {
     getCustomerUser();
     getFlowerList();
     getOrderList();
-    getOrderCart();
-
     super.onInit();
   }
 
   @override
   Future<void> refresh() async {
-    disableButton();
     customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
-    Future.delayed(const Duration(seconds: 1), () {
       getCustomerUser();
       getFlowerList();
       getOrderList();
-    });
-    Future.delayed(const Duration(seconds: 2), () {
-      getOrderCart();
-    });
   }
 
   //Home Screen
@@ -97,7 +91,6 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   Future<void> getOrderCart() async {
-    showLoading();
     cartOrderList.clear();
     boughtFlowerListCart.clear();
     cartCount.value = 0;
@@ -114,7 +107,8 @@ class CustomerHomePageFlowerController extends GetxController {
         }
       }
     }
-    hideLoading();
+    isButtonEnabled.value = true;
+    isLoadingCustomerFlowerList.value = false;
   }
 
   List<int> priceList = [];
@@ -127,7 +121,8 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   Future<void> getFlowerList() async {
-    showLoading();
+    isLoadingCustomerFlowerList.value = true;
+    isButtonEnabled.value = false;
     colorItems.clear();
     dropDownButtonList.clear();
     customerFlowerList.clear();
@@ -140,6 +135,7 @@ class CustomerHomePageFlowerController extends GetxController {
       customerFlowerList.addAll(result.right);
       for (final item in result.right) {
         flowerBuyCount[item.id] = 0;
+        isLoadingAddToCartBtn[item.id] = false.obs;
         colorItems.add(GridItem(color: Color(item.color)));
         String inputString = item.price;
         int intValue = int.parse(inputString.replaceAll(',', ''));
@@ -150,11 +146,11 @@ class CustomerHomePageFlowerController extends GetxController {
           }
         }
       }
+      getOrderCart();
     }
     if (customerFlowerList.isNotEmpty) {
       maxPrices();
     }
-    hideLoading();
   }
 
   Future<void> getCustomerUser() async {
@@ -176,11 +172,13 @@ class CustomerHomePageFlowerController extends GetxController {
   }
 
   void addFlowerToBoughtFlowers({required FlowerListViewModel flowerItem}) {
+    isLoadingAddToCartBtn[flowerItem.id]!.value = true;
+    customerFlowerList.refresh();
     int? buyCount = flowerBuyCount[flowerItem.id];
     if (buyCount == 0) {
       Get.snackbar('Add Flower', 'can not add to cart');
+      isLoadingAddToCartBtn[flowerItem.id]!.value = false;
     } else {
-      showLoading();
       DateTime dateTimeNow = DateTime.now();
       DateFormat dateFormat = DateFormat('yyyy-MM-dd');
       String dateTime = dateFormat.format(dateTimeNow);
@@ -207,62 +205,53 @@ class CustomerHomePageFlowerController extends GetxController {
         boughtFlowers: boughtFlowerListCart,
         id: cartOrderList.isEmpty ? 1 : cartOrderList[0].id,
       );
-
       if (cartOrderList.isEmpty) {
         cartOrderList.add(cartOrder);
-        Get.snackbar('Add Flower', 'add to cart');
-        addCartOrder();
+        addCartOrder(flowerItem: flowerItem);
         boughtFlowerListCart.clear();
         cartOrderList.clear();
-        refresh();
-        hideLoading();
       } else {
         cartOrderList.clear();
         cartOrderList.add(cartOrder);
-        Get.snackbar('Add Flower', 'add to cart');
-        updateCartOrder(cartId: cartOrderList[0].id);
-        refresh();
+        updateCartOrder(cartId: cartOrderList[0].id, flowerItem: flowerItem);
         incrementCartCount();
-        hideLoading();
       }
     }
   }
 
-  Future<void> addCartOrder() async {
-    showLoading();
+  Future<void> addCartOrder({required FlowerListViewModel flowerItem}) async {
     final AddCartOrderDto dto = AddCartOrderDto(
         user: customerUser.first,
         dateTime: cartOrderList[0].dateTime,
         totalPrice: cartOrderList[0].totalPrice,
         boughtFlowers: boughtFlowerListCart);
-
     final Either<String, String> resultOrException =
         (await _repository.addCartOrder(dto));
     resultOrException.fold(
         (String error) => Get.snackbar('Register',
             'Your registration is not successfully code error:$error'),
         (String addRecord) async {
-      Get.snackbar('Add cart', 'Your Add order is successfully');
+          isLoadingAddToCartBtn[flowerItem.id]!.value = false;
+          getFlowerList();
     });
   }
 
-  Future<void> updateCartOrder({required int cartId}) async {
+  Future<void> updateCartOrder({required int cartId,required FlowerListViewModel flowerItem}) async {
     final EditCartOrderDto dto = EditCartOrderDto(
         user: customerUser.first,
         dateTime: cartOrderList[0].dateTime,
         totalPrice: cartOrderList[0].totalPrice,
         boughtFlowers: boughtFlowerListCart,
         id: cartOrderList[0].id);
-
     final Either<String, String> resultOrException =
         (await _repository.updateCartOrder(dto, cartId));
     resultOrException.fold(
         (String error) => Get.snackbar(
             'Register', 'Your update is not successfully code error:$error'),
         (String addRecord) async {
-      Get.snackbar('Update cart', 'Your Update Cart is successfully');
+          isLoadingAddToCartBtn[flowerItem.id]!.value = false;
+          getFlowerList();
     });
-    hideLoading();
   }
 
   void deleteFlowerItemForCartOrder({
@@ -275,7 +264,7 @@ class CustomerHomePageFlowerController extends GetxController {
     decrementCartCount();
     cartOrderList[0].totalPrice = cartOrderList[0].totalPrice - sumBuyPrice;
     totalPrice = totalPrice - sumBuyPrice;
-    updateCartOrder(cartId: cartOrderList[0].id);
+    updateCartOrder(cartId: cartOrderList[0].id, flowerItem: flowerItem);
     refresh();
     cartOrderList.refresh();
   }
@@ -284,7 +273,7 @@ class CustomerHomePageFlowerController extends GetxController {
 
   void disableButton() {
     isButtonEnabled.value = false;
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       isButtonEnabled.value = true;
     });
   }
@@ -307,7 +296,7 @@ class CustomerHomePageFlowerController extends GetxController {
           cartOrderList[0].totalPrice + intFlowerItemPrice;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
-      updateCartOrder(cartId: cartOrderList[0].id);
+      updateCartOrder(cartId: cartOrderList[0].id, flowerItem: boughtFlowerListCart[index].flowerListViewModel);
       isLoadingPlusCart.value = false;
       refresh();
     } else {
@@ -333,7 +322,7 @@ class CustomerHomePageFlowerController extends GetxController {
           intFlowerItemPrice;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
-      updateCartOrder(cartId: cartOrderList[0].id);
+      updateCartOrder(cartId: cartOrderList[0].id, flowerItem: boughtFlowerListCart[index].flowerListViewModel);
       isLoadingMinusCart.value = false;
       refresh();
     } else {

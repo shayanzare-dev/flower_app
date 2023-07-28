@@ -26,7 +26,7 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
               children: [
                 Text(LocaleKeys.vendor_page_refresh.tr),
                 Obx(
-                  () =>  IconButton(
+                  () => IconButton(
                     icon: const Icon(Icons.refresh),
                     onPressed: controller.isButtonEnabled.value
                         ? () => controller.refresh()
@@ -58,15 +58,14 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
               leading: const Icon(Icons.home),
               title: Text(LocaleKeys.vendor_page_home.tr),
               onTap: () {
-                Get.toNamed(RouteNames.vendorHomePageFlower);
-                Navigator.pop(context);
+                Get.offAllNamed(RouteNames.vendorHomePageFlower);
               },
             ),
             ListTile(
               leading: const Icon(Icons.add),
               title: Text(LocaleKeys.vendor_page_add_flower.tr),
               onTap: () {
-                Get.toNamed(
+                Get.offAllNamed(
                     RouteNames.vendorHomePageFlower + RouteNames.addFlowerPage);
               },
             ),
@@ -131,7 +130,7 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
           ],
         ),
       ),
-      body: HomeScreen()
+      body: const HomeScreen()
 
       /* Obx(() => VendorHomePageFlowerController.widgetOptionsNavBar
             .elementAt(controller.selectedIndexNavBar.value)),

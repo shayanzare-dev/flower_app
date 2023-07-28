@@ -25,14 +25,14 @@ class LoginPageFlowerController extends GetxController {
     super.onInit();
   }
 
-  var isLoading = false.obs;
+  RxBool isLoadingLoginBtn = false.obs;
 
   void showLoading() {
-    isLoading.value = true;
+    isLoadingLoginBtn.value = true;
   }
 
   void hideLoading() {
-    isLoading.value = false;
+    isLoadingLoginBtn.value = false;
   }
 
   void toggleRememberMe(bool value) {

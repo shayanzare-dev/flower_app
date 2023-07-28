@@ -125,7 +125,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
                           Row(
                             children: [
                               Obx(
-                                () => _deleteAlertDialog(),
+                                () => _deleteAlertDialog(flowerItem: flowerItem),
                               ),
                             ],
                           ),
@@ -221,8 +221,8 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
             )),
       );
 
-  Widget _deleteAlertDialog() {
-    if (controller.isLoadingDeleteBtn.value) {
+  Widget _deleteAlertDialog({required FlowerListViewModel flowerItem}) {
+    if (controller.isLoadingDeleteBtn[flowerItem.id]!.value) {
       return const CircularProgressIndicator();
     }
     return DeleteAlertDialog(flowerItem: flowerItem);

@@ -9,7 +9,7 @@ class LoadingWidget extends GetView<CustomerHomePageFlowerController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return controller.isLoading.value
+      return controller.isLoadingCustomerFlowerList.value
           ? Container(
               color: Colors.green.withOpacity(0.5),
               child: const Center(
