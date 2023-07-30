@@ -15,43 +15,40 @@ class VendorSearchPage extends GetView<VendorSearchPageController> {
       appBar: AppBar(
           title: const Text('Search Flower page'),
           backgroundColor: const Color(0xff04927c)),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: controller.searchController,
-              onChanged: (value) {
-                controller.getSearchFlowerList( search: value);
-              },
-              decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    icon: const Icon(
-                      Icons.clear,
-                      color: Colors.green,
-                    ),
-                    onPressed: () {
-                      controller.clearSearchFilterFlowersTextField();
-                    },
+      body: Column(
+        children: [
+          TextField(
+            controller: controller.searchController,
+            onChanged: (value) {
+              controller.getSearchFlowerList( search: value);
+            },
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: const Icon(
+                    Icons.clear,
+                    color: Colors.green,
                   ),
-                  labelText: LocaleKeys.home_search_search.tr,
-                  prefixIcon: const SearchAlertDialog()),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Obx(() {
-                return _filteredFlowerList();
-              }),
-            ),
-            const Stack(
-              children: <Widget>[
-                Center(
-                  child: LoadingWidget(),
+                  onPressed: () {
+                    controller.clearSearchFilterFlowersTextField();
+                  },
                 ),
-              ],
-            )
-          ],
-        ),
+                labelText: LocaleKeys.home_search_search.tr,
+                prefixIcon: const SearchAlertDialog()),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: Obx(() {
+              return _filteredFlowerList();
+            }),
+          ),
+          const Stack(
+            children: <Widget>[
+              Center(
+                child: LoadingWidget(),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
