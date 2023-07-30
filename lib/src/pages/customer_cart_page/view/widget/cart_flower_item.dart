@@ -1,3 +1,4 @@
+import 'package:flower_app/generated/locales.g.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,8 +25,8 @@ class CartFlowerItem extends GetView<CustomerCartPageController> {
               children: [
                 Row(
                   children: [
-                    const Text('Total Price: ',
-                        style: TextStyle(
+                     Text( LocaleKeys.customer_home_item_total_price.tr,
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff04927c),
                             fontSize: 20)),
@@ -65,12 +66,12 @@ class CartFlowerItem extends GetView<CustomerCartPageController> {
                   borderRadius: BorderRadius.circular(20)),
               height: 45,
               width: 90,
-              child: const Row(
+              child:  Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Purchase',
-                      style: TextStyle(
+                  Text(LocaleKeys.customer_home_item_purchase.tr,
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold)),

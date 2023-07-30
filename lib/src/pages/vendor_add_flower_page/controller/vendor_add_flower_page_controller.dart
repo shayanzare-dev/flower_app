@@ -269,5 +269,8 @@ class VendorAddFlowerPageController extends GetxController {
     return null;
   }
 
+  void clearLoginStatus() async {
+    await _prefs.clear();
+  }
 
 }

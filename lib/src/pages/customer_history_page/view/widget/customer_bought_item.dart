@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:flower_app/src/pages/customer_home_page/models/bought_flowers_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../../../generated/locales.g.dart';
 import '../../controller/customer_history_page_controller.dart';
-
-
 
 class CustomerBoughtItem extends GetView<CustomerHistoryPageController> {
   final BoughtFlowersViewModel boughtFlower;
@@ -64,9 +61,9 @@ class CustomerBoughtItem extends GetView<CustomerHistoryPageController> {
                     children: [
                       Row(
                         children: [
-                          const Text(
-                            'Flower Name: ',
-                            style: TextStyle(
+                          Text(
+                            LocaleKeys.customer_home_history_flower_name.tr,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
@@ -85,9 +82,9 @@ class CustomerBoughtItem extends GetView<CustomerHistoryPageController> {
                       const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          const Text('Vendor Name: ',
+                          Text(LocaleKeys.customer_home_history_vendor_name.tr,
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 20)),
+                                  const TextStyle(color: Colors.white, fontSize: 20)),
                           Text(
                             boughtFlower
                                 .flowerListViewModel.vendorUser.firstName,
@@ -110,9 +107,9 @@ class CustomerBoughtItem extends GetView<CustomerHistoryPageController> {
                       const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          const Text('Bought Date: ',
+                          Text(LocaleKeys.customer_home_history_bought_date.tr,
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
+                                  const TextStyle(color: Colors.white, fontSize: 16)),
                           Text(boughtFlower.dateTime,
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 16)),
@@ -123,9 +120,9 @@ class CustomerBoughtItem extends GetView<CustomerHistoryPageController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                            const Text(
-                              'Sum Price: ',
-                              style: TextStyle(
+                            Text(
+                              LocaleKeys.customer_home_history_price.tr,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
@@ -142,9 +139,10 @@ class CustomerBoughtItem extends GetView<CustomerHistoryPageController> {
                           ]),
                           Row(
                             children: [
-                              const Text(
-                                'Count Bought: ',
-                                style: TextStyle(
+                              Text(
+                                LocaleKeys
+                                    .customer_home_history_count_bought.tr,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
@@ -166,50 +164,6 @@ class CustomerBoughtItem extends GetView<CustomerHistoryPageController> {
                   ),
                 ),
               ),
-            )
-
-            /*Column(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                    ),
-                  ),
-                  constraints: const BoxConstraints.expand(
-                    height: 100,
-                  ),
-                  child: StringToImagePost(
-                      base64String: boughtFlower.flowerListViewModel.image),
-                ),
-                Row(
-                  children: [
-                    Text('Flower Name : '),
-                    Text(boughtFlower.flowerListViewModel.name),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Flower buy count : '),
-                    Text(boughtFlower.buyCount.toString()),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('vendor Flower name : '),
-                    Text(boughtFlower.flowerListViewModel.vendorUser.firstName),
-                    Text(boughtFlower.flowerListViewModel.vendorUser.lastName),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('date : '),
-                    Text(boughtFlower.dateTime),
-                  ],
-                ),
-              ],
-            )*/
-            ),
+            )),
       );
 }

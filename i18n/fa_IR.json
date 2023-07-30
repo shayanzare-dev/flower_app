@@ -31,12 +31,12 @@
     "about": "در باره ما"
   },
   "vendor_home_item": {
-    "name": "نام",
-    "description": "شرح",
-    "color": "رنگ",
+    "name": "نام: ",
+    "description": "شرح: ",
+    "color": "رنگ: ",
     "delete_btn": "حذف",
-    "price": "قیمت",
-    "count": "تعداد"
+    "price": "قیمت: ",
+    "count": "تعداد: "
   },
   "vendor_home_add": {
     "flower_name": "نام گل",
@@ -57,16 +57,16 @@
     "search_clear_btn": "حذف فیلتر "
   },
   "vendor_home_history": {
-    "flower_name": "نام گل",
-    "customer_name": "نام مشتری",
-    "bought_date": "تاریخ خرید",
-    "price": "قیمت",
-    "count_bought": "تعداد خرید"
+    "flower_name": "نام گل: ",
+    "customer_name": "نام مشتری: ",
+    "bought_date": "تاریخ خرید: ",
+    "price": "قیمت: ",
+    "count_bought": "تعداد خرید: "
   },
   "profile": {
-    "first_name": "نام",
-    "last_name": "نام خانوادگی",
-    "email": "ایمیل",
+    "first_name": "نام: ",
+    "last_name": "نام خانوادگی: ",
+    "email": "ایمیل: ",
     "sign_out_btn": "خروج"
   },
   "customer_page": {
@@ -82,23 +82,23 @@
     "about": "در باره ما"
   },
   "customer_home_item": {
-    "name": "نام",
-    "description": "شرح",
-    "vendor_name": "اسم فروشنده",
-    "color": "رنگ",
+    "name": "نام: ",
+    "description": "شرح: ",
+    "vendor_name": "اسم فروشنده: ",
+    "color": "رنگ: ",
     "add_cart_btn": "اضافه به سبد",
-    "price": "قیمت",
-    "count": "تعداد",
+    "price": "قیمت: ",
+    "count": "تعداد: ",
     "out_of_stock": "تمام شده",
     "count_buy": "تعداد خرید",
-    "total_price": "قیمت کل",
+    "total_price": "قیمت کل: ",
     "purchase": "خرید"
   },
   "customer_home_history": {
-    "flower_name": "نام گل",
-    "vendor_name": "نام فروشنده",
-    "bought_date": "تاریخ خرید",
-    "price": "قیمت",
-    "count_bought": "تعداد خرید"
+    "flower_name": "نام گل: ",
+    "vendor_name": "نام فروشنده: ",
+    "bought_date": "تاریخ خرید: ",
+    "price": "قیمت: ",
+    "count_bought": "تعداد خرید: "
   }
 }

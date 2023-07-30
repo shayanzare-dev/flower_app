@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flower_app/src/pages/customer_home_page/models/bought_flowers_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../../../../../generated/locales.g.dart';
 import '../../../../../controller/customer_home_page_flower_controller.dart';
 import 'delete_alert_dialog.dart';

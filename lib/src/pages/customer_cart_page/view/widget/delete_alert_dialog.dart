@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../generated/locales.g.dart';
 import '../../../customer_home_page/models/bought_flowers_view_model.dart';
 import '../../../customer_home_page/models/flower_list_view_model.dart';
 import '../../controller/customer_cart_page_controller.dart';
@@ -43,11 +44,11 @@ class DeleteAlertDialog extends GetView<CustomerCartPageController> {
             color: const Color(0xff54786c),
             borderRadius: BorderRadius.circular(25.0),
           ),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child:  Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Text(
-              'Delete',
-              style: TextStyle(
+              LocaleKeys.vendor_home_item_delete_btn.tr,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14.0,
                 fontWeight: FontWeight.bold,

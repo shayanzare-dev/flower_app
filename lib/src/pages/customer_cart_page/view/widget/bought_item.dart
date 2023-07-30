@@ -4,6 +4,7 @@ import 'package:flower_app/src/pages/customer_home_page/models/bought_flowers_vi
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../generated/locales.g.dart';
 import '../../controller/customer_cart_page_controller.dart';
 import 'delete_alert_dialog.dart';
 
@@ -63,8 +64,8 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                     children: [
                       Row(
                         children: [
-                          const Text(
-                            'Name: ',
+                           Text(
+                            LocaleKeys.customer_home_item_name.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -84,7 +85,7 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                       const SizedBox(height: 8.0),
                       Row(
                         children: [
-                          const Text('Description: ',
+                          Text(LocaleKeys.customer_home_item_description.tr,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16)),
                           Text(
@@ -102,7 +103,7 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                         children: [
                           Row(
                             children: [
-                              const Text('Vendor Name: ',
+                              Text(LocaleKeys.customer_home_item_vendor_name.tr,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16)),
                               Text(
@@ -150,7 +151,7 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                         children: [
                           Row(
                             children: [
-                              const Text('Color: ',
+                              Text(LocaleKeys.customer_home_item_color.tr,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16)),
                               Container(
@@ -165,8 +166,8 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                             ],
                           ),
                           Row(children: [
-                            const Text(
-                              'Count: ',
+                            Text(
+                              LocaleKeys.customer_home_item_count.tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
@@ -196,8 +197,8 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                            const Text(
-                              'Price: ',
+                            Text(
+                              LocaleKeys.customer_home_item_price.tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
@@ -218,7 +219,7 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                               Obx(() => _editFlowerCountBuyCartMinusLoading(
                                   boughtFlowers: boughtFlower)),
                               Text(
-                                'Count Buy: ${boughtFlower.buyCount}',
+                                "${LocaleKeys.customer_home_item_count_buy.tr} : ${boughtFlower.buyCount}",
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,

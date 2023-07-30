@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../generated/locales.g.dart';
 import '../../vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_home_screen/widget/flower_item.dart';
 import '../view/widget/search_alert_dialog.dart';
 import '../controller/vendor_search_page_controller.dart';
@@ -33,7 +34,7 @@ class VendorSearchPage extends GetView<VendorSearchPageController> {
                       controller.clearSearchFilterFlowersTextField();
                     },
                   ),
-                  labelText: 'Search or for filter press search icon',
+                  labelText: LocaleKeys.home_search_search.tr,
                   prefixIcon: const SearchAlertDialog()),
             ),
             const SizedBox(height: 16),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../generated/locales.g.dart';
 import '../../customer_home_page/controller/customer_home_page_flower_controller.dart';
 
 class CustomerProfilePage extends StatelessWidget {
@@ -44,9 +45,9 @@ class CustomerProfilePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'First Name: ',
-                      style: TextStyle(
+                    Text(
+                      LocaleKeys.profile_first_name.tr,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -65,9 +66,9 @@ class CustomerProfilePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Last Name: ',
-                      style: TextStyle(
+                    Text(
+                      LocaleKeys.profile_last_name.tr,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -87,9 +88,9 @@ class CustomerProfilePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Email: ',
-                      style: TextStyle(
+                    Text(
+                      LocaleKeys.profile_email.tr,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -114,9 +115,9 @@ class CustomerProfilePage extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
                   ),
-                  child: const Text(
-                    'Sign Out',
-                    style: TextStyle(
+                  child: Text(
+                    LocaleKeys.profile_sign_out_btn.tr,
+                    style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),

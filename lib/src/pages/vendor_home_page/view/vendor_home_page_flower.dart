@@ -99,8 +99,7 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
               title: Text(LocaleKeys.profile_sign_out_btn.tr),
               onTap: () {
                 controller.clearLoginStatus();
-                Get.offAllNamed(
-                    RouteNames.loadingPageFlower + RouteNames.loginPageFlower);
+                Get.offAllNamed(RouteNames.loginPageFlower);
               },
             ),
             const Divider(),

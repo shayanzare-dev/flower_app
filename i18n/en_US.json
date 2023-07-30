@@ -31,12 +31,12 @@
     "about": "about"
   },
   "vendor_home_item": {
-    "name": "Name",
-    "description": "Description",
-    "color": "Color",
+    "name": "Name: ",
+    "description": "Description: ",
+    "color": "Color: ",
     "delete_btn": "Delete",
-    "price": "Price",
-    "count": "Count"
+    "price": "Price: ",
+    "count": "Count: "
   },
   "vendor_home_add": {
     "flower_name": "Flower Name",
@@ -57,17 +57,17 @@
     "search_clear_btn": "Clear Filter"
   },
   "vendor_home_history": {
-    "flower_name": "Flower Name",
-    "customer_name": "Customer Name",
-    "bought_date": "Bought Date",
-    "price": "Price",
-    "count_bought": "Count Bought"
+    "flower_name": "Flower Name: ",
+    "customer_name": "Customer Name: ",
+    "bought_date": "Bought Date: ",
+    "price": "Price: ",
+    "count_bought": "Count Bought: "
   },
   "profile": {
-    "first_name": "First Name",
-    "last_name": "Last Name",
-    "email": "Email",
-    "sign_out_btn": "Sign Out"
+    "first_name": "First Name: ",
+    "last_name": "Last Name: ",
+    "email": "Email: ",
+    "sign_out_btn": "Sign Out: "
   },
   "customer_page": {
     "title": "Customer Home Page",
@@ -82,23 +82,23 @@
     "about": "about"
   },
   "customer_home_item": {
-    "name": "Name",
-    "description": "Description",
-    "vendor_name": "Vendor Name",
-    "color": "Color",
+    "name": "Name: ",
+    "description": "Description: ",
+    "vendor_name": "Vendor Name: ",
+    "color": "Color: ",
     "add_cart_btn": "Add to cart",
-    "price": "Price",
-    "count": "Count",
+    "price": "Price: ",
+    "count": "Count: ",
     "out_of_stock": "Out of Stock",
     "count_buy": "Count Buy",
-    "total_price": "Total Price",
+    "total_price": "Total Price: ",
     "purchase": "Purchase"
   },
   "customer_home_history": {
-    "flower_name": "Flower Name",
-    "vendor_name": "Vendor Name",
-    "bought_date": "Bought Date",
-    "price": "Price",
-    "count_bought": "Count Bought"
+    "flower_name": "Flower Name: ",
+    "vendor_name": "Vendor Name: ",
+    "bought_date": "Bought Date: ",
+    "price": "Price: ",
+    "count_bought": "Count Bought: "
   }
 }
