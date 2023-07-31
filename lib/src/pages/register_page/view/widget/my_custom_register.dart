@@ -1,10 +1,11 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../generated/locales.g.dart';
+import '../../../shared/user_type_enum.dart';
 import '../../controller/register_page_flower_controller.dart';
 
 class MyCustomRegister extends GetView<RegisterPageFlowerController> {
@@ -31,7 +32,6 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
         ),
       );
 
-
   Widget _iconUser() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30),
@@ -43,16 +43,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
             children: [
               Stack(
                 children: [
-                  Obx(
-                    () => SizedBox(
-                      width: 150,
-                      height: 150,
-                      child: CircleAvatar(
-                        backgroundImage:MemoryImage(controller.imageBytes1.value),
-                        radius: 50.0,
-                      ),
-                    ),
-                  ),
+                  Obx(() => _showImage()),
                   PositionedDirectional(
                     bottom: 9,
                     start: 9,
@@ -77,7 +68,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                       ),
                     ),
                   ),
-                  Obx(() =>  _removeImage()),
+                  Obx(() => _removeImage()),
                 ],
               ),
             ],
@@ -87,9 +78,40 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
     );
   }
 
-  Widget _removeImage(){
-    if (controller.imageBytes1.value != controller.imageBytes2.value){
-      return  PositionedDirectional(
+  Widget _showImage() {
+    if (controller.imageAddressToShow.isNotEmpty) {
+      return Obx(
+        () => SizedBox(
+          width: 150,
+          height: 150,
+          child: CircleAvatar(
+            backgroundImage: FileImage(
+              File(controller.imageAddressToShow.value),
+            ),
+            radius: 50.0,
+          ),
+        ),
+      );
+    }
+    return Container(
+      alignment: AlignmentDirectional.center,
+      height: 150,
+      width: 150,
+      decoration: BoxDecoration(
+        color: const Color(0xff159947),
+        borderRadius: BorderRadius.circular(1000),
+      ),
+      child: const Icon(
+        Icons.person,
+        size: 50,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _removeImage() {
+    if (controller.imageAddressToShow.isNotEmpty) {
+      return PositionedDirectional(
         bottom: 9,
         end: 9,
         child: Material(
@@ -98,36 +120,21 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
           child: InkWell(
             borderRadius: BorderRadius.circular(100),
             onTap: () {
-              controller.imageBytes1.value = controller.imageBytes2.value;
               controller.defaultImage();
             },
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  border:
-                  Border.all(width: 4, color: Colors.white)),
+                  border: Border.all(width: 4, color: Colors.white)),
               width: 35,
               height: 35,
-              child: const Icon(Icons.clear,
-                  size: 20, color: Colors.white),
+              child: const Icon(Icons.clear, size: 20, color: Colors.white),
             ),
           ),
         ),
       );
     }
-    return PositionedDirectional(
-      bottom: 9,
-      end: 9,
-      child: Material(
-        color: Colors.lightBlueAccent[100],
-        borderRadius: BorderRadius.circular(100),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(100),
-          onTap: () {
-          },
-        ),
-      ),
-    );
+    return const Row();
   }
 
   Widget _inputFirstName() {
@@ -367,10 +374,10 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
                   ),
-                  value: 1,
-                  groupValue: controller.selectedTypeUser.value,
-                  onChanged: (value) {
-                    controller.selectedTypeUserValue(value!);
+                  value: UserType.vendor,
+                  groupValue: controller.selectedUserType.value,
+                  onChanged: (userType) {
+                    controller.selectedTypeUserValue(userType!);
                   },
                 ),
               ),
@@ -385,8 +392,8 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
                   ),
-                  value: 2,
-                  groupValue: controller.selectedTypeUser.value,
+                  value: UserType.customer,
+                  groupValue: controller.selectedUserType.value,
                   onChanged: (value) {
                     controller.selectedTypeUserValue(value!);
                   },
@@ -402,12 +409,12 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
   Widget _myButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Obx(() =>  _onSubmitRegister()),
+      child: Obx(() => _onSubmitRegister()),
     );
   }
 
-  Widget _onSubmitRegister(){
-    if(controller.isLoadingRegisterBtn.value){
+  Widget _onSubmitRegister() {
+    if (controller.isLoadingRegisterBtn.value) {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

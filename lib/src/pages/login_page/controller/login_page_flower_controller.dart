@@ -15,14 +15,13 @@ class LoginPageFlowerController extends GetxController {
   RxBool obscureText = true.obs;
   RxBool rememberMe = false.obs;
 
+
+
   @override
-  void onInit() {
-    if (Get.arguments != null) {
-      List<String> loginEmailPass = Get.arguments;
-      emailController.text = loginEmailPass[0];
-      passWordController.text = loginEmailPass[1];
-    }
-    super.onInit();
+  void dispose(){
+    passWordController.text;
+    emailController.text;
+    super.dispose();
   }
 
   RxBool isLoadingLoginBtn = false.obs;
@@ -43,7 +42,6 @@ class LoginPageFlowerController extends GetxController {
     await _prefs.setString('userEmail', userEmail);
     await _prefs.setBool('isLoggedIn', isLoggedIn);
     await _prefs.setInt('userType', userType);
-
   }
 
   void clearLoginStatus() async {
@@ -102,7 +100,11 @@ class LoginPageFlowerController extends GetxController {
     return null;
   }
 
-  void goToRegisterPage() {
-    Get.offAndToNamed(RouteNames.registerPageFlower);
+  Future<void> goToRegisterPage() async {
+    final result = await Get.toNamed(RouteNames.registerPageFlower);
+    if (result != null){
+      emailController.text = result['email'];
+      passWordController.text = result['password'];
+    }
   }
 }
