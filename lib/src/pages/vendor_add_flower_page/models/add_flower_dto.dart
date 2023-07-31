@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 
 
 class AddFlowerDto {
-  final int  countInStock,color;
-  final String name, image, shortDescription,price;
+  final int price, countInStock,color;
+  final String name, image, shortDescription;
   final RxList<String> category;
   final VendorViewModel vendorUser;
 

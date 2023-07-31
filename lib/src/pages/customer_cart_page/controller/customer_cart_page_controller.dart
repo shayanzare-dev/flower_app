@@ -53,6 +53,8 @@ class CustomerCartPageController extends GetxController {
     }
   }
 
+
+
   Future<void> getOrderCart() async {
     isLoadingCartListPage.value = true;
     cartOrderList.clear();
@@ -83,6 +85,24 @@ class CustomerCartPageController extends GetxController {
 
   void decrementCartCount() {
     cartCount.value--;
+  }
+
+  RxString formatPrice = ''.obs;
+  String priceFormat({required String price}){
+    formatPrice.value = '';
+    int counter =0;
+    for(int i = (price.length-1);i >=0;i--){
+      counter++;
+      String showPrice = price[i];
+      if((counter%3) != 0  && i !=0){
+        formatPrice.value = '$showPrice$formatPrice';
+      }else if (i == 0){
+        formatPrice.value = '$showPrice$formatPrice';
+      }else{
+        formatPrice.value = ',$showPrice$formatPrice';
+      }
+    }
+    return formatPrice.trim();
   }
 
   Future<void> updateCartOrder(
@@ -145,13 +165,10 @@ class CustomerCartPageController extends GetxController {
         boughtFlowerListCart[index].flowerListViewModel.countInStock) {
       boughtFlowerListCart[index].buyCount =
           boughtFlowerListCart[index].buyCount + 1;
-      String inputStringPrice =
-          boughtFlowerListCart[index].flowerListViewModel.price;
-      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
       boughtFlowerListCart[index].sumBuyPrice =
-          boughtFlowerListCart[index].sumBuyPrice + intFlowerItemPrice;
+          boughtFlowerListCart[index].sumBuyPrice + boughtFlowerListCart[index].flowerListViewModel.price;
       cartOrderList[0].totalPrice =
-          cartOrderList[0].totalPrice + intFlowerItemPrice;
+          cartOrderList[0].totalPrice + boughtFlowerListCart[index].flowerListViewModel.price;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(
@@ -172,13 +189,10 @@ class CustomerCartPageController extends GetxController {
     if (boughtFlowerListCart[index].buyCount > 1) {
       boughtFlowerListCart[index].buyCount =
           boughtFlowerListCart[index].buyCount - 1;
-      String inputStringPrice =
-          boughtFlowerListCart[index].flowerListViewModel.price;
-      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
       boughtFlowerListCart[index].sumBuyPrice =
-          boughtFlowerListCart[index].sumBuyPrice - intFlowerItemPrice;
+          boughtFlowerListCart[index].sumBuyPrice - boughtFlowerListCart[index].flowerListViewModel.price;
       cartOrderList[0].totalPrice =
-          cartOrderList[0].totalPrice - intFlowerItemPrice;
+          cartOrderList[0].totalPrice - boughtFlowerListCart[index].flowerListViewModel.price;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(

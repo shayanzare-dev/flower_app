@@ -199,7 +199,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
                             ),
                           ),
                           Text(
-                            ('\$${flowerItem.price}'),
+                            ('\$${controller.priceFormat(price:flowerItem.price.toString() )}'),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24.0,

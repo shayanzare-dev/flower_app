@@ -2,8 +2,8 @@ import 'package:flower_app/src/pages/vendor_home_page/models/vendor_view_model.d
 
 
 class FlowerListViewModel {
-  final int id, countInStock,color;
-  final String name, image, shortDescription,price ;
+  final int id, countInStock,color,price;
+  final String name, image, shortDescription ;
   final List category;
   final VendorViewModel vendorUser;
 
@@ -22,7 +22,7 @@ class FlowerListViewModel {
 
   FlowerListViewModel copyWith({
     int? id,
-    String? price,
+    int? price,
     int? countInStock,
     int? color,
     String? name,

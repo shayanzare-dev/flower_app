@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../flower_app.dart';
-import '../../vendor_home_page/controller/vendor_home_page_flower_controller.dart';
 import '../../vendor_home_page/models/vendor_view_model.dart';
 import '../models/add_category_dto.dart';
 import '../models/add_color_dto.dart';
@@ -193,8 +192,10 @@ class VendorAddFlowerPageController extends GetxController {
       return;
     }
     showLoading();
+    String inputPriceFlower = flowerPriceController.text;
+    int priceFlower = int.parse(inputPriceFlower.replaceAll(',', ''));
     final AddFlowerDto dto = AddFlowerDto(
-        price: flowerPriceController.text,
+        price: priceFlower,
         shortDescription: flowerDescriptionController.text,
         countInStock: int.parse(flowerCountController.text),
         category: categoryChips,

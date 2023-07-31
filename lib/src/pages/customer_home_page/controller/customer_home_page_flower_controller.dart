@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../flower_app.dart';
 import '../../shared/grid_item.dart';
 import '../../vendor_home_page/models/vendor_view_model.dart';
@@ -77,6 +75,24 @@ class CustomerHomePageFlowerController extends GetxController {
       getOrderList();
   }
 
+  RxString formatPrice = ''.obs;
+  String priceFormat({required String price}){
+    formatPrice.value = '';
+    int counter =0;
+    for(int i = (price.length-1);i >=0;i--){
+      counter++;
+      String showPrice = price[i];
+      if((counter%3) != 0  && i !=0){
+        formatPrice.value = '$showPrice$formatPrice';
+      }else if (i == 0){
+        formatPrice.value = '$showPrice$formatPrice';
+      }else{
+        formatPrice.value = ',$showPrice$formatPrice';
+      }
+    }
+    return formatPrice.trim();
+  }
+
   //Home Screen
   static List<Widget> widgetOptionsNavBar = <Widget>[
     const CustomerHomeScreen(),
@@ -137,9 +153,7 @@ class CustomerHomePageFlowerController extends GetxController {
         flowerBuyCount[item.id] = 0;
         isLoadingAddToCartBtn[item.id] = false.obs;
         colorItems.add(GridItem(color: Color(item.color)));
-        String inputString = item.price;
-        int intValue = int.parse(inputString.replaceAll(',', ''));
-        priceList.add(intValue);
+        priceList.add(item.price);
         for (final categoryItem in item.category) {
           if (!dropDownButtonList.contains(categoryItem.toString())) {
             dropDownButtonList.add(categoryItem.toString());
@@ -182,9 +196,7 @@ class CustomerHomePageFlowerController extends GetxController {
       DateTime dateTimeNow = DateTime.now();
       DateFormat dateFormat = DateFormat('yyyy-MM-dd');
       String dateTime = dateFormat.format(dateTimeNow);
-      String inputStringPrice = flowerItem.price;
-      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
-      int sumBuyPrice = buyCount! * intFlowerItemPrice;
+      int sumBuyPrice = buyCount! * flowerItem.price;
       BoughtFlowersViewModel boughtFlowers = BoughtFlowersViewModel(
           flowerListViewModel: flowerItem,
           buyCount: buyCount,
@@ -287,13 +299,11 @@ class CustomerHomePageFlowerController extends GetxController {
         boughtFlowerListCart[index].flowerListViewModel.countInStock) {
       boughtFlowerListCart[index].buyCount =
           boughtFlowerListCart[index].buyCount + 1;
-      String inputStringPrice =
-          boughtFlowerListCart[index].flowerListViewModel.price;
-      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
+
       boughtFlowerListCart[index].sumBuyPrice =
-          boughtFlowerListCart[index].sumBuyPrice + intFlowerItemPrice;
+          boughtFlowerListCart[index].sumBuyPrice + boughtFlowerListCart[index].flowerListViewModel.price;
       cartOrderList[0].totalPrice =
-          cartOrderList[0].totalPrice + intFlowerItemPrice;
+          cartOrderList[0].totalPrice + boughtFlowerListCart[index].flowerListViewModel.price;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id, flowerItem: boughtFlowerListCart[index].flowerListViewModel);
@@ -312,14 +322,11 @@ class CustomerHomePageFlowerController extends GetxController {
     if (boughtFlowerListCart[index].buyCount > 1) {
       boughtFlowerListCart[index].buyCount =
           boughtFlowerListCart[index].buyCount - 1;
-      String inputStringPrice =
-          boughtFlowerListCart[index].flowerListViewModel.price;
-      int intFlowerItemPrice = int.parse(inputStringPrice.replaceAll(',', ''));
       boughtFlowerListCart[index].sumBuyPrice =
           boughtFlowerListCart[index].sumBuyPrice -
-              intFlowerItemPrice;
+              boughtFlowerListCart[index].flowerListViewModel.price;
       cartOrderList[0].totalPrice = cartOrderList[0].totalPrice -
-          intFlowerItemPrice;
+          boughtFlowerListCart[index].flowerListViewModel.price;
       boughtFlowerListCart.refresh();
       cartOrderList.refresh();
       updateCartOrder(cartId: cartOrderList[0].id, flowerItem: boughtFlowerListCart[index].flowerListViewModel);

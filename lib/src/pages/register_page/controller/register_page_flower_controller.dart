@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:either_dart/either.dart';
 import 'package:flower_app/src/pages/shared/user_type_enum.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +14,14 @@ class RegisterPageFlowerController extends GetxController {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passWordController = TextEditingController();
-  final TextEditingController passWordConfirmController =
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordConfirmController =
       TextEditingController();
   Rx<UserType> selectedUserType = UserType.vendor.obs;
   final RegisterPageFlowerRepository _repository =
       RegisterPageFlowerRepository();
   String passCheckConfirm = '';
   String passCheck = '';
-
   RxBool isLoadingRegisterBtn = false.obs;
 
   void showLoading() {
@@ -93,7 +91,7 @@ class RegisterPageFlowerController extends GetxController {
                 userType: selectedUserType.value,
                 firstName: firstNameController.text,
                 lastName: lastNameController.text,
-                passWord: passWordConfirmController.text,
+                passWord: passwordConfirmController.text,
                 email: emailController.text,
                 image: imageAddressToString.value);
             final Either<String, String> resultOrException =
@@ -107,7 +105,7 @@ class RegisterPageFlowerController extends GetxController {
                 (String addRecord) {
               Get.back(result: {
                 'email': emailController.text,
-                'password': passWordConfirmController.text
+                'password': passwordConfirmController.text
               });
               registerFormKey.currentState?.reset();
 
@@ -136,7 +134,7 @@ class RegisterPageFlowerController extends GetxController {
                 userType: selectedUserType.value,
                 firstName: firstNameController.text,
                 lastName: lastNameController.text,
-                passWord: passWordConfirmController.text,
+                passWord: passwordConfirmController.text,
                 email: emailController.text,
                 image: imageAddressToString.value);
             final Either<String, String> resultOrException =
@@ -147,7 +145,7 @@ class RegisterPageFlowerController extends GetxController {
                 (String addRecord) {
               Get.back(result: {
                 'email': emailController.text,
-                'password': passWordConfirmController.text
+                'password': passwordConfirmController.text
               });
               hideLoading();
               registerFormKey.currentState?.reset();

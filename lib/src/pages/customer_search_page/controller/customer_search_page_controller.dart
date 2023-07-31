@@ -54,9 +54,7 @@ class CustomerSearchPageController extends GetxController {
     } else if (result.isRight) {
       customerFlowerList.addAll(result.right);
       for (final item in result.right) {
-        String inputString = item.price;
-        int intValue = int.parse(inputString.replaceAll(',', ''));
-        priceList.add(intValue);
+        priceList.add(item.price);
       }
     }
     if (customerFlowerList.isNotEmpty) {

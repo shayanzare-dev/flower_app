@@ -30,7 +30,7 @@ class CartFlowerItem extends GetView<CustomerCartPageController> {
                             fontWeight: FontWeight.bold,
                             color: Color(0xff04927c),
                             fontSize: 20)),
-                    Text(cartOrderItem.totalPrice.toString(),
+                    Text(controller.priceFormat(price: cartOrderItem.totalPrice.toString()) ,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff04927c),

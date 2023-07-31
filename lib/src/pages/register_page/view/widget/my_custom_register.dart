@@ -266,7 +266,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.bold),
-              controller: controller.passWordController,
+              controller: controller.passwordController,
               obscureText: controller.obscureText.value,
               decoration: InputDecoration(
                   icon: const Icon(Icons.lock, color: Colors.white),
@@ -320,7 +320,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.bold),
-              controller: controller.passWordConfirmController,
+              controller: controller.passwordConfirmController,
               obscureText: controller.obscureTextConfirm.value,
               decoration: InputDecoration(
                   icon: const Icon(Icons.lock, color: Colors.white),

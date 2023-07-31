@@ -190,9 +190,11 @@ class EditFlowerPageController extends GetxController {
 
   Future<void> editFlower() async {
     isLoadingEditFlowerBtn.value = true;
+    String inputPriceFlower = flowerPriceController.text;
+    int priceFlower = int.parse(inputPriceFlower.replaceAll(',', ''));
     final EditFlowerDto dto = EditFlowerDto(
         id: editFlowerItem.id,
-        price: flowerPriceController.text,
+        price: priceFlower,
         shortDescription: flowerDescriptionController.text,
         countInStock: int.parse(flowerCountController.text),
         category: categoryChips,

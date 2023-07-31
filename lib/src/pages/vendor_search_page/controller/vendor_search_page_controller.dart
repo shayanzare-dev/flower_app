@@ -50,9 +50,7 @@ class VendorSearchPageController extends GetxController {
     } else if (result.isRight) {
       flowerList.addAll(result.right);
       for (final item in result.right) {
-        String inputString = item.price;
-        int intValue = int.parse(inputString.replaceAll(',', ''));
-        priceList.add(intValue);
+        priceList.add(item.price);
       }
     }
     if (flowerList.isNotEmpty) {
@@ -295,7 +293,6 @@ class VendorSearchPageController extends GetxController {
       }
       hideLoading();
     });
-
   }
 
   void colorToggleSelection({required int colorToggleIndex}) {

@@ -124,7 +124,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
               _inputFlowerCount(),
               _colorFlower(context),
               const FlowerChipList(),
-              _myAddFlowerBtn(context),
+              _myAddFlowerButton(context),
             ],
           ),
         ),
@@ -300,7 +300,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
                     borderRadius: BorderRadius.circular(40),
                     child: InkWell(
                       onTap: () {
-                        openColorPicker(context);
+                        _openColorPicker(context);
                       },
                       borderRadius: BorderRadius.circular(40),
                       child: Container(
@@ -444,7 +444,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
     );
   }
 
-  void openColorPicker(BuildContext context) {
+  void _openColorPicker(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -474,7 +474,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
     );
   }
 
-  Widget _myAddFlowerBtn(BuildContext context) {
+  Widget _myAddFlowerButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child:Obx(() =>  _addFlowerBtnLoading()),

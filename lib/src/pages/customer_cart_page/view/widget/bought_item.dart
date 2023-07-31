@@ -206,7 +206,7 @@ class BoughtItem extends GetView<CustomerCartPageController> {
                               ),
                             ),
                             Text(
-                              ('\$${boughtFlower.flowerListViewModel.price}'),
+                              ('\$${controller.priceFormat(price:boughtFlower.flowerListViewModel.price.toString() ) }'),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 24.0,

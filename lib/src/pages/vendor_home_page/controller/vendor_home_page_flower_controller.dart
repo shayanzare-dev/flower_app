@@ -41,6 +41,27 @@ class VendorHomePageFlowerController extends GetxController {
 
   //Home Screen
 
+  RxString formatPrice = ''.obs;
+
+
+
+  String priceFormat({required String price}){
+    formatPrice.value = '';
+    int counter =0;
+    for(int i = (price.length-1);i >=0;i--){
+      counter++;
+      String showPrice = price[i];
+      if((counter%3) != 0  && i !=0){
+        formatPrice.value = '$showPrice$formatPrice';
+      }else if (i == 0){
+        formatPrice.value = '$showPrice$formatPrice';
+      }else{
+        formatPrice.value = ',$showPrice$formatPrice';
+      }
+    }
+    return formatPrice.trim();
+  }
+
   Future<void> editCountFlowerPlus(
       {required FlowerListViewModel flowerItem}) async {
     isLoadingCountPlus[flowerItem.id] = true.obs;
@@ -179,9 +200,7 @@ class VendorHomePageFlowerController extends GetxController {
         isLoadingCountMinus[item.id] = false.obs;
         isLoadingCountPlus[item.id] = false.obs;
         isLoadingDeleteBtn[item.id] = false.obs;
-        String inputString = item.price;
-        int intValue = int.parse(inputString.replaceAll(',', ''));
-        priceList.add(intValue);
+        priceList.add(item.price);
       }
     }
     isButtonEnabled.value = true;
