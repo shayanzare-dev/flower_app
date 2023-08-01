@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../../generated/locales.g.dart';
 import '../../controller/login_page_flower_controller.dart';
 
-class MyCustomLogin extends GetView<LoginPageFlowerController> {
-  const MyCustomLogin({Key? key}) : super(key: key);
+class LoginForm extends GetView<LoginPageFlowerController> {
+  const LoginForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Form(
@@ -18,8 +19,8 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
               _inputEmail(),
               _inputPassword(),
               _rememberMe(),
-              _myLoginBtn(context),
-              _myButtonSignUp(),
+              _loginButton(),
+              _signUpButton(),
             ],
           ),
         ),
@@ -34,11 +35,12 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               Text(LocaleKeys.login_remember_me.tr),
+              Text(LocaleKeys.login_remember_me.tr),
               Obx(() => Checkbox(
                     value: controller.rememberMe.value,
-                    onChanged: (value) {
-                      controller.toggleRememberMe(value!);
+                    onChanged: (rememberValue) {
+                      controller.toggleRememberMe(
+                          rememberValue: rememberValue!);
                     },
                   ))
             ],
@@ -96,7 +98,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
             style: const TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             controller: controller.emailController,
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               icon: const Icon(Icons.mail, color: Colors.white),
               border: InputBorder.none,
               label: Padding(
@@ -111,7 +113,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateEmail(value!);
+              return controller.validateEmail(value: value!);
             },
           ),
         ),
@@ -150,7 +152,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                         color: Colors.white,
                       )),
                   border: InputBorder.none,
-                  label:  Padding(
+                  label: Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: Text(
                       LocaleKeys.login_passWord.tr,
@@ -161,7 +163,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                     ),
                   )),
               validator: (value) {
-                return controller.validatePassword(value!);
+                return controller.validatePassword(value: value!);
               },
             ),
           ),
@@ -170,15 +172,15 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
     );
   }
 
-  Widget _myLoginBtn(BuildContext context) {
+  Widget _loginButton() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Obx(() =>  _loginBtn()),
+      child: Obx(() => _loading()),
     );
   }
 
-  Widget _loginBtn(){
-    if(controller.isLoadingLoginBtn.value){
+  Widget _loading() {
+    if (controller.isLoadingLoginBtn.value) {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -196,7 +198,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                   borderRadius: BorderRadius.circular(20)),
               height: 45,
               width: 100,
-              child:  Row(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -215,7 +217,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
     );
   }
 
-  Widget _myButtonSignUp() {
+  Widget _signUpButton() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -228,7 +230,7 @@ class MyCustomLogin extends GetView<LoginPageFlowerController> {
                     borderRadius: BorderRadius.circular(20)),
                 height: 45,
                 width: 100,
-                child:  Row(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

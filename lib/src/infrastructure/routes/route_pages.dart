@@ -38,7 +38,7 @@ class RoutePages {
     ),
     GetPage(
       name: RouteNames.loginPageFlower,
-      page: () => LoginPageFlower(),
+      page: () => LoginFormPage(),
       binding: LoginPageFlowerBindings(),
     ),
     GetPage(

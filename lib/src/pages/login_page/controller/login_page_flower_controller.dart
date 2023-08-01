@@ -12,13 +12,12 @@ class LoginPageFlowerController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final LoginPageFlowerRepository _repository = LoginPageFlowerRepository();
   final SharedPreferences _prefs = Get.find<SharedPreferences>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   RxBool obscureText = true.obs;
   RxBool rememberMe = false.obs;
 
-
-
   @override
-  void dispose(){
+  void dispose() {
     passWordController.text;
     emailController.text;
     super.dispose();
@@ -34,11 +33,14 @@ class LoginPageFlowerController extends GetxController {
     isLoadingLoginBtn.value = false;
   }
 
-  void toggleRememberMe(bool value) {
-    rememberMe.value = value;
+  void toggleRememberMe({required bool rememberValue}) {
+    rememberMe.value = rememberValue;
   }
 
-  void saveLoginStatus(bool isLoggedIn, int userType, String userEmail) async {
+  void saveLoginStatus(
+      {required bool isLoggedIn,
+      required int userType,
+      required String userEmail}) async {
     await _prefs.setString('userEmail', userEmail);
     await _prefs.setBool('isLoggedIn', isLoggedIn);
     await _prefs.setInt('userType', userType);
@@ -59,32 +61,38 @@ class LoginPageFlowerController extends GetxController {
             passWord: passWordController.text,
             email: emailController.text,
             user: 2);
-    resultOrExceptionUserValidate.fold((left) {
-      saveLoginStatus(rememberMe.value, 2, emailController.text);
-      Get.offAndToNamed(RouteNames.customerHomePageFlower);
-      loginFormKey.currentState?.reset();
-      hideLoading();
-      return;
-    }, (right) async {
+    resultOrExceptionUserValidate.fold((left) async {
       final Either<String, String> resultOrExceptionVendorValidate =
           await _repository.checkVendorValidate(
               passWord: passWordController.text,
               email: emailController.text,
               user: 1);
       resultOrExceptionVendorValidate.fold((left) {
-        saveLoginStatus(rememberMe.value, 1, emailController.text);
+        Get.snackbar('login', 'Your email or password is incorrect');
+        hideLoading();
+      }, (right) {
+        saveLoginStatus(
+            isLoggedIn: rememberMe.value,
+            userType: 1,
+            userEmail: emailController.text);
         Get.offAndToNamed(RouteNames.vendorHomePageFlower);
         hideLoading();
         loginFormKey.currentState?.reset();
         return;
-      }, (right) {
-        Get.snackbar('login', 'Your email or password is incorrect');
-        hideLoading();
       });
+    }, (right) async {
+      saveLoginStatus(
+          isLoggedIn: rememberMe.value,
+          userType: 2,
+          userEmail: emailController.text);
+      Get.offAndToNamed(RouteNames.customerHomePageFlower);
+      loginFormKey.currentState?.reset();
+      hideLoading();
+      return;
     });
   }
 
-  String? validateEmail(String value) {
+  String? validateEmail({required String value}) {
     RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     bool isValid = emailRegex.hasMatch(value);
     if (value.isEmpty || value.length < 5 || !isValid) {
@@ -93,7 +101,7 @@ class LoginPageFlowerController extends GetxController {
     return null;
   }
 
-  String? validatePassword(String value) {
+  String? validatePassword({required String value}) {
     if (value.isEmpty || value.length < 6) {
       return "Password must be of 6 characters";
     }
@@ -102,7 +110,7 @@ class LoginPageFlowerController extends GetxController {
 
   Future<void> goToRegisterPage() async {
     final result = await Get.toNamed(RouteNames.registerPageFlower);
-    if (result != null){
+    if (result != null) {
       emailController.text = result['email'];
       passWordController.text = result['password'];
     }

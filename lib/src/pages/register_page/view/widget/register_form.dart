@@ -26,7 +26,7 @@ class RegisterForm extends GetView<RegisterPageFlowerController> {
               _inputPassword(),
               _inputPasswordConfirm(),
               _inputTypeOfUser(),
-              _onSubmitRegister(context),
+              _onSubmitRegisterButton(),
             ],
           ),
         ),
@@ -406,7 +406,7 @@ class RegisterForm extends GetView<RegisterPageFlowerController> {
     );
   }
 
-  Widget _onSubmitRegister(BuildContext context) {
+  Widget _onSubmitRegisterButton() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Obx(() => _loading()),

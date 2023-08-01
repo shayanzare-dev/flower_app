@@ -16,9 +16,9 @@ class LoginPageFlowerRepository {
       final responseData = jsonDecode(responseOrException.body);
 
       if (responseData.isNotEmpty) {
-        return const Left('user found');
+        return const Right('user found');
       } else {
-        return const Right('use not found');
+        return const Left('use not found');
       }
     } else {
       return const Left('Failed to check password ');
@@ -34,9 +34,9 @@ class LoginPageFlowerRepository {
       final responseData = jsonDecode(responseOrException.body);
 
       if (responseData.isNotEmpty) {
-        return const Left('user found');
+        return const Right('user found');
       } else {
-        return const Right('use not found');
+        return const Left('use not found');
       }
     } else {
       return const Left('Failed to check password ');

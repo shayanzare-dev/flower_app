@@ -1,21 +1,21 @@
-import 'package:flower_app/src/pages/login_page/view/widget/my_custom_login.dart';
+import 'package:flower_app/src/pages/login_page/view/widget/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../generated/locales.g.dart';
 import '../controller/login_page_flower_controller.dart';
 
-class LoginPageFlower extends GetView<LoginPageFlowerController> {
-   LoginPageFlower({Key? key}) : super(key: key);
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class LoginFormPage extends GetView<LoginPageFlowerController> {
+   const LoginFormPage({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    key: _scaffoldKey,
+    key: controller.scaffoldKey,
     appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
+            controller.scaffoldKey.currentState?.openDrawer();
           },
           icon: const Icon(Icons.menu),
         ),
@@ -65,6 +65,6 @@ class LoginPageFlower extends GetView<LoginPageFlowerController> {
         ],
       ),
     ),
-        body: const MyCustomLogin(),
+        body: const LoginForm(),
       );
 }
