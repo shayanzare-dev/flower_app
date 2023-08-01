@@ -41,12 +41,15 @@ class VendorSearchPage extends GetView<VendorSearchPageController> {
               return _filteredFlowerList();
             }),
           ),
-          const Stack(
-            children: <Widget>[
-              Center(
-                child: LoadingWidget(),
-              ),
-            ],
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Stack(
+              children: <Widget>[
+                Center(
+                  child: LoadingWidget(),
+                ),
+              ],
+            ),
           )
         ],
       ),

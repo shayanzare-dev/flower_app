@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../shared/grid_item.dart';
 import '../../vendor_home_page/models/flower_list_view_model.dart';
 import '../repositories/vendor_search_page_repository.dart';
@@ -20,8 +19,9 @@ class VendorSearchPageController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   RxList<FlowerListViewModel> flowerList = RxList();
   RxBool isLoading = false.obs;
-
-  final debouncer = Debouncer(delay: const Duration(seconds: 1));
+  List<int> priceList = [];
+  double maxPrice = 2.0;
+  final deBouncer = Debouncer(delay: const Duration(seconds: 1));
 
   void showLoading() {
     isLoading.value = true;
@@ -46,7 +46,7 @@ class VendorSearchPageController extends GetxController {
     flowerList.clear();
     final result = await _repository.getFlowerList(vendorUserEmail);
     if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
+      Get.snackbar('get flower', 'flower not found');
     } else if (result.isRight) {
       flowerList.addAll(result.right);
       for (final item in result.right) {
@@ -64,7 +64,7 @@ class VendorSearchPageController extends GetxController {
     colorItems.clear();
     final result = await _repository.getColorList();
     if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
+      Get.snackbar('get color', 'color not found');
     } else if (result.isRight) {
       for (final item in result.right) {
         colorItems.add(ColorGridItem(color: Color(item.color)));
@@ -79,7 +79,7 @@ class VendorSearchPageController extends GetxController {
     selectedItemDropDown = Rx<String>('select a item');
     final result = await _repository.getCategoryList();
     if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
+      Get.snackbar('get category', 'category not found');
     } else if (result.isRight) {
       for (final item in result.right) {
         for (final categoryItem in item.category) {
@@ -89,8 +89,7 @@ class VendorSearchPageController extends GetxController {
     }
   }
 
-  List<int> priceList = [];
-  double maxPrice = 2.0;
+
 
   void maxPrices() {
     priceList.sort();
@@ -137,8 +136,7 @@ class VendorSearchPageController extends GetxController {
     colorItems.refresh();
   }
 
-  Future<void> getSearchFilterFlowerList(
-      {required BuildContext context}) async {
+  Future<void> getSearchFilterFlowerList({required BuildContext context}) async {
     filteredFlowerList.clear();
     Navigator.of(context).pop();
     showLoading();
@@ -150,7 +148,6 @@ class VendorSearchPageController extends GetxController {
       }
     }
     String colorFilters = colorFilter.map((color) => 'color=$color').join('&');
-
     if (selectedItemDropDown.value != 'select a item' && colorFilters != '') {
       final searchFiltersResult = await _repository.searchFilters(
         category: selectedItemDropDown.value,
@@ -160,7 +157,7 @@ class VendorSearchPageController extends GetxController {
         max: valuesRange.value.end.toString(),
       );
       if (searchFiltersResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
+        Get.snackbar('search', 'search result is error');
       } else if (searchFiltersResult.isRight) {
         filteredFlowerList.clear();
         filteredFlowerList.addAll(searchFiltersResult.right);
@@ -174,7 +171,7 @@ class VendorSearchPageController extends GetxController {
         max: valuesRange.value.end.toString(),
       );
       if (searchFiltersResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
+        Get.snackbar('search', 'search result is error');
       } else if (searchFiltersResult.isRight) {
         filteredFlowerList.clear();
         filteredFlowerList.addAll(searchFiltersResult.right);
@@ -188,7 +185,7 @@ class VendorSearchPageController extends GetxController {
         max: valuesRange.value.end.toString(),
       );
       if (searchFiltersResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
+        Get.snackbar('search', 'search result is error');
       } else if (searchFiltersResult.isRight) {
         filteredFlowerList.clear();
         filteredFlowerList.addAll(searchFiltersResult.right);
@@ -201,7 +198,7 @@ class VendorSearchPageController extends GetxController {
         max: valuesRange.value.end.toString(),
       );
       if (priceResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
+        Get.snackbar('search', 'search result is error');
       } else if (priceResult.isRight) {
         filteredFlowerList.clear();
         filteredFlowerList.addAll(priceResult.right);
@@ -212,9 +209,7 @@ class VendorSearchPageController extends GetxController {
   }
 
   Future<void> getSearchFlowerList({required String search}) async {
-
-
-    debouncer(() async {
+    deBouncer(() async {
       showLoading();
       List<int> colorFilter = [];
       for (int i = 0; i < savedSelections.length; i++) {
@@ -237,7 +232,7 @@ class VendorSearchPageController extends GetxController {
           search: search,
         );
         if (searchFiltersResult.isLeft) {
-          Get.snackbar('Login', 'user not found');
+          Get.snackbar('search', 'search result is error');
         } else if (searchFiltersResult.isRight) {
           filteredFlowerList.clear();
           filteredFlowerList.addAll(searchFiltersResult.right);
@@ -253,7 +248,7 @@ class VendorSearchPageController extends GetxController {
           search: search,
         );
         if (searchFiltersResult.isLeft) {
-          Get.snackbar('Login', 'user not found');
+          Get.snackbar('search', 'search result is error');
         } else if (searchFiltersResult.isRight) {
           filteredFlowerList.clear();
           filteredFlowerList.addAll(searchFiltersResult.right);
@@ -268,7 +263,7 @@ class VendorSearchPageController extends GetxController {
           search: search,
         );
         if (searchFiltersResult.isLeft) {
-          Get.snackbar('Login', 'user not found');
+          Get.snackbar('search', 'search result is error');
         } else if (searchFiltersResult.isRight) {
           filteredFlowerList.clear();
           filteredFlowerList.addAll(searchFiltersResult.right);
@@ -282,7 +277,7 @@ class VendorSearchPageController extends GetxController {
               max: valuesRange.value.end.toString(),
               search: search);
           if (result.isLeft) {
-            Get.snackbar('Login', 'user not found');
+            Get.snackbar('search', 'search result is error');
           } else if (result.isRight) {
             filteredFlowerList.clear();
             filteredFlowerList.addAll(result.right);

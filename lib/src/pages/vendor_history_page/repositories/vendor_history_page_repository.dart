@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:either_dart/either.dart';
 import '../../customer_home_page/models/cart_order_view_model.dart';
 import 'package:http/http.dart' as http;

@@ -68,8 +68,8 @@ class VendorHomePageFlowerController extends GetxController {
     resultOrException.fold(
         (String error) {
           isLoadingCountPlus[flowerItem.id] = false.obs;
-          return Get.snackbar('Register',
-            'Your registration is not successfully code error:$error');
+          return Get.snackbar('edit count',
+            'edit count is not successfully code error:$error');
         },
         (FlowerListViewModel addRecord) {
           flowerList[index] =
@@ -110,8 +110,8 @@ class VendorHomePageFlowerController extends GetxController {
       resultOrException.fold(
           (String error) {
             isLoadingCountMinus[flowerItem.id] = false.obs;
-            return Get.snackbar('Register',
-              'Your registration is not successfully code error:$error');
+            return Get.snackbar('edit count',
+                'edit count is not successfully code error:$error');
           },
           (FlowerListViewModel addRecord) {
             flowerList[index] =

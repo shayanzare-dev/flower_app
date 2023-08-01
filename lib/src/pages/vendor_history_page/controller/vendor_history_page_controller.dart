@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../customer_home_page/models/bought_flowers_view_model.dart';
 import '../../customer_home_page/models/cart_order_view_model.dart';
 import '../repositories/vendor_history_page_repository.dart';
@@ -30,17 +29,14 @@ class VendorHistoryPageController extends GetxController {
     getOrderListVendorHistory();
   }
 
-  Future<String> userEmail() async {
-    return _prefs.getString('userEmail') ?? 'test@gmail.com';
-  }
-
   Future<void> getOrderListVendorHistory() async {
     showLoading();
     boughtFlowerList.clear();
     boughtOrderList.clear();
     final result = await _repository.getVendorUserOrdersHistory();
     if (result.isLeft) {
-      Get.snackbar('Login', 'user not found');
+      hideLoading();
+      Get.snackbar('get History', 'History not found');
     } else if (result.isRight) {
       boughtOrderList.addAll(result.right);
       for (final item in boughtOrderList) {

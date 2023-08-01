@@ -68,14 +68,6 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
                     RouteNames.vendorHistoryPage);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: Text(LocaleKeys.vendor_page_profile.tr),
-              onTap: () {
-                Get.toNamed(RouteNames.vendorHomePageFlower +
-                    RouteNames.vendorProfilePage);
-              },
-            ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.output_rounded),
