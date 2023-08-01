@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:either_dart/either.dart';
 import 'package:flower_app/src/pages/shared/user_type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../models/register_user_dto.dart';
 import '../models/register_vendor_dto.dart';
 import '../repositories/register_page_flower_repository.dart';
@@ -23,6 +25,8 @@ class RegisterPageFlowerController extends GetxController {
   String passCheckConfirm = '';
   String passCheck = '';
   RxBool isLoadingRegisterBtn = false.obs;
+  RxBool obscureText = true.obs;
+  RxBool obscureTextConfirm = true.obs;
 
   void showLoading() {
     isLoadingRegisterBtn.value = true;
@@ -32,15 +36,9 @@ class RegisterPageFlowerController extends GetxController {
     isLoadingRegisterBtn.value = false;
   }
 
-  void selectedTypeUserValue(UserType userType) {
+  void selectedTypeUserValue({required UserType userType}) {
     selectedUserType.value = userType;
   }
-
-  RxBool obscureText = true.obs;
-  RxBool obscureTextConfirm = true.obs;
-
-
-
 
   void defaultImage() {
     imageAddressToString.value = "";
@@ -51,9 +49,9 @@ class RegisterPageFlowerController extends GetxController {
   Rx<String> imageAddressToString = "".obs;
   Rx<String> imageAddressToShow = "".obs;
 
-  Future<void> getImage(ImageSource source) async {
+  Future<void> getImage({required ImageSource imageSource}) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
+    final pickedFile = await picker.pickImage(source: imageSource);
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
       if (imageFile != null) {
@@ -74,105 +72,111 @@ class RegisterPageFlowerController extends GetxController {
     }
     showLoading();
     if (selectedUserType.value == UserType.vendor) {
-      final Either<String, bool> resultOrExceptionEmailVendor =
-          await _repository.checkEmailVendor(emailController.text);
-      resultOrExceptionEmailVendor.fold((String error) {
-        hideLoading();
-        return Get.snackbar('Register', 'Email already exists');
-      }, (right) async {
-        if (right) {
-          final Either<String, bool> resultOrExceptionEmailUser =
-              await _repository.checkEmailUser(emailController.text);
-          resultOrExceptionEmailUser.fold((String error) {
-            hideLoading();
-            return Get.snackbar('Register', 'Email already exists');
-          }, (right) async {
-            final RegisterVendorDto dto = RegisterVendorDto(
-                userType: selectedUserType.value,
-                firstName: firstNameController.text,
-                lastName: lastNameController.text,
-                passWord: passwordConfirmController.text,
-                email: emailController.text,
-                image: imageAddressToString.value);
-            final Either<String, String> resultOrException =
-                (await _repository.addVendor(dto));
-            resultOrException.fold(
-                (String error) {
-                  hideLoading();
-                  return Get.snackbar('Register',
-                    'Your registration is not successfully code error:$error');
-                },
-                (String addRecord) {
-              Get.back(result: {
-                'email': emailController.text,
-                'password': passwordConfirmController.text
-              });
-              registerFormKey.currentState?.reset();
-
-              hideLoading();
-            });
-            return;
-          });
-        }
-        return;
-      });
+      _addVendor();
     } else if (selectedUserType.value == UserType.customer) {
-      final Either<String, bool> resultOrExceptionEmail =
-          await _repository.checkEmailUser(emailController.text);
-      resultOrExceptionEmail.fold((String error) {
-        hideLoading();
-        return Get.snackbar('Register', 'Email already exists');
-      }, (right) async {
-        if (right) {
-          final Either<String, bool> resultOrExceptionEmailVendor =
-              await _repository.checkEmailVendor(emailController.text);
-          resultOrExceptionEmailVendor.fold((String error) {
-            hideLoading();
-            return Get.snackbar('Register', 'Email already exists');
-          }, (right) async {
-            final RegisterUserDto dto = RegisterUserDto(
-                userType: selectedUserType.value,
-                firstName: firstNameController.text,
-                lastName: lastNameController.text,
-                passWord: passwordConfirmController.text,
-                email: emailController.text,
-                image: imageAddressToString.value);
-            final Either<String, String> resultOrException =
-                (await _repository.addUser(dto));
-            resultOrException.fold(
-                (String error) => Get.snackbar('Register',
-                    'Your registration is not successfully code error:$error'),
-                (String addRecord) {
-              Get.back(result: {
-                'email': emailController.text,
-                'password': passwordConfirmController.text
-              });
-              hideLoading();
-              registerFormKey.currentState?.reset();
-            });
-            return;
-          });
-        }
-        return;
-      });
+      _addUser();
     }
   }
 
-  String? validateFirstName(String value) {
+  Future<void> _addVendor() async {
+    final Either<String, bool> resultOrExceptionEmailVendor =
+        await _repository.checkEmailVendor(email: emailController.text);
+    resultOrExceptionEmailVendor.fold((String error) {
+      hideLoading();
+      return Get.snackbar('Register', 'Email already exists');
+    }, (right) async {
+      if (right) {
+        final Either<String, bool> resultOrExceptionEmailUser =
+            await _repository.checkEmailUser(email: emailController.text);
+        resultOrExceptionEmailUser.fold((String error) {
+          hideLoading();
+          return Get.snackbar('Register', 'Email already exists');
+        }, (right) async {
+          final RegisterVendorDto dto = RegisterVendorDto(
+              userType: selectedUserType.value,
+              firstName: firstNameController.text,
+              lastName: lastNameController.text,
+              passWord: passwordConfirmController.text,
+              email: emailController.text,
+              image: imageAddressToString.value);
+          final Either<String, String> resultOrException =
+              (await _repository.addVendor(dto: dto));
+          resultOrException.fold((String error) {
+            hideLoading();
+            return Get.snackbar('Register',
+                'Your registration is not successfully code error:$error');
+          }, (String addRecord) {
+            Get.back(result: {
+              'email': emailController.text,
+              'password': passwordConfirmController.text
+            });
+            registerFormKey.currentState?.reset();
+            hideLoading();
+          });
+          return;
+        });
+      }
+      return;
+    });
+  }
+
+  Future<void> _addUser() async {
+    final Either<String, bool> resultOrExceptionEmail =
+        await _repository.checkEmailUser(email: emailController.text);
+    resultOrExceptionEmail.fold((String error) {
+      hideLoading();
+      return Get.snackbar('Register', 'Email already exists');
+    }, (right) async {
+      if (right) {
+        final Either<String, bool> resultOrExceptionEmailVendor =
+            await _repository.checkEmailVendor(email: emailController.text);
+        resultOrExceptionEmailVendor.fold((String error) {
+          hideLoading();
+          return Get.snackbar('Register', 'Email already exists');
+        }, (right) async {
+          final RegisterUserDto dto = RegisterUserDto(
+              userType: selectedUserType.value,
+              firstName: firstNameController.text,
+              lastName: lastNameController.text,
+              passWord: passwordConfirmController.text,
+              email: emailController.text,
+              image: imageAddressToString.value);
+          final Either<String, String> resultOrException =
+              (await _repository.addUser(dto: dto));
+          resultOrException.fold((String error) {
+            hideLoading();
+            return Get.snackbar('Register',
+                'Your registration is not successfully code error:$error');
+          }, (String addRecord) {
+            Get.back(result: {
+              'email': emailController.text,
+              'password': passwordConfirmController.text
+            });
+            hideLoading();
+            registerFormKey.currentState?.reset();
+          });
+          return;
+        });
+      }
+      return;
+    });
+  }
+
+  String? validateFirstName({required String value}) {
     if (value.isEmpty || value.length < 3 || value.length > 15) {
       return "first name must be between 3 and 15 characters";
     }
     return null;
   }
 
-  String? validateLastName(String value) {
+  String? validateLastName({required String value}) {
     if (value.isEmpty || value.length < 3 || value.length > 20) {
       return "last name must be between 3 and 20 characters";
     }
     return null;
   }
 
-  String? validateEmail(String value) {
+  String? validateEmail({required String value}) {
     RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     bool isValid = emailRegex.hasMatch(value);
     if (value.isEmpty || value.length < 5 || !isValid || value.length > 20) {
@@ -181,14 +185,14 @@ class RegisterPageFlowerController extends GetxController {
     return null;
   }
 
-  String? validatePassword(String value) {
+  String? validatePassword({required String value}) {
     if (value.isEmpty || value.length < 6 || value.length > 15) {
       return "Password must be of 6 characters";
     }
     return null;
   }
 
-  String? validateConfirmPassword(String value) {
+  String? validateConfirmPassword({required String value}) {
     if (passCheck != passCheckConfirm) {
       return "Passwords is not  match";
     }

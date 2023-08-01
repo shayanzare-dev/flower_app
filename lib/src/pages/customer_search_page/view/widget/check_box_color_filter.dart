@@ -21,7 +21,7 @@ class CheckBoxColorFilter extends GetView<CustomerSearchPageController> {
               childAspectRatio: 1,
             ),
             itemBuilder: (BuildContext context, int index) {
-              GridItem item = controller.colorItems[index];
+              ColorGridItem item = controller.colorItems[index];
               return InkWell(
                 onTap: () {
                   controller.colorToggleSelection(colorIndex: index);

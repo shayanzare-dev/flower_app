@@ -1,4 +1,3 @@
-
 enum UserType {
   vendor(
     value: 1,

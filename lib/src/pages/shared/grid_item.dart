@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class GridItem {
+class ColorGridItem {
   final Color color;
   bool isSelected;
 
-  GridItem({required this.color, this.isSelected = false});
+  ColorGridItem({required this.color, this.isSelected = false});
 }

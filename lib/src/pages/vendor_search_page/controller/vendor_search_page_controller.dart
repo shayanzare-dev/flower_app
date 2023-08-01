@@ -11,7 +11,7 @@ class VendorSearchPageController extends GetxController {
   SharedPreferences _prefs = Get.find<SharedPreferences>();
   final VendorSearchPageRepository _repository = VendorSearchPageRepository();
   List<String> savedSelections = [];
-  final RxList<GridItem> colorItems = RxList<GridItem>([]);
+  final RxList<ColorGridItem> colorItems = RxList<ColorGridItem>([]);
   List<String> dropDownButtonList = ['select a item'];
   Rx<String> selectedItemDropDown = Rx<String>('select a item');
   Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
@@ -67,7 +67,7 @@ class VendorSearchPageController extends GetxController {
       Get.snackbar('Login', 'user not found');
     } else if (result.isRight) {
       for (final item in result.right) {
-        colorItems.add(GridItem(color: Color(item.color)));
+        colorItems.add(ColorGridItem(color: Color(item.color)));
       }
     }
     hideLoading();

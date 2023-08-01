@@ -40,7 +40,7 @@ class CustomerHomePageFlowerController extends GetxController {
   List<String> dropDownButtonList = ['select a item'];
   Rx<String> selectedItemDropDown = Rx<String>('select a item');
   List<String> savedSelections = [];
-  final RxList<GridItem> colorItems = RxList<GridItem>([]);
+  final RxList<ColorGridItem> colorItems = RxList<ColorGridItem>([]);
   Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
   int totalPrice = 0;
   RxBool isLoadingCustomerFlowerList = false.obs;
@@ -152,7 +152,7 @@ class CustomerHomePageFlowerController extends GetxController {
       for (final item in result.right) {
         flowerBuyCount[item.id] = 0;
         isLoadingAddToCartBtn[item.id] = false.obs;
-        colorItems.add(GridItem(color: Color(item.color)));
+        colorItems.add(ColorGridItem(color: Color(item.color)));
         priceList.add(item.price);
         for (final categoryItem in item.category) {
           if (!dropDownButtonList.contains(categoryItem.toString())) {

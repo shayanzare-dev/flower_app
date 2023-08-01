@@ -1,4 +1,4 @@
-import 'package:flower_app/src/pages/register_page/view/widget/my_custom_register.dart';
+import 'package:flower_app/src/pages/register_page/view/widget/register_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../generated/locales.g.dart';
@@ -11,7 +11,6 @@ class RegisterPageFlower extends StatelessWidget {
         appBar: AppBar(
             title: Text(LocaleKeys.register_title.tr),
             backgroundColor: const Color(0xff04927c)),
-        body: const MyCustomRegister(),
-
+        body: const RegisterForm(),
       );
 }

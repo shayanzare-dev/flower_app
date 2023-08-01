@@ -18,7 +18,7 @@ class CustomerSearchPageController extends GetxController {
   List<String> dropDownButtonList = ['select a item'];
   Rx<String> selectedItemDropDown = Rx<String>('select a item');
   List<String> savedSelections = [];
-  final RxList<GridItem> colorItems = RxList<GridItem>([]);
+  final RxList<ColorGridItem> colorItems = RxList<ColorGridItem>([]);
   Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
   RxList<FlowerListViewModel> customerFlowerList = RxList();
   RxMap<int, int> flowerBuyCount = RxMap();
@@ -71,7 +71,7 @@ class CustomerSearchPageController extends GetxController {
       Get.snackbar('Login', 'user not found');
     } else if (result.isRight) {
       for (final item in result.right) {
-        colorItems.add(GridItem(color: Color(item.color)));
+        colorItems.add(ColorGridItem(color: Color(item.color)));
       }
     }
     hideLoading();

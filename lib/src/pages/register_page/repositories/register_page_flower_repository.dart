@@ -10,7 +10,7 @@ class RegisterPageFlowerRepository {
   final httpClient = http.Client();
   Map<String, String> customHeaders = {"content-type": "application/json"};
 
-  Future<Either<String, String>> addUser(RegisterUserDto dto) async {
+  Future<Either<String, String>> addUser({required RegisterUserDto dto}) async {
     final url = Uri.http(BaseUrl.baseUrl, 'users');
     final jsonDto = dto.toJson();
     final responseOrException = await httpClient.post(url,
@@ -23,7 +23,7 @@ class RegisterPageFlowerRepository {
     }
   }
 
-  Future<Either<String, bool>> checkEmailUser(String email) async {
+  Future<Either<String, bool>> checkEmailUser({required String email}) async {
     final url = Uri.parse("http://10.0.2.2:3000/users?email=$email");
     final responseOrException =
         await httpClient.get(url, headers: customHeaders);
@@ -40,7 +40,7 @@ class RegisterPageFlowerRepository {
     }
   }
 
-  Future<Either<String, String>> addVendor(RegisterVendorDto dto) async {
+  Future<Either<String, String>> addVendor({required RegisterVendorDto dto}) async {
     final url = Uri.http(BaseUrl.baseUrl, 'vendors');
     final jsonDto = dto.toJson();
     final responseOrException = await httpClient.post(url,
@@ -53,7 +53,7 @@ class RegisterPageFlowerRepository {
     }
   }
 
-  Future<Either<String, bool>> checkEmailVendor(String email) async {
+  Future<Either<String, bool>> checkEmailVendor({required String email}) async {
     final url = Uri.parse("http://10.0.2.2:3000/vendors?email=$email");
     final responseOrException =
         await httpClient.get(url, headers: customHeaders);

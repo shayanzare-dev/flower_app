@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flower_app/src/pages/vendor_add_flower_page/view/widget/inputPriceSeparator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -224,15 +226,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
                 () =>
                 Stack(
                   children: [
-                    Positioned.fill(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.memory(
-                          controller.imageBytes1.value,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                    _showImage(),
                     Positioned.fill(
                       child: Center(
                         child: Column(
@@ -269,11 +263,30 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
     );
   }
 
+  Widget _showImage() {
+    if (controller.imageAddressToShow.isNotEmpty) {
+      return Positioned.fill(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image(image: FileImage(
+            File(controller.imageAddressToShow.value),
+          ),fit: BoxFit.cover),
+        ),
+      );
+    }
+    return Positioned.fill(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          child: Icon(Icons.camera_alt),decoration: BoxDecoration( color: Colors.black),),
+      ),
+    );
+  }
+
   Widget _removeImage() {
-    if (controller.imageBytes1.value != controller.imageBytes2.value) {
+    if (controller.imageAddressToShow.isNotEmpty) {
       return IconButton(
         onPressed: () {
-          controller.imageBytes1.value = controller.imageBytes2.value;
           controller.defaultImage();
         },
         icon: const Icon(Icons.delete),
@@ -477,7 +490,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
   Widget _myAddFlowerButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child:Obx(() =>  _addFlowerBtnLoading()),
+      child: Obx(() => _addFlowerBtnLoading()),
     );
   }
 
@@ -495,7 +508,7 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
       children: [
         ElevatedButton(
           onPressed: () {
-            controller.imageBytes1.value = controller.imageBytes2.value;
+            controller.defaultImage();
             controller.onSubmitAddFlower();
           },
           style: ElevatedButton.styleFrom(

@@ -212,7 +212,7 @@ class VendorHomePageFlowerController extends GetxController {
   void goToEditFlowerPage({required FlowerListViewModel flowerItem}) {
     Get.offAndToNamed(
         RouteNames.vendorHomePageFlower + RouteNames.editFlowerPage,
-        arguments: flowerItem);
+        arguments: flowerItem  );
   }
 
   void clearLoginStatus() async {

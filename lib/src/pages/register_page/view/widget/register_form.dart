@@ -8,8 +8,8 @@ import '../../../../../generated/locales.g.dart';
 import '../../../shared/user_type_enum.dart';
 import '../../controller/register_page_flower_controller.dart';
 
-class MyCustomRegister extends GetView<RegisterPageFlowerController> {
-  const MyCustomRegister({Key? key}) : super(key: key);
+class RegisterForm extends GetView<RegisterPageFlowerController> {
+  const RegisterForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Form(
@@ -26,7 +26,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
               _inputPassword(),
               _inputPasswordConfirm(),
               _inputTypeOfUser(),
-              _myButton(context),
+              _onSubmitRegister(context),
             ],
           ),
         ),
@@ -53,7 +53,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(100),
                         onTap: () {
-                          controller.getImage(ImageSource.gallery);
+                          controller.getImage(imageSource: ImageSource.gallery);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -166,7 +166,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFirstName(value!);
+              return controller.validateFirstName(value: value!);
             },
           ),
         ),
@@ -203,7 +203,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateLastName(value!);
+              return controller.validateLastName(value: value!);
             },
           ),
         ),
@@ -240,7 +240,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
               ),
             ),
             validator: (value) {
-              return controller.validateEmail(value!);
+              return controller.validateEmail(value: value!);
             },
           ),
         ),
@@ -293,7 +293,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                     ),
                   )),
               validator: (value) {
-                return controller.validatePassword(value!);
+                return controller.validatePassword(value: value!);
               },
             ),
           ),
@@ -347,7 +347,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                     ),
                   )),
               validator: (value) {
-                return controller.validateConfirmPassword(value!);
+                return controller.validateConfirmPassword(value: value!);
               },
             ),
           ),
@@ -377,7 +377,7 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                   value: UserType.vendor,
                   groupValue: controller.selectedUserType.value,
                   onChanged: (userType) {
-                    controller.selectedTypeUserValue(userType!);
+                    controller.selectedTypeUserValue(userType: userType!);
                   },
                 ),
               ),
@@ -394,8 +394,8 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
                   ),
                   value: UserType.customer,
                   groupValue: controller.selectedUserType.value,
-                  onChanged: (value) {
-                    controller.selectedTypeUserValue(value!);
+                  onChanged: (userType) {
+                    controller.selectedTypeUserValue(userType: userType!);
                   },
                 ),
               ),
@@ -406,14 +406,14 @@ class MyCustomRegister extends GetView<RegisterPageFlowerController> {
     );
   }
 
-  Widget _myButton(BuildContext context) {
+  Widget _onSubmitRegister(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Obx(() => _onSubmitRegister()),
+      child: Obx(() => _loading()),
     );
   }
 
-  Widget _onSubmitRegister() {
+  Widget _loading() {
     if (controller.isLoadingRegisterBtn.value) {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,

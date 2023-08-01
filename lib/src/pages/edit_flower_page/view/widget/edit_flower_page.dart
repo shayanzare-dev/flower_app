@@ -3,16 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../widget/inputPriceSeparator.dart';
+
 import '../../controller/edit_flower_page_controller.dart';
+import '../widget/inputPriceSeparator.dart';
 import 'flower_chip_list.dart';
-
-
 
 class EditFlowerPageForm extends GetView<EditFlowerPageController> {
   const EditFlowerPageForm({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -122,17 +119,9 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Obx(
-                () => Stack(
+            () => Stack(
               children: [
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.memory(
-                      controller.imageBytes1.value,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                _showImage(),
                 Positioned.fill(
                   child: Center(
                     child: Column(
@@ -140,7 +129,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
                       children: [
                         IconButton(
                           onPressed: () => controller.getImage(
-                            imageSource:  ImageSource.gallery,
+                            imageSource: ImageSource.gallery,
                           ),
                           icon: const Icon(Icons.photo_library),
                           color: Colors.white,
@@ -166,11 +155,31 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
       ),
     );
   }
+
+  Widget _showImage() {
+    if (controller.imageAddressToString.isNotEmpty) {
+      return Positioned.fill(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.memory(controller.imageToShow.value, fit: BoxFit.cover),
+        ),
+      );
+    }
+    return Positioned.fill(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          child: Icon(Icons.camera_alt),
+          decoration: BoxDecoration(color: Colors.black),
+        ),
+      ),
+    );
+  }
+
   Widget _removeImage() {
-    if (controller.imageBytes1.value != controller.imageBytes2.value) {
+    if (controller.imageAddressToString.isNotEmpty) {
       return IconButton(
         onPressed: () {
-          controller.imageBytes1.value = controller.imageBytes2.value;
           controller.defaultImage();
         },
         icon: const Icon(Icons.delete),
@@ -257,8 +266,6 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
       ),
     );
   }
-
-
 
   Widget _inputFlowerPrice() {
     return Padding(
@@ -351,7 +358,6 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
               onColorChanged: (value) {
                 controller.changeColor(value);
               },
-
               pickerAreaHeightPercent: 0.8,
             ),
           ),
@@ -371,12 +377,12 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
   Widget _myEditFlowerBtn(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Obx(() =>  _editFlowerBtnLoading()),
+      child: Obx(() => _editFlowerBtnLoading()),
     );
   }
 
-  Widget _editFlowerBtnLoading(){
-    if(controller.isLoadingEditFlowerBtn.value){
+  Widget _editFlowerBtnLoading() {
+    if (controller.isLoadingEditFlowerBtn.value) {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -412,8 +418,4 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
       ],
     );
   }
-
 }
-
-
-
