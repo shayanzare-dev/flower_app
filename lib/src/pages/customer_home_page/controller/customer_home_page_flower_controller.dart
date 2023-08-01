@@ -99,6 +99,7 @@ class CustomerHomePageFlowerController extends GetxController {
   Future<void> getFlowerList() async {
     isLoadingCustomerFlowerList.value = true;
     isButtonEnabled.value = false;
+    customerFlowerList.clear();
     final result = await _repository.getFlowerList();
     if (result.isLeft) {
       Get.snackbar('Flower List', 'Flowers not found');
@@ -225,6 +226,7 @@ class CustomerHomePageFlowerController extends GetxController {
     }
     return;
   }
+
 
   void editBuyCountFlowerMinus({required FlowerListViewModel flowerItem}) {
     if (flowerBuyCount[flowerItem.id]! > 0) {

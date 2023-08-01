@@ -170,4 +170,5 @@ class VendorProfilePage extends GetView<VendorProfilePageController> {
       ),
     );
   }
+
 }

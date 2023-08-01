@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../customer_home_page/models/flower_list_view_model.dart';
 import '../repositories/customer_search_page_repository.dart';
 
@@ -22,8 +21,9 @@ class CustomerSearchPageController extends GetxController {
   Rx<RangeValues> valuesRange = Rx<RangeValues>(const RangeValues(0, 1));
   RxList<FlowerListViewModel> customerFlowerList = RxList();
   RxMap<int, int> flowerBuyCount = RxMap();
-
-  final debouncer = Debouncer(delay: const Duration(seconds: 1));
+  List<int> priceList = [];
+  double maxPrice = 2.0;
+  final deBouncer = Debouncer(delay: const Duration(seconds: 1));
 
   RxBool isLoading = false.obs;
 
@@ -93,8 +93,7 @@ class CustomerSearchPageController extends GetxController {
     }
   }
 
-  List<int> priceList = [];
-  double maxPrice = 2.0;
+
 
   void maxPrices() {
     priceList.sort();
@@ -212,7 +211,7 @@ class CustomerSearchPageController extends GetxController {
   }
 
   Future<void> getSearchFlowerList({required String search}) async {
-    debouncer(() async {
+    deBouncer(() async {
       showLoading();
       List<int> colorFilter = [];
       for (int i = 0; i < savedSelections.length; i++) {

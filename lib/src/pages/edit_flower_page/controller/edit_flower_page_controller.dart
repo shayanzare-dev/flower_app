@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:either_dart/either.dart';
 import 'package:flower_app/flower_app.dart';
 import 'package:flower_app/src/pages/edit_flower_page/models/edit_color_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../vendor_home_page/models/edit_flower_dto.dart';
 import '../../vendor_home_page/models/flower_list_view_model.dart';
 import '../../vendor_home_page/models/vendor_view_model.dart';
@@ -33,6 +31,10 @@ class EditFlowerPageController extends GetxController {
   RxList<dynamic> categoryChips = <dynamic>[].obs;
   final TextEditingController categoryTextController = TextEditingController();
   RxBool isLoadingEditFlowerBtn = false.obs;
+  RxList<String> suggestions = <String>[].obs;
+  List<String> getFilteredSuggestions = [];
+  RxList<String> categoryChipsAdd = RxList();
+  RxList<CategoryListViewModel> categoryList = RxList();
 
   @override
   void onInit() {
@@ -74,7 +76,7 @@ class EditFlowerPageController extends GetxController {
     }
   }
 
-  RxList<String> suggestions = <String>[].obs;
+
 
   void updateSuggestions(String text) {
     if (text == '') {
@@ -87,7 +89,7 @@ class EditFlowerPageController extends GetxController {
     }
   }
 
-  List<String> getFilteredSuggestions = [];
+
 
   void addChip() {
     final text = categoryTextController.text.trim();
@@ -98,24 +100,16 @@ class EditFlowerPageController extends GetxController {
       categoryTextController.clear();
       if (categoryList.isEmpty) {
         addCategoryList();
-        Future.delayed(const Duration(seconds: 1), () {
-          getCategoryList();
-        });
       } else {
         if (text.isNotEmpty && !categoryList.first.category.contains(text)) {
           categoryList.first.category.add(text);
         }
         editCategoryList();
-        Future.delayed(const Duration(seconds: 1), () {
-          getCategoryList();
-        });
       }
     }
   }
 
-  RxList<String> categoryChipsAdd = RxList();
 
-  RxList<CategoryListViewModel> categoryList = RxList();
 
   Future<void> addCategoryList() async {
     AddCategoryDto dto = AddCategoryDto(category: categoryChipsAdd);
@@ -123,7 +117,7 @@ class EditFlowerPageController extends GetxController {
     if (result.isLeft) {
       Get.snackbar('', 'user not found');
     } else if (result.isRight) {
-      Get.snackbar('add category', 'success');
+      getCategoryList();
     }
   }
 
@@ -135,7 +129,7 @@ class EditFlowerPageController extends GetxController {
     if (result.isLeft) {
       Get.snackbar('', 'user not found');
     } else if (result.isRight) {
-      Get.snackbar('edit category', 'success');
+      getCategoryList();
     }
   }
 
@@ -181,7 +175,7 @@ class EditFlowerPageController extends GetxController {
     }
   }
 
-  Future<void> editFlower() async {
+  Future<void> editFlowerButton() async {
     isLoadingEditFlowerBtn.value = true;
     String inputPriceFlower = flowerPriceController.text;
     int priceFlower = int.parse(inputPriceFlower.replaceAll(',', ''));
@@ -217,40 +211,44 @@ class EditFlowerPageController extends GetxController {
     return;
   }
 
+
   Future<void> editColorList({required int colorId, required int color}) async {
     EditColorDto dto = EditColorDto(id: colorId, color: color);
     final result = await _repository.editColorList(dto, colorId);
     if (result.isLeft) {
       Get.snackbar('', 'user not found');
     } else if (result.isRight) {
-      Get.snackbar('edit category', 'success');
     }
   }
 
-  String? validateFlowerName(String value) {
-    if (value.isEmpty || value.length < 2) {
-      return "flower name must be of 2 characters";
-    }
-    return null;
-  }
-
-  String? validateFlowerDescription(String value) {
-    if (value.isEmpty || value.length < 10) {
-      return "flower description must be of 10 characters";
+  String? validateFlowerName({required String value}) {
+    if (value.isEmpty || value.length < 2 || value.length > 15) {
+      return "flower name must be between 2 and 15 characters";
     }
     return null;
   }
 
-  String? validateFlowerPrice(String value) {
-    if (value.isEmpty || value.length < 2) {
-      return "flower price must be of 2 characters";
+  String? validateFlowerDescription({required String value}) {
+    if (value.isEmpty || value.length < 10  || value.length >25) {
+      return "flower description must be between 10 and 25 characters";
     }
     return null;
   }
 
-  String? validateFlowerCount(String value) {
-    if (value.isEmpty) {
-      return "flower count is required ";
+  String? validateFlowerPrice({required String value}) {
+    final RegExp integerRegex = RegExp(r'^\d{1,3}(,\d{3})*$');
+    bool isValid = integerRegex.hasMatch(value);
+    if (value.isEmpty ||  value.length > 8 || !isValid) {
+      return "flower price must be valid number";
+    }
+    return null;
+  }
+
+  String? validateFlowerCount({required String value}) {
+    RegExp integerRegex = RegExp(r'^\d+$');
+    bool isValid = integerRegex.hasMatch(value);
+    if (value.isEmpty  ||  value.length > 3 || !isValid) {
+      return "flower count must be valid number ";
     }
     return null;
   }

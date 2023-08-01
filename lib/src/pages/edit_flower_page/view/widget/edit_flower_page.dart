@@ -27,7 +27,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
             _inputFlowerCount(),
             _colorFlower(context),
             const FlowerChipList(),
-            _myEditFlowerBtn(context),
+            _editFlowerButton(context),
           ],
         ),
       ),
@@ -63,7 +63,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerName(value!);
+              return controller.validateFlowerName(value: value!);
             },
           ),
         ),
@@ -100,7 +100,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerDescription(value!);
+              return controller.validateFlowerDescription(value: value!);
             },
           ),
         ),
@@ -169,8 +169,8 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Container(
-          child: Icon(Icons.camera_alt),
-          decoration: BoxDecoration(color: Colors.black),
+          decoration: const BoxDecoration(color: Colors.black),
+          child: const Icon(Icons.camera_alt),
         ),
       ),
     );
@@ -301,7 +301,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerPrice(value!);
+              return controller.validateFlowerPrice(value: value!);
             },
           ),
         ),
@@ -338,7 +338,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
               ),
             ),
             validator: (value) {
-              return controller.validateFlowerCount(value!);
+              return controller.validateFlowerCount(value: value!);
             },
           ),
         ),
@@ -351,7 +351,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select a color'),
+          title: const Text('Select a color'),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: controller.selectedColor.value,
@@ -363,7 +363,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
           ),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -374,14 +374,14 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
     );
   }
 
-  Widget _myEditFlowerBtn(BuildContext context) {
+  Widget _editFlowerButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Obx(() => _editFlowerBtnLoading()),
+      child: Obx(() => _editFlowerLoading()),
     );
   }
 
-  Widget _editFlowerBtnLoading() {
+  Widget _editFlowerLoading() {
     if (controller.isLoadingEditFlowerBtn.value) {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -412,7 +412,7 @@ class EditFlowerPageForm extends GetView<EditFlowerPageController> {
                 ],
               )),
           onTap: () {
-            controller.editFlower();
+            controller.editFlowerButton();
           },
         ),
       ],

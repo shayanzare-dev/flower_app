@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:either_dart/either.dart';
 import 'package:flower_app/flower_app.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../customer_home_page/models/add_cart_order_dto.dart';
 import '../../customer_home_page/models/bought_flowers_view_model.dart';
 import '../../customer_home_page/models/cart_order_view_model.dart';
@@ -28,7 +26,7 @@ class CustomerCartPageController extends GetxController {
   int totalPrice = 0;
   RxBool isLoadingCartListPage = false.obs;
   RxBool isLoadingCartPurchaseBtn = false.obs;
-  RxMap<int, RxBool> isLoadingDeleteBtn = RxMap<int, RxBool>();
+  RxMap<int, RxBool> isLoadingDeleteButton = RxMap<int, RxBool>();
   RxMap<int, RxBool> isLoadingPlusCart = RxMap<int, RxBool>();
   RxMap<int, RxBool> isLoadingMinusCart = RxMap<int, RxBool>();
 
@@ -68,7 +66,7 @@ class CustomerCartPageController extends GetxController {
       for (final item in result.right) {
         boughtFlowerListCart.addAll(item.boughtFlowers);
         for (final items in item.boughtFlowers) {
-          isLoadingDeleteBtn[items.flowerListViewModel.id] = false.obs;
+          isLoadingDeleteButton[items.flowerListViewModel.id] = false.obs;
           isLoadingPlusCart[items.flowerListViewModel.id] = false.obs;
           isLoadingMinusCart[items.flowerListViewModel.id] = false.obs;
           flowerBuyCount[items.flowerListViewModel.id] = items.buyCount;
@@ -117,14 +115,14 @@ class CustomerCartPageController extends GetxController {
         (await _repository.updateCartOrder(dto, cartId));
     resultOrException.fold(
         (String error) {
-          isLoadingDeleteBtn[flowerItem.id] = false.obs;
+          isLoadingDeleteButton[flowerItem.id] = false.obs;
           isLoadingMinusCart[flowerItem.id] = false.obs;
           isLoadingPlusCart[flowerItem.id] = false.obs;
           return Get.snackbar(
             'Register', 'Your update is not successfully code error:$error');
         },
         (String addRecord) async {
-      isLoadingDeleteBtn[flowerItem.id] = false.obs;
+      isLoadingDeleteButton[flowerItem.id] = false.obs;
       isLoadingMinusCart[flowerItem.id] = false.obs;
       isLoadingPlusCart[flowerItem.id] = false.obs;
     });
@@ -134,7 +132,7 @@ class CustomerCartPageController extends GetxController {
     required FlowerListViewModel flowerItem,
     required BoughtFlowersViewModel boughtFlowers,
   }) {
-    isLoadingDeleteBtn[flowerItem.id] = true.obs;
+    isLoadingDeleteButton[flowerItem.id] = true.obs;
     boughtFlowerListCart.refresh();
     final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     int sumBuyPrice = boughtFlowerListCart[index].sumBuyPrice;
@@ -158,7 +156,6 @@ class CustomerCartPageController extends GetxController {
 
   void editFlowerCountBuyCartPlus(
       {required BoughtFlowersViewModel boughtFlowers}) {
-    disableButton();
     isLoadingPlusCart[boughtFlowers.flowerListViewModel.id] = true.obs;
     final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     if (boughtFlowerListCart[index].buyCount <
@@ -182,8 +179,6 @@ class CustomerCartPageController extends GetxController {
 
   void editFlowerCountBuyCartMinus(
       {required BoughtFlowersViewModel boughtFlowers}) {
-    disableButton();
-
     final int index = boughtFlowerListCart.indexOf(boughtFlowers);
     isLoadingMinusCart[boughtFlowers.flowerListViewModel.id] = true.obs;
     if (boughtFlowerListCart[index].buyCount > 1) {
@@ -200,7 +195,6 @@ class CustomerCartPageController extends GetxController {
           flowerItem: boughtFlowers.flowerListViewModel);
       refresh();
     } else {
-
       deleteFlowerItemForCartOrder(
           flowerItem: boughtFlowers.flowerListViewModel,
           boughtFlowers: boughtFlowers);
@@ -226,7 +220,6 @@ class CustomerCartPageController extends GetxController {
   }
 
   Future<void> onSubmitPurchaseCartOrder() async {
-
     isLoadingCartPurchaseBtn.value =true;
     if (boughtFlowerListCart.isEmpty) {
       Get.snackbar('Add cart', 'Your cart  is empty');

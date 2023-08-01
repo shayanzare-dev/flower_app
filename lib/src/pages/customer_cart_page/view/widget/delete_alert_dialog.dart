@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../../generated/locales.g.dart';
 import '../../../customer_home_page/models/bought_flowers_view_model.dart';
 import '../../../customer_home_page/models/flower_list_view_model.dart';

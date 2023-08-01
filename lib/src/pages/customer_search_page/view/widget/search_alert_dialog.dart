@@ -22,23 +22,23 @@ class SearchAlertDialog extends GetView<CustomerSearchPageController> {
               width: 200,
               child: Column(
                 children: [
-                  MyDropdownButton(),
-                  SizedBox(height: 8),
+                  const MyDropdownButton(),
+                  const SizedBox(height: 8),
                   Text(LocaleKeys.home_search_search_color.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 18,
                           color: Color(0xff04927c),
                           fontWeight: FontWeight.bold)),
-                  SizedBox(height: 8),
-                  CheckBoxColorFilter(),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
+                  const CheckBoxColorFilter(),
+                  const SizedBox(height: 8),
                   Text(LocaleKeys.home_search_search_price.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 18,
                           color: Color(0xff04927c),
                           fontWeight: FontWeight.bold)),
-                  SizedBox(height: 8),
-                  CustomerRangeSliderPrice1(),
+                  const SizedBox(height: 8),
+                  const CustomerRangeSliderPrice1(),
                 ],
               ),
             ),

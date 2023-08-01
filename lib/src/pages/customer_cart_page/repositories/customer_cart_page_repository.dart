@@ -18,7 +18,7 @@ class CustomerCartPageRepository {
       String email) async {
     final url = Uri.parse("http://10.0.2.2:3000/users?email=$email");
     final responseOrException =
-    await httpClient.get(url, headers: customHeaders);
+        await httpClient.get(url, headers: customHeaders);
 
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {
@@ -32,12 +32,11 @@ class CustomerCartPageRepository {
     }
   }
 
-
   Future<Either<String, List<CartOrderViewModel>>> getCartOrders(
       String email) async {
     final url = Uri.parse("http://10.0.2.2:3000/cartOrder?user.email=$email");
     final responseOrException =
-    await httpClient.get(url, headers: customHeaders);
+        await httpClient.get(url, headers: customHeaders);
 
     if (responseOrException.statusCode >= 200 &&
         responseOrException.statusCode <= 400) {
@@ -116,7 +115,4 @@ class CustomerCartPageRepository {
       return const Left('error');
     }
   }
-
-
-
 }

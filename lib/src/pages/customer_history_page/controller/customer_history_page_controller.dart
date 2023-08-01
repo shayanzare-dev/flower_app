@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../customer_home_page/models/bought_flowers_view_model.dart';
 import '../../customer_home_page/models/cart_order_view_model.dart';
 import '../repositories/customer_history_page_repository.dart';
@@ -29,10 +28,6 @@ class CustomerHistoryPageController extends GetxController {
     customerUserEmail = _prefs.getString('userEmail') ?? 'test@gmail.com';
     getOrderList();
     super.onInit();
-  }
-
-  Future<String> userEmail() async {
-    return _prefs.getString('userEmail') ?? 'test@gmail.com';
   }
 
   Future<void> getOrderList() async {
