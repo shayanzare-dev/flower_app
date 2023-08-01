@@ -5,7 +5,7 @@ import '../../../../flower_app.dart';
 
 class LoadingPageController extends GetxController {
   final SharedPreferences _prefs = Get.find<SharedPreferences>();
-  var isLoading = false.obs;
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() {

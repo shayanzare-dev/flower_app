@@ -1,23 +1,21 @@
 import 'package:flower_app/flower_app.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../generated/locales.g.dart';
 import '../controller/vendor_home_page_flower_controller.dart';
-import 'widget/bottom_navigation_bar_pages/bottom_navigation_bar_home_screen/bottom_navigation_bar_home_screen.dart';
+import 'widget/home_page/home_screen.dart';
 
 class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
-  VendorHomePageFlower({Key? key}) : super(key: key);
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  const VendorHomePageFlower({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      key: _scaffoldKey,
+      key: controller.scaffoldKey,
       appBar: AppBar(
           automaticallyImplyLeading: false,
           leading: IconButton(
             onPressed: () {
-              _scaffoldKey.currentState?.openDrawer();
+              controller.scaffoldKey.currentState?.openDrawer();
             },
             icon: const Icon(Icons.menu),
           ),
@@ -129,42 +127,5 @@ class VendorHomePageFlower extends GetView<VendorHomePageFlowerController> {
           ],
         ),
       ),
-      body: const HomeScreen()
-
-      /* Obx(() => VendorHomePageFlowerController.widgetOptionsNavBar
-            .elementAt(controller.selectedIndexNavBar.value)),
-        bottomNavigationBar: Obx(
-          () => BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            fixedColor: Colors.white,
-            backgroundColor: const Color(0xff8ab178),
-            currentIndex: controller.selectedIndexNavBar.value,
-            onTap: (value) {
-              controller.onItemTappedNavBar(index: value);
-            },
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.home),
-                label: LocaleKeys.vendor_page_home.tr,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.add),
-                label: LocaleKeys.vendor_page_add_flower.tr,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.search),
-                label: LocaleKeys.vendor_page_search.tr,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.history),
-                label: LocaleKeys.vendor_page_history.tr,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.person),
-                label: LocaleKeys.vendor_page_profile.tr,
-              ),
-            ],
-          ),
-        ),*/
-      );
+      body: const HomeScreen());
 }

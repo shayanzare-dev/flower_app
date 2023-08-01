@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../generated/locales.g.dart';
-import '../../vendor_home_page/view/widget/bottom_navigation_bar_pages/bottom_navigation_bar_home_screen/widget/flower_item.dart';
+import '../../vendor_home_page/view/widget/home_page/widget/flower_item.dart';
 import '../view/widget/search_alert_dialog.dart';
 import '../controller/vendor_search_page_controller.dart';
 import '../view/widget/loading_widget.dart';

@@ -11,7 +11,7 @@ class CustomerHomeScreen extends GetView<CustomerHomePageFlowerController> {
   Widget build(BuildContext context) {
     return Obx(
       () => RefreshIndicator(
-        onRefresh: controller.refresh,
+        onRefresh: controller.getFlowerList,
         child: _customerFlowerList(),
       ),
     );
