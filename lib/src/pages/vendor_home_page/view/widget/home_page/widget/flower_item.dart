@@ -227,7 +227,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: const [
           BoxShadow(
-            color: Color(0xff04927c),
+            color: Colors.grey,
             offset: Offset(0, 6),
             blurRadius: 6.0,
           )

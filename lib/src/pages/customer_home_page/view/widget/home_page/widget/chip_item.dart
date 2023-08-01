@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../controller/customer_home_page_flower_controller.dart';
+import '../../../../models/flower_list_view_model.dart';
 
-import '../../../../../controller/customer_home_page_flower_controller.dart';
-import '../../../../../models/flower_list_view_model.dart';
 
 class ChipItem extends StatelessWidget {
   final int index;

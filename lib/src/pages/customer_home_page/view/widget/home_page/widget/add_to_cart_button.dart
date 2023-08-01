@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../../../../../generated/locales.g.dart';
-import '../../../../../controller/customer_home_page_flower_controller.dart';
-import '../../../../../models/flower_list_view_model.dart';
+import '../../../../controller/customer_home_page_flower_controller.dart';
+import '../../../../models/flower_list_view_model.dart';
 
-class AddToCartBtn extends GetView<CustomerHomePageFlowerController> {
+
+class AddToCartButton extends GetView<CustomerHomePageFlowerController> {
   final FlowerListViewModel flowerItem;
 
-  const AddToCartBtn({Key? key, required this.flowerItem}) : super(key: key);
+  const AddToCartButton({Key? key, required this.flowerItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
