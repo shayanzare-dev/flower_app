@@ -15,7 +15,4 @@ class RouteNames {
   static const customerCartPage = '/customer_cart_page';
 
 
-
-
-
 }

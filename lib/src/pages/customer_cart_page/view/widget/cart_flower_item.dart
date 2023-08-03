@@ -2,6 +2,7 @@ import 'package:flower_app/generated/locales.g.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../customer_home_page/models/cart_order_view_model.dart';
+import '../../../shared/flower_progress_indicator.dart';
 import '../../controller/customer_cart_page_controller.dart';
 
 class CartFlowerItem extends GetView<CustomerCartPageController> {
@@ -50,7 +51,7 @@ class CartFlowerItem extends GetView<CustomerCartPageController> {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+           FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif'),
         ],
       );
     }

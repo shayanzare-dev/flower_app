@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../generated/locales.g.dart';
+import '../../../shared/flower_progress_indicator.dart';
 import '../../controller/customer_cart_page_controller.dart';
 import 'delete_alert_dialog.dart';
 
@@ -270,7 +271,7 @@ class BoughtItem extends GetView<CustomerCartPageController> {
       {required BoughtFlowersViewModel boughtFlowers}) {
     if (controller
         .isLoadingPlusCart[boughtFlowers.flowerListViewModel.id]!.value) {
-      return const CircularProgressIndicator();
+      return const FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif');
     }
     return IconButton(
       onPressed: () {
@@ -287,7 +288,7 @@ class BoughtItem extends GetView<CustomerCartPageController> {
       {required BoughtFlowersViewModel boughtFlowers}) {
     if (controller
         .isLoadingMinusCart[boughtFlowers.flowerListViewModel.id]!.value) {
-      return const CircularProgressIndicator();
+      return const FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif');
     }
     return IconButton(
       onPressed: () {
@@ -303,7 +304,7 @@ class BoughtItem extends GetView<CustomerCartPageController> {
   Widget _deleteCartBtn({required BoughtFlowersViewModel boughtFlowers}) {
     if (controller
         .isLoadingDeleteButton[boughtFlowers.flowerListViewModel.id]!.value) {
-      return const CircularProgressIndicator();
+      return const FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif');
     }
     return DeleteAlertDialog(
       flowerItem: boughtFlower.flowerListViewModel,

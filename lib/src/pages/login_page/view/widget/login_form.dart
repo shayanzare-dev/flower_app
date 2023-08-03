@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../generated/locales.g.dart';
+import '../../../shared/flower_progress_indicator.dart';
 import '../../controller/login_page_flower_controller.dart';
 
 class LoginForm extends GetView<LoginPageFlowerController> {
@@ -184,7 +185,7 @@ class LoginForm extends GetView<LoginPageFlowerController> {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+          FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif'),
         ],
       );
     }

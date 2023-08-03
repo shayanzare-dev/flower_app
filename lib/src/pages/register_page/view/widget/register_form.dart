@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../generated/locales.g.dart';
+import '../../../shared/flower_progress_indicator.dart';
 import '../../../shared/user_type_enum.dart';
 import '../../controller/register_page_flower_controller.dart';
 
@@ -418,7 +419,7 @@ class RegisterForm extends GetView<RegisterPageFlowerController> {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+          FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif'),
         ],
       );
     }

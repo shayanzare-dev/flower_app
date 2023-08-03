@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../flower_app.dart';
 import '../../../../generated/locales.g.dart';
 
+import '../../shared/flower_progress_indicator.dart';
 import '../controller/vendor_add_flower_page_controller.dart';
 import '../view/widget/flower_chip_list.dart';
 
@@ -270,7 +271,8 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Container(
-          child: Icon(Icons.camera_alt),decoration: BoxDecoration( color: Colors.black),),
+          decoration: const BoxDecoration( color: Colors.black),
+          child: const Icon(Icons.camera_alt),),
       ),
     );
   }
@@ -488,10 +490,10 @@ class VendorAddFlowerPage extends GetView<VendorAddFlowerPageController> {
 
   Widget _addFlowerBtnLoading() {
     if (controller.isLoadingAddFlowerBtn.value) {
-      return const Row(
+      return  const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+          FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif'),
         ],
       );
     }

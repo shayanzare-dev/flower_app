@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../flower_app.dart';
 import '../../../../generated/locales.g.dart';
+import '../../shared/flower_progress_indicator.dart';
 import '../controller/customer_cart_page_controller.dart';
 import '../view/widget/bought_list.dart';
 import '../view/widget/cart_flower_list.dart';
@@ -141,7 +142,11 @@ class CustomerCartFlowerPage extends GetView<CustomerCartPageController> {
 
   Widget _customerCartList() {
     if (controller.isLoadingCartListPage.value) {
-      return const Center(child: CircularProgressIndicator());
+      return  const  Center(
+          child: FlowerProgressIndicator(
+            imagePath: 'assets/flower_loading.gif',
+            size: 200,
+          ));
     } else if (controller.cartOrderList.isEmpty) {
       return const Center(
         child: Text('Cart List Is Empty',

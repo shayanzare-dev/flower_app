@@ -119,6 +119,7 @@ class VendorHomePageFlowerController extends GetxController {
         isLoadingCountMinus[flowerItem.id] = false.obs;
       });
     } else {
+      isLoadingCountMinus[flowerItem.id] = false.obs;
       Get.snackbar('edit Flower', 'can not minus count in stock');
     }
     return;

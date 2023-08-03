@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../shared/flower_progress_indicator.dart';
 import '../../../controller/customer_home_page_flower_controller.dart';
 import 'widget/customer_flower_list.dart';
 
@@ -19,7 +20,11 @@ class CustomerHomeScreen extends GetView<CustomerHomePageFlowerController> {
 
   Widget _customerFlowerList() {
     if (controller.isLoadingCustomerFlowerList.value) {
-      return const Center(child: CircularProgressIndicator());
+      return const  Center(
+          child: FlowerProgressIndicator(
+            imagePath: 'assets/flower_loading.gif',
+            size: 200,
+          ));
     } else
     if (controller.customerFlowerList.isEmpty) {
       return const Center(

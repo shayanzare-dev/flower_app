@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../shared/flower_progress_indicator.dart';
 import '../../../controller/vendor_home_page_flower_controller.dart';
 import 'widget/flower_list.dart';
-
 
 class HomeScreen extends GetView<VendorHomePageFlowerController> {
   const HomeScreen({super.key});
@@ -19,7 +20,11 @@ class HomeScreen extends GetView<VendorHomePageFlowerController> {
 
   Widget _flowerList() {
     if (controller.isLoadingFlowerList.value) {
-     return const Center(child: CircularProgressIndicator());
+      return const Center(
+          child: FlowerProgressIndicator(
+        imagePath: 'assets/flower_loading.gif',
+        size: 200,
+      ));
     } else if (controller.flowerList.isEmpty) {
       return const Center(
         child: Text('List Is Empty',

@@ -3,6 +3,7 @@ import 'package:flower_app/src/pages/customer_home_page/view/widget/home_page/wi
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../../../../generated/locales.g.dart';
+import '../../../../../shared/flower_progress_indicator.dart';
 import '../../../../controller/customer_home_page_flower_controller.dart';
 import '../../../../models/flower_list_view_model.dart';
 import 'add_to_cart_button.dart';
@@ -304,7 +305,7 @@ class CustomerFlowerItem extends GetView<CustomerHomePageFlowerController> {
 
   Widget _addToCartBtnLoading({required FlowerListViewModel flowerItem}) {
     if (controller.isLoadingAddToCartBtn[flowerItem.id]!.value) {
-      return const CircularProgressIndicator();
+      return const  FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif');
     }
     return AddToCartButton(flowerItem: flowerItem);
   }

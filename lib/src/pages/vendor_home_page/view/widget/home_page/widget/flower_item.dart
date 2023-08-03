@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../../../generated/locales.g.dart';
+import '../../../../../shared/flower_progress_indicator.dart';
 import '../../../../controller/vendor_home_page_flower_controller.dart';
 import '../../../../models/flower_list_view_model.dart';
 import 'delete_alert_dialog.dart';
@@ -76,7 +77,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
       children: [
         Obx(
           () => controller.isLoadingCountMinus[flowerItem.id]!.value
-              ? const CircularProgressIndicator()
+              ? const FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif')
               : IconButton(
                   onPressed: () {
                     controller.editCountFlowerMinus(
@@ -107,7 +108,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
         ),
         Obx(
           () => controller.isLoadingCountPlus[flowerItem.id]!.value
-              ? const CircularProgressIndicator()
+              ? const FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif')
               : IconButton(
                   onPressed: () {
                     controller.editCountFlowerPlus(
@@ -254,7 +255,7 @@ class FlowerItem extends GetView<VendorHomePageFlowerController> {
 
   Widget _deleteAlertDialog({required FlowerListViewModel flowerItem}) {
     if (controller.isLoadingDeleteButton[flowerItem.id]!.value) {
-      return const CircularProgressIndicator();
+      return const FlowerProgressIndicator(imagePath: 'assets/flower_loading.gif');
     }
     return DeleteAlertDialog(flowerItem: flowerItem);
   }
