@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:either_dart/either.dart';
 import 'package:flower_app/flower_app.dart';
 import 'package:flower_app/src/pages/edit_flower_page/models/edit_color_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../vendor_home_page/models/edit_flower_dto.dart';
 import '../../vendor_home_page/models/flower_list_view_model.dart';
 import '../../vendor_home_page/models/vendor_view_model.dart';
@@ -76,8 +78,6 @@ class EditFlowerPageController extends GetxController {
     }
   }
 
-
-
   void updateSuggestions(String text) {
     if (text == '') {
       suggestions.clear();
@@ -88,8 +88,6 @@ class EditFlowerPageController extends GetxController {
       suggestions.value = filteredList;
     }
   }
-
-
 
   void addChip() {
     final text = categoryTextController.text.trim();
@@ -108,8 +106,6 @@ class EditFlowerPageController extends GetxController {
       }
     }
   }
-
-
 
   Future<void> addCategoryList() async {
     AddCategoryDto dto = AddCategoryDto(category: categoryChipsAdd);
@@ -155,9 +151,7 @@ class EditFlowerPageController extends GetxController {
     imageToShow = Rx<Uint8List>(base64Decode(''));
   }
 
-  Rx<Uint8List> imageToShow =Rx<Uint8List>(base64Decode(''));
-
-
+  Rx<Uint8List> imageToShow = Rx<Uint8List>(base64Decode(''));
 
   Future<void> getImage({required ImageSource imageSource}) async {
     final picker = ImagePicker();
@@ -177,9 +171,25 @@ class EditFlowerPageController extends GetxController {
 
   Future<void> editFlowerButton() async {
     isLoadingEditFlowerBtn.value = true;
+    final EditFlowerDto dto = _generateEditFlowerDto();
+    final Either<String, FlowerListViewModel> resultOrException =
+        (await _repository.editFlower(dto, editFlowerItem.id));
+    resultOrException.fold((String error) {
+      isLoadingEditFlowerBtn.value = false;
+      return Get.snackbar('Register',
+          'Your registration is not successfully code error:$error');
+    }, (FlowerListViewModel addRecord) {
+      editColorList(colorId: editFlowerItem.id, color: selectedColors.value);
+      Get.offAndToNamed(RouteNames.vendorHomePageFlower);
+      isLoadingEditFlowerBtn.value = false;
+    });
+    return;
+  }
+
+  EditFlowerDto _generateEditFlowerDto() {
     String inputPriceFlower = flowerPriceController.text;
     int priceFlower = int.parse(inputPriceFlower.replaceAll(',', ''));
-    final EditFlowerDto dto = EditFlowerDto(
+    return EditFlowerDto(
         id: editFlowerItem.id,
         price: priceFlower,
         shortDescription: flowerDescriptionController.text,
@@ -196,29 +206,14 @@ class EditFlowerPageController extends GetxController {
             email: editFlowerItem.vendorUser.email,
             image: editFlowerItem.vendorUser.image,
             userType: editFlowerItem.vendorUser.userType));
-
-    final Either<String, FlowerListViewModel> resultOrException =
-        (await _repository.editFlower(dto, editFlowerItem.id));
-    resultOrException.fold((String error) {
-      isLoadingEditFlowerBtn.value = false;
-      return Get.snackbar('Register',
-          'Your registration is not successfully code error:$error');
-    }, (FlowerListViewModel addRecord) {
-      editColorList(colorId: editFlowerItem.id, color: selectedColors.value);
-      Get.offAndToNamed(RouteNames.vendorHomePageFlower);
-      isLoadingEditFlowerBtn.value = false;
-    });
-    return;
   }
-
 
   Future<void> editColorList({required int colorId, required int color}) async {
     EditColorDto dto = EditColorDto(id: colorId, color: color);
     final result = await _repository.editColorList(dto, colorId);
     if (result.isLeft) {
       Get.snackbar('', 'user not found');
-    } else if (result.isRight) {
-    }
+    } else if (result.isRight) {}
   }
 
   String? validateFlowerName({required String value}) {
@@ -229,7 +224,7 @@ class EditFlowerPageController extends GetxController {
   }
 
   String? validateFlowerDescription({required String value}) {
-    if (value.isEmpty || value.length < 10  || value.length >25) {
+    if (value.isEmpty || value.length < 10 || value.length > 25) {
       return "flower description must be between 10 and 25 characters";
     }
     return null;
@@ -238,7 +233,7 @@ class EditFlowerPageController extends GetxController {
   String? validateFlowerPrice({required String value}) {
     final RegExp integerRegex = RegExp(r'^\d{1,3}(,\d{3})*$');
     bool isValid = integerRegex.hasMatch(value);
-    if (value.isEmpty ||  value.length > 8 || !isValid) {
+    if (value.isEmpty || value.length > 8 || !isValid) {
       return "flower price must be valid number";
     }
     return null;
@@ -247,7 +242,7 @@ class EditFlowerPageController extends GetxController {
   String? validateFlowerCount({required String value}) {
     RegExp integerRegex = RegExp(r'^\d+$');
     bool isValid = integerRegex.hasMatch(value);
-    if (value.isEmpty  ||  value.length > 3 || !isValid) {
+    if (value.isEmpty || value.length > 3 || !isValid) {
       return "flower count must be valid number ";
     }
     return null;

@@ -244,7 +244,19 @@ class CustomerCartPageController extends GetxController {
 
   Future<void> editCountFlowerBuy(
       {required FlowerListViewModel flowerItem, required int countBuy}) async {
-    final EditFlowerDto dto = EditFlowerDto(
+    final EditFlowerDto dto = _generateEditFlowerDto(flowerItem: flowerItem, countBuy: countBuy);
+    final Either<String, String> resultOrException =
+        (await _repository.editFlower(dto, flowerItem.id));
+    resultOrException.fold(
+        (String error) => Get.snackbar(
+            'Edit', 'Your edit is not successfully code error:$error'),
+        (String editFlower) {
+        });
+    return;
+  }
+
+  EditFlowerDto _generateEditFlowerDto({required FlowerListViewModel flowerItem, required int countBuy}){
+    return EditFlowerDto(
         id: flowerItem.id,
         price: flowerItem.price,
         shortDescription: flowerItem.shortDescription,
@@ -261,14 +273,6 @@ class CustomerCartPageController extends GetxController {
             email: flowerItem.vendorUser.email,
             image: flowerItem.vendorUser.image,
             userType: flowerItem.vendorUser.userType));
-    final Either<String, String> resultOrException =
-        (await _repository.editFlower(dto, flowerItem.id));
-    resultOrException.fold(
-        (String error) => Get.snackbar(
-            'Edit', 'Your edit is not successfully code error:$error'),
-        (String editFlower) {
-        });
-    return;
   }
 
   void minusCountInStockFlower() async {

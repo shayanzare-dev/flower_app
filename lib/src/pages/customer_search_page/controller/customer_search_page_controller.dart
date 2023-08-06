@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../customer_home_page/models/flower_list_view_model.dart';
 import '../repositories/customer_search_page_repository.dart';
 
@@ -93,8 +94,6 @@ class CustomerSearchPageController extends GetxController {
     }
   }
 
-
-
   void maxPrices() {
     priceList.sort();
     maxPrice = priceList.last.toDouble();
@@ -153,61 +152,76 @@ class CustomerSearchPageController extends GetxController {
       }
     }
     String colorFilters = colorFilter.map((color) => 'color=$color').join('&');
-
     if (selectedItemDropDown.value != 'select a item' && colorFilters != '') {
-      final searchFiltersResult = await _repository.searchFilters(
-        category: selectedItemDropDown.value,
-        colors: colorFilters,
-        min: valuesRange.value.start.toString(),
-        max: valuesRange.value.end.toString(),
-      );
-      if (searchFiltersResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
-      } else if (searchFiltersResult.isRight) {
-        filteredFlowerList.clear();
-        filteredFlowerList.addAll(searchFiltersResult.right);
-        hideLoading();
-      }
+      _searchFilters(colorFilters: colorFilters);
     } else if (selectedItemDropDown.value != 'select a item') {
-      final searchFiltersResult = await _repository.searchFilterCategoryPrice(
-        category: selectedItemDropDown.value,
-        min: valuesRange.value.start.toString(),
-        max: valuesRange.value.end.toString(),
-      );
-      if (searchFiltersResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
-      } else if (searchFiltersResult.isRight) {
-        filteredFlowerList.clear();
-        filteredFlowerList.addAll(searchFiltersResult.right);
-        hideLoading();
-      }
+      _searchFilterCategoryPrice();
     } else if (colorFilters != '') {
-      final searchFiltersResult = await _repository.searchFilterColorPrice(
-        colors: colorFilters,
-        min: valuesRange.value.start.toString(),
-        max: valuesRange.value.end.toString(),
-      );
-      if (searchFiltersResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
-      } else if (searchFiltersResult.isRight) {
-        filteredFlowerList.clear();
-        filteredFlowerList.addAll(searchFiltersResult.right);
-        hideLoading();
-      }
+      _searchFilterColorPrice(colorFilters: colorFilters);
     } else {
-      final priceResult = await _repository.searchFilterPriceRange(
-        min: valuesRange.value.start.toString(),
-        max: valuesRange.value.end.toString(),
-      );
-      if (priceResult.isLeft) {
-        Get.snackbar('Login', 'user not found');
-      } else if (priceResult.isRight) {
-        filteredFlowerList.clear();
-        filteredFlowerList.addAll(priceResult.right);
-        hideLoading();
-      }
+      _searchFilterPriceRange();
     }
     hideLoading();
+  }
+
+  Future<void> _searchFilters({required String colorFilters}) async {
+    final searchFiltersResult = await _repository.searchFilters(
+      category: selectedItemDropDown.value,
+      colors: colorFilters,
+      min: valuesRange.value.start.toString(),
+      max: valuesRange.value.end.toString(),
+    );
+    if (searchFiltersResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (searchFiltersResult.isRight) {
+      filteredFlowerList.clear();
+      filteredFlowerList.addAll(searchFiltersResult.right);
+      hideLoading();
+    }
+  }
+
+  Future<void> _searchFilterCategoryPrice() async {
+    final searchFiltersResult = await _repository.searchFilterCategoryPrice(
+      category: selectedItemDropDown.value,
+      min: valuesRange.value.start.toString(),
+      max: valuesRange.value.end.toString(),
+    );
+    if (searchFiltersResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (searchFiltersResult.isRight) {
+      filteredFlowerList.clear();
+      filteredFlowerList.addAll(searchFiltersResult.right);
+      hideLoading();
+    }
+  }
+
+  Future<void> _searchFilterColorPrice({required String colorFilters}) async {
+    final searchFiltersResult = await _repository.searchFilterColorPrice(
+      colors: colorFilters,
+      min: valuesRange.value.start.toString(),
+      max: valuesRange.value.end.toString(),
+    );
+    if (searchFiltersResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (searchFiltersResult.isRight) {
+      filteredFlowerList.clear();
+      filteredFlowerList.addAll(searchFiltersResult.right);
+      hideLoading();
+    }
+  }
+
+  Future<void> _searchFilterPriceRange() async {
+    final priceResult = await _repository.searchFilterPriceRange(
+      min: valuesRange.value.start.toString(),
+      max: valuesRange.value.end.toString(),
+    );
+    if (priceResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (priceResult.isRight) {
+      filteredFlowerList.clear();
+      filteredFlowerList.addAll(priceResult.right);
+      hideLoading();
+    }
   }
 
   Future<void> getSearchFlowerList({required String search}) async {
@@ -222,70 +236,85 @@ class CustomerSearchPageController extends GetxController {
       }
       String colorFilters =
           colorFilter.map((color) => 'color=$color').join('&');
-
       if (selectedItemDropDown.value != 'select a item' && colorFilters != '') {
-        final searchFiltersResult =
-            await _repository.searchTextFieldWithFilters(
-          category: selectedItemDropDown.value,
-          colors: colorFilters,
-          min: valuesRange.value.start.toString(),
-          max: valuesRange.value.end.toString(),
-          search: search,
-        );
-        if (searchFiltersResult.isLeft) {
-          Get.snackbar('Login', 'user not found');
-        } else if (searchFiltersResult.isRight) {
-          filteredFlowerList.clear();
-          filteredFlowerList.addAll(searchFiltersResult.right);
-          hideLoading();
-        }
+        _searchTextFieldWithFilters(colorFilters: colorFilters, search: search);
       } else if (selectedItemDropDown.value != 'select a item') {
-        final searchFiltersResult =
-            await _repository.searchTextFieldCategoryPrice(
-          category: selectedItemDropDown.value,
-          min: valuesRange.value.start.toString(),
-          max: valuesRange.value.end.toString(),
-          search: search,
-        );
-        if (searchFiltersResult.isLeft) {
-          Get.snackbar('Login', 'user not found');
-        } else if (searchFiltersResult.isRight) {
-          filteredFlowerList.clear();
-          filteredFlowerList.addAll(searchFiltersResult.right);
-          hideLoading();
-        }
+        _searchTextFieldCategoryPrice(search: search);
       } else if (colorFilters != '') {
-        final searchFiltersResult = await _repository.searchTextFieldColorPrice(
-          colors: colorFilters,
-          min: valuesRange.value.start.toString(),
-          max: valuesRange.value.end.toString(),
-          search: search,
-        );
-        if (searchFiltersResult.isLeft) {
-          Get.snackbar('Login', 'user not found');
-        } else if (searchFiltersResult.isRight) {
-          filteredFlowerList.clear();
-          filteredFlowerList.addAll(searchFiltersResult.right);
-          hideLoading();
-        }
+        _searchTextFieldColorPrice(colorFilters: colorFilters, search: search);
       } else {
-        if (search != '') {
-          final result = await _repository.textFieldSearchWithPriceRange(
-              min: valuesRange.value.start.toString(),
-              max: valuesRange.value.end.toString(),
-              search: search);
-          if (result.isLeft) {
-            Get.snackbar('Login', 'user not found');
-          } else if (result.isRight) {
-            filteredFlowerList.clear();
-            filteredFlowerList.addAll(result.right);
-          }
-        } else {
-          filteredFlowerList.clear();
-        }
+        _textFieldSearchWithPriceRange(search: search);
       }
       hideLoading();
     });
+  }
+
+  Future<void> _searchTextFieldWithFilters(
+      {required String colorFilters, required String search}) async {
+    final searchFiltersResult = await _repository.searchTextFieldWithFilters(
+      category: selectedItemDropDown.value,
+      colors: colorFilters,
+      min: valuesRange.value.start.toString(),
+      max: valuesRange.value.end.toString(),
+      search: search,
+    );
+    if (searchFiltersResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (searchFiltersResult.isRight) {
+      filteredFlowerList.clear();
+      filteredFlowerList.addAll(searchFiltersResult.right);
+      hideLoading();
+    }
+  }
+
+  Future<void> _searchTextFieldCategoryPrice({required String search}) async {
+    final searchFiltersResult = await _repository.searchTextFieldCategoryPrice(
+      category: selectedItemDropDown.value,
+      min: valuesRange.value.start.toString(),
+      max: valuesRange.value.end.toString(),
+      search: search,
+    );
+    if (searchFiltersResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (searchFiltersResult.isRight) {
+      filteredFlowerList.clear();
+      filteredFlowerList.addAll(searchFiltersResult.right);
+      hideLoading();
+    }
+  }
+
+  Future<void> _searchTextFieldColorPrice(
+      {required String colorFilters, required String search}) async {
+    final searchFiltersResult = await _repository.searchTextFieldColorPrice(
+      colors: colorFilters,
+      min: valuesRange.value.start.toString(),
+      max: valuesRange.value.end.toString(),
+      search: search,
+    );
+    if (searchFiltersResult.isLeft) {
+      Get.snackbar('Login', 'user not found');
+    } else if (searchFiltersResult.isRight) {
+      filteredFlowerList.clear();
+      filteredFlowerList.addAll(searchFiltersResult.right);
+      hideLoading();
+    }
+  }
+
+  Future<void> _textFieldSearchWithPriceRange({required String search}) async {
+    if (search != '') {
+      final result = await _repository.textFieldSearchWithPriceRange(
+          min: valuesRange.value.start.toString(),
+          max: valuesRange.value.end.toString(),
+          search: search);
+      if (result.isLeft) {
+        Get.snackbar('Login', 'user not found');
+      } else if (result.isRight) {
+        filteredFlowerList.clear();
+        filteredFlowerList.addAll(result.right);
+      }
+    } else {
+      filteredFlowerList.clear();
+    }
   }
 
   void colorToggleSelection({required int colorIndex}) {
