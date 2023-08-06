@@ -92,13 +92,8 @@ class RegisterPageFlowerController extends GetxController {
           hideLoading();
           return Get.snackbar('Register', 'Email already exists');
         }, (right) async {
-          final RegisterVendorDto dto = RegisterVendorDto(
-              userType: selectedUserType.value,
-              firstName: firstNameController.text,
-              lastName: lastNameController.text,
-              passWord: passwordConfirmController.text,
-              email: emailController.text,
-              image: imageAddressToString.value);
+
+          final RegisterVendorDto dto = _generateRegisterVendorDto();
           final Either<String, String> resultOrException =
               (await _repository.addVendor(dto: dto));
           resultOrException.fold((String error) {
@@ -120,6 +115,16 @@ class RegisterPageFlowerController extends GetxController {
     });
   }
 
+  RegisterVendorDto _generateRegisterVendorDto(){
+    return RegisterVendorDto(
+        userType: selectedUserType.value,
+        firstName: firstNameController.text,
+        lastName: lastNameController.text,
+        passWord: passwordConfirmController.text,
+        email: emailController.text,
+        image: imageAddressToString.value);
+  }
+
   Future<void> _addUser() async {
     final Either<String, bool> resultOrExceptionEmail =
         await _repository.checkEmailUser(email: emailController.text);
@@ -134,13 +139,7 @@ class RegisterPageFlowerController extends GetxController {
           hideLoading();
           return Get.snackbar('Register', 'Email already exists');
         }, (right) async {
-          final RegisterUserDto dto = RegisterUserDto(
-              userType: selectedUserType.value,
-              firstName: firstNameController.text,
-              lastName: lastNameController.text,
-              passWord: passwordConfirmController.text,
-              email: emailController.text,
-              image: imageAddressToString.value);
+          final RegisterUserDto dto = _generateRegisterUserDto();
           final Either<String, String> resultOrException =
               (await _repository.addUser(dto: dto));
           resultOrException.fold((String error) {
@@ -160,6 +159,16 @@ class RegisterPageFlowerController extends GetxController {
       }
       return;
     });
+  }
+
+  RegisterUserDto _generateRegisterUserDto(){
+    return RegisterUserDto(
+        userType: selectedUserType.value,
+        firstName: firstNameController.text,
+        lastName: lastNameController.text,
+        passWord: passwordConfirmController.text,
+        email: emailController.text,
+        image: imageAddressToString.value);
   }
 
   String? validateFirstName({required String value}) {
