@@ -280,6 +280,7 @@ class CustomerCartPageController extends GetxController {
       await editCountFlowerBuy(
           flowerItem: item.flowerListViewModel, countBuy: item.buyCount);
     }
+    Get.offAllNamed(RouteNames.customerHomePageFlower);
     isLoadingCartPurchaseBtn.value=false;
     refresh();
   }
@@ -289,7 +290,7 @@ class CustomerCartPageController extends GetxController {
     result.fold((left) => Get.snackbar('error', result.left),
         (right) {
           minusCountInStockFlower();
-          Get.offAllNamed(RouteNames.customerHomePageFlower);
+
         });
   }
 

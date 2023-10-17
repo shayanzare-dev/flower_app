@@ -13,6 +13,4 @@ class RouteNames {
   static const customerHistoryPage = '/customer_history_page';
   static const customerProfilePage = '/customer_profile_page';
   static const customerCartPage = '/customer_cart_page';
-
-
 }

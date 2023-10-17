@@ -1,7 +1,6 @@
 import 'package:flower_app/flower_app.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'localization_service.dart';
 
 class FlowerApp extends StatelessWidget {
